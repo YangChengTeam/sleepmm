@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">sleepmm</string>
+
+    <string name="main_index">音你而来</string>
+    <string name="main_sleep">睡眠SPA</string>
+    <string name="main_miemie">咩咩</string>
+
 </resources>
