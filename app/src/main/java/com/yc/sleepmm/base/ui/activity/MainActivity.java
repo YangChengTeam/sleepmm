@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             window.setStatusBarColor(Color.TRANSPARENT);
         }
         //初始化MusicService
-        MusicPlayerManager.getInstance().binService(this);
+        MusicPlayerManager.getInstance().bindService(this);
     }
 
     @Override

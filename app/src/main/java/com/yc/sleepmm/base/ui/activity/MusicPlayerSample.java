@@ -232,20 +232,6 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
 
     }
 
-    @Override
-    public void onSeekComplete() {
-
-    }
-
-    @Override
-    public void onTimer() {
-
-    }
-
-    @Override
-    public void onInfo(int i, int i1) {
-
-    }
 
     @Override
     public void onError(int what, int extra) {

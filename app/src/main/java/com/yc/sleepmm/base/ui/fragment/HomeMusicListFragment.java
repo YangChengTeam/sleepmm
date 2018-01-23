@@ -17,7 +17,6 @@ import com.music.player.lib.bean.MusicPlayerConfig;
 import com.music.player.lib.listener.OnUserPlayerEventListener;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.util.Logger;
-import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.ui.activity.MusicPlayerSample;
 import com.yc.sleepmm.base.ui.adapter.HomeMusicListAdapter;
@@ -163,6 +162,12 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
         }
     }
 
+    @Override
+    protected void onRefresh() {
+        super.onRefresh();
+        page=0;
+        loadMusicList();
+    }
     //========================================联网获取数据回调=======================================
 
 
@@ -178,8 +183,8 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     @Override
     public void showMusicList(List<MusicInfo> data) {
+        if(null!=mSwipeRefreshLayout) mSwipeRefreshLayout.setRefreshing(false);
         showContentView();
-        mSwipeRefreshLayout.setRefreshing(false);
         if(null!=mHomeMusicListAdapter){
             mRecyclerView.post(new Runnable() {
                 @Override
@@ -202,8 +207,8 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     @Override
     public void showMusicListEmpty(String data) {
+        if(null!=mSwipeRefreshLayout) mSwipeRefreshLayout.setRefreshing(false);
         showContentView();
-        mSwipeRefreshLayout.setRefreshing(false);
         if(null!=mHomeMusicListAdapter){
             mRecyclerView.post(new Runnable() {
                 @Override
@@ -216,7 +221,7 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     @Override
     public void showMusicListError(String data) {
-        mSwipeRefreshLayout.setRefreshing(false);
+        if(null!=mSwipeRefreshLayout) mSwipeRefreshLayout.setRefreshing(false);
         if(null!=mHomeMusicListAdapter){
             mRecyclerView.post(new Runnable() {
                 @Override
@@ -225,10 +230,10 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
                 }
             });
             if(1==page&&null==mHomeMusicListAdapter.getData()||mHomeMusicListAdapter.getData().size()<=0){
-                showErrorView();
+                showLoadingErrorView();
             }
         }
-        if(page>1){
+        if(page>0){
             page--;
         }
     }
@@ -287,21 +292,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     @Override
     public void stopPlayer(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void onSeekComplete() {
-
-    }
-
-    @Override
-    public void onTimer() {
-
-    }
-
-    @Override
-    public void onInfo(int i, int i1) {
 
     }
 

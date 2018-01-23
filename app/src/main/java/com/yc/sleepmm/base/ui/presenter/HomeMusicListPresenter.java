@@ -67,7 +67,7 @@ public class HomeMusicListPresenter extends RxPresenter<HomeMusicListContract.Vi
                 }else if(null!=data&&1==data.getCode()&&null!=data.getData()&&data.getData().size()<=0){
                     if(null!=mView) mView.showMusicListEmpty("没有更多数据了");
                 }else{
-                    if(null!=mView) mView.showMusicListEmpty("加载失败");
+                    if(null!=mView) mView.showMusicListError("加载失败");
                 }
             }
         });
