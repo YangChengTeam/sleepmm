@@ -677,7 +677,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * 重置释放播放器，停止计时器
      */
     private void release(){
-
         if(mediaPlayerNoEmpty()){
             if(mMediaPlayer.isPlaying()){
                 mMediaPlayer.stop();

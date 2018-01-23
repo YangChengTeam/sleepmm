@@ -140,6 +140,7 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     private void loadMusicList() {
         if(null!=mHomeMusicListAdapter&&null!=mMusicListPresenter&&!mMusicListPresenter.isIeGetMusicList()){
             page++;
+            Logger.d(TAG,"loadMusicList="+page);
             mMusicListPresenter.getMusicList(mMusic_id,page,pageSize);
         }
     }
@@ -165,6 +166,8 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     @Override
     protected void onRefresh() {
         super.onRefresh();
+        Logger.d(TAG,"onRefresh=重试");
+        showLoadingView();
         page=0;
         loadMusicList();
     }
