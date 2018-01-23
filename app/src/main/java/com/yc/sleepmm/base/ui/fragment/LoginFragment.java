@@ -26,7 +26,7 @@ import butterknife.BindView;
 /**
  * TinyHung@Outlook.com
  * 2017/11/28.
- * 用户账号密码登录
+ * 账号密码登录
  */
 
 public class LoginFragment extends MusicBaseFragment implements LoginContract.View {

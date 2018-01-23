@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
-import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.base.ui.contract.LoginContract;
 import com.yc.sleepmm.base.ui.presenter.LoginPresenter;

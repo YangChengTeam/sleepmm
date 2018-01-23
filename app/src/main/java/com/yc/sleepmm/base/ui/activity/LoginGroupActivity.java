@@ -147,7 +147,7 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
                 }
             }
         };
-        SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
+        SMSSDK.registerEventHandler(mEventHandler);
     }
 
     /**
