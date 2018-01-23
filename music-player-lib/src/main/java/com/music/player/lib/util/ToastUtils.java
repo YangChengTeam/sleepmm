@@ -17,28 +17,17 @@ public class ToastUtils {
     private static TextView sMTv_text;
     private static Toast centerToast;
 
-
     public static void showCenterToast(String text) {
-
         if (null==centerToast) {
             centerToast = new Toast(MusicPlayerManager.getInstance().getContext());
-            centerToast.setDuration(Toast.LENGTH_SHORT);
+            centerToast.setDuration(Toast.LENGTH_LONG);
             centerToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
             View view = View.inflate(MusicPlayerManager.getInstance().getContext(), R.layout.toast_center_layout, null);
             sMTv_text = (TextView) view.findViewById(R.id.tv_text);
-            if (!TextUtils.isEmpty(text)) {
-                sMTv_text.setText(text);
-            } else {
-                sMTv_text.setText("null");
-            }
+            sMTv_text.setText(TextUtils.isEmpty(text)?"null":text);
             centerToast.setView(view);
-
         } else {
-            if (!TextUtils.isEmpty(text)) {
-                sMTv_text.setText(text);
-            } else {
-                sMTv_text.setText("null");
-            }
+            sMTv_text.setText(TextUtils.isEmpty(text)?"null":text);
         }
         centerToast.show();
     }

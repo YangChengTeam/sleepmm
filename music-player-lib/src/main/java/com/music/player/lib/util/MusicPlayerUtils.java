@@ -53,7 +53,7 @@ public class MusicPlayerUtils {
             return timeMs/60+"分钟";
         }else{
             long hours = timeMs/60/60;
-            long minutes =(timeMs-60*60)/60;//分钟=减去一个小时后，剩余的分钟
+            long minutes =(timeMs-60*60)/60;
             return hours+"小时"+minutes+"分钟";
         }
     }

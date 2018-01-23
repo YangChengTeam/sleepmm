@@ -31,13 +31,13 @@ import java.util.Observer;
 public class MusicPlayerManager implements OnPlayerEventListener {
 
     private static final String TAG = MusicPlayerManager.class.getSimpleName();
-    private static MusicPlayerManager mInstance;
-    private static Context mContext;
-    private  MusicPlayerServiceConnectionCallback mConnectionCallback;
+    private static MusicPlayerManager mInstance=null;
+    private static Context mContext=null;
+    private  MusicPlayerServiceConnectionCallback mConnectionCallback=null;
     private  List<OnUserPlayerEventListener> mUserCallBackListenerList=null;//方便多界面注册进来
-    private static MusicPlayerServiceConnection mMusicPlayerServiceConnection;
-    private static SubjectObservable mSubjectObservable;
-    private static MusicPlayerService.MusicPlayerServiceBunder mMusicPlayerServiceBunder;
+    private static MusicPlayerServiceConnection mMusicPlayerServiceConnection=null;
+    private static SubjectObservable mSubjectObservable=null;
+    private static MusicPlayerService.MusicPlayerServiceBunder mMusicPlayerServiceBunder=null;
 
     public static synchronized MusicPlayerManager getInstance(){
         synchronized (MusicPlayerManager.class){
@@ -463,7 +463,7 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         }
         if(null!=mMusicPlayerServiceConnection){
             Logger.d(TAG,"binService");
-            if(null!=serviceConnectionCallBack)this.mConnectionCallback = serviceConnectionCallBack;
+            this.mConnectionCallback = serviceConnectionCallBack;
             Intent intent = new Intent(context, MusicPlayerService.class);
             context.startService(intent);
             context.bindService(intent, mMusicPlayerServiceConnection, Context.BIND_AUTO_CREATE);
@@ -479,19 +479,12 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * @param context
      */
     public void  unBindService(Context context){
-        if(null!=mMusicPlayerServiceBunder){
-            if(null==mMusicPlayerServiceConnection) return;
-            context.unbindService(mMusicPlayerServiceConnection);
+        if(serviceIsNoEmpty()&&null!=context){
+            if(null!=mMusicPlayerServiceConnection) context.unbindService(mMusicPlayerServiceConnection);
+            context.stopService(new Intent(context,MusicPlayerService.class));
         }
         mConnectionCallback=null;
     }
-
-    public void onDestroy(){
-        if(serviceIsNoEmpty()){
-            mMusicPlayerServiceBunder.onDestroy();
-        }
-    }
-
 
     //=================================播放状态回调，回调至调用者=====================================
 

@@ -179,16 +179,18 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         Logger.d(TAG,"onDestroy");
+        stop();
+        mOnPlayerEventListener=null;
         if(null!=mAudioFocusManager){
             mAudioFocusManager.abandonAudioFocus();
         }
         unregisterReceiver(mMusicActionReceiver);
-        stop();
+
         if(null!=mManager){
             mManager.cancelAll();
         }
+        super.onDestroy();
     }
 
     private boolean mediaPlayerNoEmpty() {
@@ -222,7 +224,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * 移除监听
      */
     private void removeEventListener() {
-        this.mOnPlayerEventListener=null;
+        mOnPlayerEventListener=null;
     }
 
     /**
@@ -477,7 +479,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             initMediaPlayer();
             mMediaPlayer.setDataSource(musicInfo.getMusicPath());
             mMediaPlayer.prepareAsync();
-            if (mOnPlayerEventListener != null) {
+            if (null!=mOnPlayerEventListener) {
                 mOnPlayerEventListener.onMusicChange(musicInfo);//回调切换了播放任务
             }
         } catch (IOException e) {
@@ -734,7 +736,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         NotificationCompat.Builder  notificationCompat=new NotificationCompat.Builder(this);
         notificationCompat.setSmallIcon(R.mipmap.ic_launcher);
         notificationCompat.setContentTitle("睡眠咩咩");
-        notificationCompat.setContentText("正在播放"+musicInfo.getMusicTitle());
+        notificationCompat.setContentText("正在播放:"+musicInfo.getMusicTitle());
         Intent intent = new Intent("com.music.player.action");//响应Action的Activity需要配置此Action
         PendingIntent mPendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         notificationCompat.setContentIntent(mPendingIntent);
@@ -989,10 +991,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         //播放下一首
         public void playNext() {
             MusicPlayerService.this.next();
-        }
-        //结束自己
-        public void onDestroy() {
-            MusicPlayerService.this.onDestroy();
         }
     }
 }
