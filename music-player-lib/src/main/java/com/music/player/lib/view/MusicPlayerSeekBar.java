@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import com.music.player.lib.R;
@@ -207,8 +206,6 @@ public class MusicPlayerSeekBar extends View {
     private void drawProgressText(Canvas canvas) {
         if (true == mIsShowProgressText){
             float textWidth = mProgressTextPaint.measureText("" + mCurrentProgress);
-//            canvas.drawText("" + mCurrentProgress, mSeekBarCenterX - textWidth / 2, mSeekBarCenterY
-//                    + mProgressTextSize / 2, mProgressTextPaint);
             //回执进度条
             String forTime = MusicPlayerUtils.stringForTime(mCurrentProgress);
             canvas.drawText(forTime,mSeekBarCenterX - textWidth/2,mSeekBarCenterY+mProgressTextSize / 2, mProgressTextPaint);
@@ -227,7 +224,6 @@ public class MusicPlayerSeekBar extends View {
                 mDownY = event.getY();
                 break ;
             case MotionEvent.ACTION_MOVE:
-
                 seekTo(eventX, eventY, false);
                 break ;
             case MotionEvent.ACTION_UP:
@@ -236,7 +232,7 @@ public class MusicPlayerSeekBar extends View {
                 Logger.d(TAG,"newDownX="+newDownX+",newDownY="+newDownY+",mDownX="+mDownX+",mDownY="+mDownY);
                 //如果松手时X轴坐标小于按下时X坐标上下10个像素&&如果松手时Y轴坐标小于按下时Y坐标上下10个像素即在点击范围内
                 if(newDownX<(mDownX+10)&&newDownX>(mDownX-10)&&newDownY<(mDownY+10)&&newDownY>(mDownY-10)){
-                    Logger.d(TAG,"用户只是在特定区域内触摸，符合点击事件");
+                    Logger.d(TAG,"用户触摸行为符合单击事件");
                     mDownY=0;mDownY=0;
                     if(null!=mOnClickListener){
                         mOnClickListener.onClickView();
@@ -283,14 +279,6 @@ public class MusicPlayerSeekBar extends View {
             mThumbDrawable.setState(flag?mThumbPressed:mThumbNormal);
         }
         invalidate();
-    }
-
-    /**
-     * 设置最大时间,
-     * @param durtion
-     */
-    public void setDurtion(long durtion){
-
     }
 
 

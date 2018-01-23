@@ -36,7 +36,7 @@ import java.util.Observer;
 /**
  * TinyHung@Outlook.com
  * 2018/1/18
- * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者需要注册EventListener事件来改变收藏按图片
+ * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者需要注册EventListener事件来处理其他由播放器回调的功能
  */
 
 public class MusicPlayerController extends FrameLayout implements Observer, OnUserPlayerEventListener {
@@ -109,7 +109,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         });
         //默认闹钟最大2个小时
         mMusicPlayerSeekbar.setProgressMax(PlayerAlarmModel.TIME.MAX_TWO_HOUR);
-        mMusicPlayerSeekbar.setProgress(MusicPlayerManager.getInstance().getPlayerAlarmDurtion());//使用用户设置的时间
+        mMusicPlayerSeekbar.setProgress(MusicPlayerManager.getInstance().getPlayerAlarmDurtion());//使用用户最近设置的定时关闭时间
 
         View.OnClickListener onClickListener=new View.OnClickListener() {
             @Override
@@ -157,13 +157,13 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         btnRandomPlay.setOnClickListener(onClickListener);
         mBtnBack.setOnClickListener(onClickListener);
         MusicPlayerManager.getInstance().addPlayerStateListener(this);
-        MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后初始化的
+        MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后才会初始化的
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if(null!=arg){
-            Logger.d(TAG,"播放控制器收到观察者新任务");
+            Logger.d(TAG,"播放控制器--收到观察者通知新播放任务");
             MusicInfo musicInfo= (MusicInfo) arg;
             //正在播放
             if(null!=musicInfo){
@@ -182,7 +182,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                 }
             }
         }else{
-            Logger.d(TAG,"播放控制器收到播放任务已完成通知");
+            Logger.d(TAG,"播放控制器--收到观察者通知播放任务已完成或销毁");
             if(null!=mMusicPlayerSeekbar){
                 mMusicPlayerSeekbar.setPlaying(false);
             }
@@ -453,115 +453,12 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         this.UI_COMPONENT_TYPE=uiTypeHome;
     }
 
-    public interface OnClickEventListener{
-        void onEventCollect();//收藏
-        void onEventRandomPlay();//随机播放
-        void onBack();//返回事件
-    }
-
-    private OnClickEventListener mOnClickEventListener;
-
-    public void setOnClickEventListener(OnClickEventListener onClickEventListener) {
-        mOnClickEventListener = onClickEventListener;
-    }
-
-
     //=====================================监听来自播放器的回调=======================================
 
     /**
-     * 播放器发生了变化
-     * @param music
-     */
-    @Override
-    public void onMusicChange(MusicInfo music) {
-        if(null!=music) Logger.d(TAG,"onMusicChange"+music.getMusicTitle());
-    }
-
-
-    @Override
-    public void onCompletion() {
-        Logger.d(TAG,"onCompletion");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放停止了
+     * 检查播放器播放任务回调
      * @param musicInfo
-     */
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放开始了
      * @param mediaPlayer
-     */
-    @Override
-    public void onPrepared(final IMediaPlayer mediaPlayer) {
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(true);
-        }
-    }
-
-
-    @Override
-    public void onBufferingUpdate(int percent) {
-    }
-
-    @Override
-    public void onSeekComplete() {
-        Logger.d(TAG,"onSeekComplete");
-    }
-
-    @Override
-    public void onTimer() {
-        Logger.d(TAG,"onTimer");
-    }
-
-    @Override
-    public void onError(int what, int extra) {
-        Logger.d(TAG,"onError");
-    }
-
-    @Override
-    public void autoStartNewPlayTasks(int viewTupe, int position) {
-        //播放器不需理会此方法
-    }
-
-    /**
-     * 定时器剩余时间回调
-     * @param durtion
-     */
-    @Override
-    public void taskRemmainTime(final long durtion) {
-        if(null!=mHandler){
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mMusicPlayerSeekbar.setProgress(durtion);
-                }
-            });
-        }
-    }
-
-    /**
-     * 播放器发生了变化
-     * @param i
-     * @param i1
-     */
-    @Override
-    public void onInfo(int i, int i1) {
-        Logger.d(TAG,"onInfo"+i+",i1="+i1);
-    }
-
-    /**
-     * 在控制器持有者的调用onResume()，方法，也会回调Obsever的upData()方法
-     * @param musicInfo
      */
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
@@ -572,20 +469,74 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     }
 
     /**
-     * 视频暂停播放了
-     * @param musicInfo
+     * 用户改变了播放模式
+     * @param playModel
      */
     @Override
-    public void pauseResult(MusicInfo musicInfo) {
-        if(null!=musicInfo) Logger.d(TAG,"pauseResult=ID="+musicInfo.getMusicID());
-        ToastUtils.showCenterToast("暂停播放了");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
+    public void changePlayModelResult(int playModel) {
+        Logger.d(TAG,"changePlayModelResult==playModel:"+playModel);
+        if(null!=mIcPlayMode){
+            changePlayerModel(playModel,true);
         }
     }
 
     /**
-     * 视频开始播放了
+     * 用户改变了闹钟定时模式
+     * @param model
+     */
+    @Override
+    public void changeAlarmModelResult(int model) {
+        Logger.d(TAG,"changeAlarmModelResult==playModel:"+model);
+        if(null!=mIcAlarm){
+            changePlayerAlarmModel(model,true);
+        }
+    }
+
+    /**
+     * 音乐播放器配置结果
+     * @param musicPlayerConfig
+     */
+    @Override
+    public void onMusicPlayerConfig(MusicPlayerConfig musicPlayerConfig) {
+        if(null!=musicPlayerConfig) Logger.d(TAG,"检查用户设置的播放模式回调"+musicPlayerConfig.getPlayModel()+",闹钟模式："+musicPlayerConfig.getAlarmModel());
+        if(null!=musicPlayerConfig&&null!=mIcPlayMode&&null!=mIcAlarm){
+            changePlayerModel(musicPlayerConfig.getPlayModel(),false);
+            changePlayerAlarmModel(musicPlayerConfig.getAlarmModel(),false);
+        }
+    }
+
+    /**
+     * 播放器任务发生了变化
+     * @param music
+     */
+    @Override
+    public void onMusicChange(MusicInfo music) {
+        if(null!=music) Logger.d(TAG,"onMusicChange:"+music.getMusicID());
+    }
+
+    /**
+     * 缓冲进度
+     * @param percent
+     */
+    @Override
+    public void onBufferingUpdate(int percent) {
+
+    }
+
+    /**
+     * 播放器准备完成了
+     * @param mediaPlayer
+     */
+    @Override
+    public void onPrepared(IMediaPlayer mediaPlayer) {
+        Logger.d(TAG,"onPrepared");
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setPlaying(true);
+        }
+    }
+
+    /**
+     * 开始播放了
      * @param musicInfo
      */
     @Override
@@ -598,41 +549,87 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     }
 
     /**
-     * 改变了播放器播放模式
-     * @param playModel
+     * 暂停播放了
+     * @param musicInfo
      */
     @Override
-    public void changePlayModelResult(int playModel) {
-        Logger.d(TAG,"changePlayModelResult==playModel:"+playModel);
-        if(null!=mIcPlayMode){
-            changePlayerModel(playModel,true);
+    public void pauseResult(MusicInfo musicInfo) {
+        if(null!=musicInfo) Logger.d(TAG,"pauseResult=ID="+musicInfo.getMusicID());
+        ToastUtils.showCenterToast("暂停播放了");
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setPlaying(false);
         }
     }
 
     /**
-     * 手动改变触发
-     * @param model
+     * 播放完成了
      */
     @Override
-    public void changeAlarmModelResult(int model) {
-        Logger.d(TAG,"changeAlarmModelResult==playModel:"+model);
-        if(null!=mIcAlarm){
-            changePlayerAlarmModel(model,true);
+    public void onCompletion() {
+        Logger.d(TAG,"onCompletion");
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setPlaying(false);
         }
     }
 
     /**
-     * 播放器的默认配置
-     * @param musicPlayerConfig
+     * 停止播放了
+     * @param musicInfo
      */
     @Override
-    public void onMusicPlayerConfig(MusicPlayerConfig musicPlayerConfig) {
-        if(null!=musicPlayerConfig) Logger.d(TAG,"检查用户设置的播放模式回调"+musicPlayerConfig.getPlayModel()+",闹钟模式："+musicPlayerConfig.getAlarmModel());
-        if(null!=musicPlayerConfig&&null!=mIcPlayMode&&null!=mIcAlarm){
-            changePlayerModel(musicPlayerConfig.getPlayModel(),false);
-            changePlayerAlarmModel(musicPlayerConfig.getAlarmModel(),false);
+    public void stopPlayer(MusicInfo musicInfo) {
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setPlaying(false);
+        }
+    }
+
+    /**
+     * 播放失败
+     * @param what
+     * @param extra
+     */
+    @Override
+    public void onError(int what, int extra) {
+        Logger.d(TAG,"onError：what="+what+",extra="+extra);
+    }
+
+    /**
+     * 请求自动开启播放任务
+     * @param viewTupe
+     * @param position
+     */
+    @Override
+    public void autoStartNewPlayTasks(int viewTupe, int position) {
+        Logger.d(TAG,"autoStartNewPlayTasks：viewTupe="+viewTupe+",position="+position);
+    }
+
+    /**
+     * 闹钟定时的剩余时间
+     * @param durtion
+     */
+    @Override
+    public void taskRemmainTime(final long durtion) {
+        Logger.d(TAG,"taskRemmainTime：durtion="+durtion);
+        if(null!=mHandler){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mMusicPlayerSeekbar.setProgress(durtion);
+                }
+            });
         }
     }
 
 
+
+    //对持有者提供回调
+    public interface OnClickEventListener{
+        void onEventCollect();//收藏
+        void onEventRandomPlay();//随机播放
+        void onBack();//返回事件
+    }
+    private OnClickEventListener mOnClickEventListener;
+    public void setOnClickEventListener(OnClickEventListener onClickEventListener) {
+        mOnClickEventListener = onClickEventListener;
+    }
 }

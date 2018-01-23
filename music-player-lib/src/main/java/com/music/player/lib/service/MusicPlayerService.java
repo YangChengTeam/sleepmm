@@ -33,7 +33,6 @@ import com.music.player.lib.util.SharedPreferencesUtil;
 import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.util.MusicPlayerUtils;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -48,7 +47,7 @@ import java.util.TimerTask;
 public class MusicPlayerService extends Service implements IMediaPlayer.OnPreparedListener,
         IMediaPlayer.OnCompletionListener, IMediaPlayer.OnBufferingUpdateListener,
         IMediaPlayer.OnSeekCompleteListener, IMediaPlayer.OnErrorListener,
-        IMediaPlayer.OnInfoListener, IMediaPlayer.OnVideoSizeChangedListener, KSYMediaPlayer.OnAudioPCMListener {
+        IMediaPlayer.OnInfoListener{
 
     private static final String TAG = MusicPlayerService.class.getSimpleName();
     private static KSYMediaPlayer mMediaPlayer;
@@ -209,8 +208,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         mMediaPlayer.setOnSeekCompleteListener(this);
         mMediaPlayer.setOnErrorListener(this);
         mMediaPlayer.setOnInfoListener(this);
-        mMediaPlayer.setOnVideoSizeChangedListener(this);
-        mMediaPlayer.setOnAudioPCMAvailableListener(this);
     }
 
     /**
@@ -674,6 +671,27 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
     }
 
 
+    /**
+     * 重置释放播放器，停止计时器
+     */
+    private void release(){
+
+        if(mediaPlayerNoEmpty()){
+            if(mMediaPlayer.isPlaying()){
+                mMediaPlayer.stop();
+            }
+            mMediaPlayer.release();
+            mMediaPlayer.reset();
+            mMediaPlayer.resetListeners();
+            mMediaPlayer=null;
+        }
+        stopTimer();
+        if(null!=mManager){
+            mManager.cancel(NOTIFACTION_ID);
+            mManager.cancelAll();
+        }
+    }
+
     public void stop() {
         Logger.d(TAG,"stop:");
         if(mediaPlayerNoEmpty()){
@@ -844,6 +862,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      */
     @Override
     public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+        release();
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.onError(i,i1);
         }
@@ -864,17 +883,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             mOnPlayerEventListener.onInfo(i,i1);
         }
         return false;
-    }
-
-    @Override
-    public void onVideoSizeChanged(IMediaPlayer iMediaPlayer, int i, int i1, int i2, int i3) {
-        //音频不需要
-    }
-
-    //音频
-    @Override
-    public void onAudioPCMAvailable(IMediaPlayer iMediaPlayer, ByteBuffer byteBuffer, long l, int i, int i1, int i2) {
-        iMediaPlayer.start();
     }
 
 
@@ -986,6 +994,5 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         public void onDestroy() {
             MusicPlayerService.this.onDestroy();
         }
-
     }
 }

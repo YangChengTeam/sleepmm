@@ -60,42 +60,23 @@ public interface OnUserPlayerEventListener {
      * 播放完成了
      */
     void onCompletion();
-
-
     /**
      * 播放停止了
      * @param musicInfo
      */
     void stopPlayer(MusicInfo musicInfo);
-
     /**
-     * 设置进度成功回调
-     */
-    void onSeekComplete();
-    /**
-     * 更新定时停止播放时间
-     */
-    void onTimer();
-    /**
-     * 音频的基本信息
-     * @param i
-     * @param i1
-     */
-    void onInfo(int i, int i1);
-    /**
-     * 播放失败
+     * 播放失败了
      * @param what
      * @param extra
      */
     void onError(int what, int extra);
-
     /**
      * 自动创建播放任务
      * @param viewTupe
      * @param position
      */
     void autoStartNewPlayTasks(int viewTupe, int position);
-
     /**
      * 播放时间倒计时，注意：该方法在子线程回调
      * @param durtion

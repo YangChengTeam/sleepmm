@@ -40,27 +40,21 @@ public interface OnPlayerEventListener {
     void onBufferingUpdate(int percent);
 
     /**
+     * 播放器反馈信息
+     * @param i
+     * @param i1
+     */
+    void onInfo(int i, int i1);
+    /**
      * 设置进度完成回调
      */
     void onSeekComplete();
-    /**
-     * 更新定时停止播放时间
-     */
-    void onTimer();
-
     /**
      * 播放失败
      * @param what
      * @param extra
      */
     void onError(int what, int extra);
-
-    /**
-     * 音频的基本信息
-     * @param i
-     * @param i1
-     */
-    void onInfo(int i, int i1);
 
     /**
      * 检查当前正在播放的任务，建议在界面的onResume()中调用
@@ -83,17 +77,14 @@ public interface OnPlayerEventListener {
      * @param playModel
      */
     void changePlayModelResult(int playModel);
-
     /**
      * 设定闹钟回调
      * @param playAlarmModel
      */
     void changeAlarmModelResult(int playAlarmModel);
-
     /**
      * 计时器剩余的时间，回调给播放控制器
      * @param durtion
      */
     void taskRemmainTime(long durtion);
-
 }

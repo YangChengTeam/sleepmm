@@ -33,8 +33,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     private static final String TAG = MusicPlayerManager.class.getSimpleName();
     private static MusicPlayerManager mInstance;
     private static Context mContext;
-    private static MusicPlayerServiceConnectionCallback mConnectionCallback;
-    private static List<OnUserPlayerEventListener> mUserCallBackListenerList=null;//方便多界面注册这个监听
+    private  MusicPlayerServiceConnectionCallback mConnectionCallback;
+    private  List<OnUserPlayerEventListener> mUserCallBackListenerList=null;//方便多界面注册进来
     private static MusicPlayerServiceConnection mMusicPlayerServiceConnection;
     private static SubjectObservable mSubjectObservable;
     private static MusicPlayerService.MusicPlayerServiceBunder mMusicPlayerServiceBunder;
@@ -48,7 +48,7 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         return mInstance;
     }
 
-
+    //标注一个方法过期,方法上面：@Deprecated
     public MusicPlayerManager(){
         mMusicPlayerServiceConnection = new MusicPlayerServiceConnection();
         mSubjectObservable = new SubjectObservable();
@@ -84,6 +84,9 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * 列表播放最好添加
      */
     public void addObservable(Observer o) {
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if (null!=mSubjectObservable) {
             mSubjectObservable.addObserver(o);
         }
@@ -160,21 +163,31 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     /**
      * 检查当前正在播放的任务，建议在RecyclerView适配器或者播放控制器初始化后调用
      */
+
     public void onResumeChecked() {
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.checkedPlayTask();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
-
-
 
     /**
      * 播放新的音乐
      * @param musicInfo
      */
+
     public void  playMusic(MusicInfo musicInfo){
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.playMusic(musicInfo);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -183,8 +196,13 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * @param pistion
      */
     public void playMusic(int pistion){
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.playMusic(pistion);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -194,8 +212,13 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * @param musicInfos 任务列表
      */
     public void playMusic(List<MusicInfo> musicInfos,int pistion){
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.playMusic(musicInfos,pistion);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -205,6 +228,9 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * @return
      */
     public boolean playPause(){
+        if(null==mContext){
+            throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
+        }
         if(serviceIsNoEmpty()){
             return mMusicPlayerServiceBunder.onPlayPause();
         }
@@ -217,6 +243,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void stop(){
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.stop();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -237,6 +265,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void playLast() {
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.playLast();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -246,6 +276,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void playNext() {
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.playNext();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -268,6 +300,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void setLoop(boolean flag){
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.setLoop(flag);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -279,6 +313,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void changePlayModel(){
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.changePlayModel();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -288,6 +324,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void changeAlarmModel() {
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.changeAlarmModel();
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -333,6 +371,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void setPlayerDurtion(long durtion) {
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.setPlayerDurtion(durtion);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -343,6 +383,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void setAralmFiexdTimer(int fiexdTimerAlarmModel) {
         if(serviceIsNoEmpty()){
             mMusicPlayerServiceBunder.setAralmFiexdTimer(fiexdTimerAlarmModel);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
         }
     }
 
@@ -381,7 +423,6 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * bindService()必需
      */
     private class MusicPlayerServiceConnection implements ServiceConnection {
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             if(null!=service){
@@ -416,7 +457,7 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * @param context
      * @param serviceConnectionCallBack
      */
-    public void binService(Context context, MusicPlayerServiceConnectionCallback serviceConnectionCallBack){
+    public void bindService(Context context, MusicPlayerServiceConnectionCallback serviceConnectionCallBack){
         if(null==mContext){
             throw new IllegalStateException("请先在Application中调用init()方法");
         }
@@ -429,8 +470,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         }
     }
 
-    public void binService(final Context context) {
-        binService(context, null);
+    public void bindService(final Context context) {
+        bindService(context, null);
     }
 
     /**
@@ -509,25 +550,21 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     }
 
     @Override
-    public void onSeekComplete() {
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onSeekComplete();
-            }
-        }
+    public void onInfo(int i, int i1) {
+
     }
 
     @Override
-    public void onTimer() {
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onTimer();
-            }
-        }
+    public void onSeekComplete() {
+
     }
+
 
     @Override
     public void onError(int what, int extra) {
+        if(null!=mSubjectObservable){
+            mSubjectObservable.updataSubjectObserivce(null);
+        }
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
                 onPlayerEventListener.onError(what,extra);
@@ -535,14 +572,6 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         }
     }
 
-    @Override
-    public void onInfo(int i, int i1) {
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onInfo(i,i1);
-            }
-        }
-    }
 
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
