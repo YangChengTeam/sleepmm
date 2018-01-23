@@ -9,14 +9,39 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".base.ui.activity.MainActivity">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:screenOrientation="portrait">
+
+        <activity android:name=".base.ui.activity.MainActivity"
+            android:theme="@style/FullScreenTransparentStyle"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!--需要响应music_lib的点击通知Action事件-->
+                <action android:name="com.music.player.action"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.ys.location.category" />
             </intent-filter>
         </activity>
+        <!--登录、注册、找回密码-->
+        <activity android:name=".base.ui.activity.LoginGroupActivity"
+            android:screenOrientation="portrait" android:theme="@style/FullScreenTransparentStyle">
+
+        </activity>
+        <!--单个Activity主题-->
+        <activity android:name=".base.ui.activity.MusicPlayerSample"
+                  android:theme="@style/FullScreenTransparentStyle">
+        </activity>
+
+        <!--友盟-->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 
 </manifest>

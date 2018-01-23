@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/login_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="3dp"
+        android:background="@drawable/bg_login_register"
+        android:layout_margin="10dp">
+        <!--手机号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_phone"
+                android:layout_marginLeft="3dp"/>
+            <EditText
+                android:id="@+id/et_account"
+                style="@style/LoginEditTextInputStyle"
+                android:layout_weight="1"
+                android:inputType="number|textMultiLine"
+                android:hint="请输入手机号"/>
+            <ImageView
+                android:id="@+id/iv_account_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_login_calen"
+                android:background="?attr/selectableItemBackground"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/gray_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <!--密码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_password"
+                android:layout_marginLeft="3dp"/>
+            <EditText
+                android:id="@+id/et_password"
+                style="@style/LoginEditTextInputStyle"
+                android:layout_weight="1"
+                android:inputType="number|textMultiLine"
+                android:hint="请输入6位数密码"/>
+            <ImageView
+                android:id="@+id/iv_password_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:visibility="invisible"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_login_calen"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_retrieve_password"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="忘记密码?"
+        android:textColor="@color/login_find_password"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:layout_gravity="center_horizontal"/>
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:text="登 录"
+        android:gravity="center"
+        android:background="@drawable/bg_btn_login_submit"
+        android:textSize="16sp"
+        android:layout_margin="10dp" />
+</LinearLayout>
+

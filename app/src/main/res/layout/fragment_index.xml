@@ -1,12 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="首页" />
-
-</RelativeLayout>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/main_bg">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/statusbar_view_height">
+        </View>
+        <com.music.player.lib.view.MusicPlayerController
+            android:id="@+id/music_player_controller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.music.player.lib.view.MusicPlayerController>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color"/>
+        <com.androidkun.xtablayout.XTabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            app:xTabMode="fixed"
+            app:xTabIndicatorColor="@color/app_style"
+            app:xTabIndicatorHeight="2dp"
+            app:xTabIndicatorWidth="50dp"
+            app:xTabSelectedTextColor="@color/app_style"
+            app:xTabTextColor="@color/white"
+            app:xTabTextSize="14sp"
+            app:xTabSelectedTextSize="15sp">
+        </com.androidkun.xtablayout.XTabLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
