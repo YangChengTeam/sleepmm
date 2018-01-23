@@ -126,6 +126,5 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         MusicPlayerManager.getInstance().unBindService(this);
         MusicPlayerManager.getInstance().deleteObservers();
         MusicPlayerManager.getInstance().deteleAllPlayerStateListener();
-        MusicPlayerManager.getInstance().onDestroy();
     }
 }
