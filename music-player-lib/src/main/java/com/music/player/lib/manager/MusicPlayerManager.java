@@ -209,7 +209,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * 播放一个全新的列表,并指定位置
      * @param pistion 指定播放的位置
      * @param musicInfos 任务列表
-     * 此方法已被playPauseMusic()替代，新增暂停、开始播放特性
+     * 此方法已被playPauseMusic()替代，新增暂停、播放特性
+     * 此方法只会播放新的任务
      */
     @Deprecated
     public void playMusic(List<MusicInfo> musicInfos,int pistion){
@@ -432,8 +433,9 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         Logger.IS_DEBUG=flag;
     }
 
+
     /**
-     *
+     * 检查收藏结果回调
      * @param icon
      * @param isCollect
      */

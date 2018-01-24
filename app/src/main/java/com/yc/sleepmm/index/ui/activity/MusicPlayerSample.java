@@ -67,6 +67,10 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         mMusicPlayerController.setUIComponentType(Constants.UI_TYPE_DETAILS);
         //设置是否显示返回按钮
         mMusicPlayerController.setBackButtonVisibility(true);
+        //设置闹钟最大定时时间
+//        mMusicPlayerController.setAlarmSeekBarProgressMax(1000);
+        //设置闹钟初始的定时时间
+//        mMusicPlayerController.setAlarmSeekBarProgress(60);
         //是否点赞,默认false
         mMusicPlayerController.setCollectIcon(R.drawable.ic_player_collect,isCollect);//相反，未收藏：R.drawable.ic_player_collect,false
         //注册事件回调

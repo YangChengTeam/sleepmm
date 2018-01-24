@@ -28,6 +28,7 @@ import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
+import com.music.player.lib.util.MusicPlayerUtils;
 import com.music.player.lib.util.SharedPreferencesUtil;
 import com.music.player.lib.util.ToastUtils;
 import java.io.IOException;
@@ -971,7 +972,14 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             Logger.d(TAG,"回调=播放失败了");
             mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_ERROR);
         }
-        onCompletionPlay();
+        //有网络才会继续播放下一首
+        try {
+            if(MusicPlayerUtils.isCheckNetwork()){
+                onCompletionPlay();
+            }
+        }catch (Exception e){
+
+        }
         return false;
     }
 
