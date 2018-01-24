@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.player.lib.bean.MusicInfo;
+import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.DateUtil;
 import com.yc.sleepmm.R;
 import java.util.List;
@@ -51,28 +52,43 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             viewHolder.tv_item_author.setText(musicInfo.getMusicAuthor());
             viewHolder.tv_item_drutaion.setText(DateUtil.getTimeLengthString((int) (second)));
             viewHolder.tv_item_num.setText((position+1)+"");
+
+            switch (musicInfo.getPlauStatus()) {
+                //缓冲中
+                case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
+
+                    break;
+                //播放中
+                case PlayerStatus.PLAYER_STATUS_PLAYING:
+                    viewHolder.ic_play_anim.setImageResource(R.drawable.play_anim);
+                    AnimationDrawable drawable = (AnimationDrawable) viewHolder.ic_play_anim.getDrawable();
+                    if(null!=drawable){
+                        drawable.start();
+                    }
+                    viewHolder.ic_play_anim.setVisibility(View.VISIBLE);
+                    viewHolder.tv_item_num.setVisibility(View.GONE);
+                    break;
+                    //这里未做详细处理
+                //暂停中
+                case PlayerStatus.PLAYER_STATUS_PAUSE:
+                //播放完成或已停止
+                case PlayerStatus.PLAYER_STATUS_STOP:
+                    //播放失败
+                case PlayerStatus.PLAYER_STATUS_ERROR:
+                    viewHolder.ic_play_anim.setImageResource(0);
+                    viewHolder.ic_play_anim.setVisibility(View.GONE);
+                    viewHolder.tv_item_num.setVisibility(View.VISIBLE);
+                    break;
+
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(musicInfo.isPlaying())return;
                     if(null!=mOnItemClickListener){
                         mOnItemClickListener.onItemClick(position,v);
                     }
                 }
             });
-            if(musicInfo.isPlaying()){
-                viewHolder.ic_play_anim.setImageResource(R.drawable.play_anim);
-                AnimationDrawable drawable = (AnimationDrawable) viewHolder.ic_play_anim.getDrawable();
-                if(null!=drawable){
-                    drawable.start();
-                }
-                viewHolder.ic_play_anim.setVisibility(View.VISIBLE);
-                viewHolder.tv_item_num.setVisibility(View.GONE);
-            }else{
-                viewHolder.ic_play_anim.setImageResource(0);
-                viewHolder.ic_play_anim.setVisibility(View.GONE);
-                viewHolder.tv_item_num.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -91,18 +107,17 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * @param musicInfo
      */
     public void notifyDataSetChanged(MusicInfo musicInfo){
-        if(null!=musicInfo&&!TextUtils.isEmpty(musicInfo.getMusicID())){
-            if(null!=mData&&mData.size()>0){
-                for (int i = 0; i < mData.size(); i++) {
-                    MusicInfo info = mData.get(i);
-                    if(null!=musicInfo&&musicInfo.getMusicID().equals(info.getMusicID())){
-                        info.setPlaying(true);
-                    }else{
-                        info.setPlaying(false);
-                    }
+        if(null!=musicInfo&&null!=mData&&mData.size()>0){
+            int position=0;
+            for (int i = 0; i < mData.size(); i++) {
+                MusicInfo info = mData.get(i);
+                if(musicInfo.getMusicID().equals(info.getMusicID())){
+                    info.setPlauStatus(2);
+                    position=i;
+                    break;
                 }
-                this.notifyDataSetChanged();
             }
+            this.notifyItemChanged(position);
         }
     }
 
@@ -115,23 +130,16 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void update(Observable o, Object arg) {
         if(null!=arg){
             MusicInfo musicInfo= (MusicInfo) arg;
-            if(null!=mData&&mData.size()>0){
+            if(null!=musicInfo&&null!=mData&&mData.size()>0){
+                int position=0;
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
-                    if(null!=musicInfo&&musicInfo.getMusicID().equals(info.getMusicID())){
-                        info.setPlaying(true);
-                    }else{
-                        info.setPlaying(false);
+                    if(musicInfo.getMusicID().equals(info.getMusicID())){
+                        position=i;
+                        break;
                     }
                 }
-                this.notifyDataSetChanged();
-            }
-        }else{
-            if(null!=mData&&mData.size()>0){
-                for (MusicInfo data : mData) {
-                    data.setPlaying(false);
-                }
-                this.notifyDataSetChanged();
+                this.notifyItemChanged(position);
             }
         }
     }

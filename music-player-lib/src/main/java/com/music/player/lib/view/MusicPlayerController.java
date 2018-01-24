@@ -27,6 +27,7 @@ import com.music.player.lib.mode.GlideCircleTransform;
 import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerSetyle;
+import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.MusicPlayerUtils;
 import com.music.player.lib.util.ToastUtils;
@@ -160,31 +161,66 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后才会初始化的
     }
 
+    /**
+     * 观察者刷新，最好不要和onMusicPlayerState()同时处理
+     * @param o 哪个被观察者发出的通知
+     * @param arg 更新的内容
+     */
     @Override
     public void update(Observable o, Object arg) {
+        //为空无需处理
         if(null!=arg){
-            Logger.d(TAG,"播放控制器--收到观察者通知新播放任务");
             MusicInfo musicInfo= (MusicInfo) arg;
-            //正在播放
-            if(null!=musicInfo){
-                if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
-                //封面
-                if(null!=mIcPlayerCover){
-                    if(null==mOptions){
-                        mOptions = new RequestOptions();
-                        mOptions.error(R.drawable.ic_player_cover_default);
-                        mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
-                        mOptions.skipMemoryCache(true);//跳过内存缓存
-                        mOptions.centerCrop();
-                        mOptions.transform(new GlideCircleTransform(getContext()));
+            switch (musicInfo.getPlauStatus()) {
+                //播放任务为空
+                case PlayerStatus.PLAYER_STATUS_EMPOTY:
+                    Logger.d(TAG,"播放为空");
+                    break;
+                //异步缓冲中
+                case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
+                    Logger.d(TAG,"异步缓冲中");
+                    if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
+                    //封面
+                    if(null!=mIcPlayerCover){
+                        if(null==mOptions){
+                            mOptions = new RequestOptions();
+                            mOptions.error(R.drawable.ic_player_cover_default);
+                            mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
+                            mOptions.skipMemoryCache(true);//跳过内存缓存
+                            mOptions.centerCrop();
+                            mOptions.transform(new GlideCircleTransform(getContext()));
+                        }
+                        Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
                     }
-                    Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
-                }
-            }
-        }else{
-            Logger.d(TAG,"播放控制器--收到观察者通知播放任务已完成或销毁");
-            if(null!=mMusicPlayerSeekbar){
-                mMusicPlayerSeekbar.setPlaying(false);
+                    break;
+                //开始播放中
+                case PlayerStatus.PLAYER_STATUS_PLAYING:
+                    Logger.d(TAG,"开始播放中");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(true);
+                    }
+                    break;
+                //暂停了播放
+                case PlayerStatus.PLAYER_STATUS_PAUSE:
+                    Logger.d(TAG,"暂停了播放");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(false);
+                    }
+                    break;
+                //结束、强行停止播放
+                case PlayerStatus.PLAYER_STATUS_STOP:
+                    Logger.d(TAG,"结束、强行停止播放");
+                    if(null!=mMusicPlayerSeekbar)mMusicPlayerSeekbar.setPlaying(false);
+                    if(null!=mTvMusicTitle) mTvMusicTitle.setText("");
+                    //封面
+                    if(null!=mIcPlayerCover)mIcPlayerCover.setImageResource(R.drawable.ic_player_cover_default);
+                //播放失败
+                case PlayerStatus.PLAYER_STATUS_ERROR:
+                    Logger.d(TAG,"播放失败");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(false);
+                    }
+                    break;
             }
         }
     }
@@ -453,7 +489,18 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         this.UI_COMPONENT_TYPE=uiTypeHome;
     }
 
+
     //=====================================监听来自播放器的回调=======================================
+
+    /**
+     * 播放器状态回调,建议不要和update()同时处理
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放, 5：播放失败,详见：PlayerStatus类
+     */
+    @Override
+    public void onMusicPlayerState(MusicInfo musicInfo, int stateCode) {
+
+    }
 
     /**
      * 检查播放器播放任务回调
@@ -506,15 +553,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     }
 
     /**
-     * 播放器任务发生了变化
-     * @param music
-     */
-    @Override
-    public void onMusicChange(MusicInfo music) {
-        if(null!=music) Logger.d(TAG,"onMusicChange:"+music.getMusicID());
-    }
-
-    /**
      * 缓冲进度
      * @param percent
      */
@@ -533,64 +571,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         if(null!=mMusicPlayerSeekbar){
             mMusicPlayerSeekbar.setPlaying(true);
         }
-    }
-
-    /**
-     * 开始播放了
-     * @param musicInfo
-     */
-    @Override
-    public void startResult(MusicInfo musicInfo) {
-        if(null!=musicInfo) Logger.d(TAG,"startResult=ID="+musicInfo.getMusicID());
-        ToastUtils.showCenterToast("开始播放了");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(true);
-        }
-    }
-
-    /**
-     * 暂停播放了
-     * @param musicInfo
-     */
-    @Override
-    public void pauseResult(MusicInfo musicInfo) {
-        if(null!=musicInfo) Logger.d(TAG,"pauseResult=ID="+musicInfo.getMusicID());
-        ToastUtils.showCenterToast("暂停播放了");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放完成了
-     */
-    @Override
-    public void onCompletion() {
-        Logger.d(TAG,"onCompletion");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 停止播放了
-     * @param musicInfo
-     */
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放失败
-     * @param what
-     * @param extra
-     */
-    @Override
-    public void onError(int what, int extra) {
-        Logger.d(TAG,"onError：what="+what+",extra="+extra);
     }
 
     /**

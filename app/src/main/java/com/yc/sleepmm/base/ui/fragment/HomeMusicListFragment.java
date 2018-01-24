@@ -109,12 +109,12 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
         ((TextView) emptyView.findViewById(R.id.tvEmptyView)).setText("暂时没有音乐呢~");
         mHomeMusicListAdapter.setEmptyView(emptyView);
         mHomeMusicListAdapter.setOnItemClickListener(new HomeMusicListAdapter.OnItemClickListener() {
-            //播放
+            //播放/暂停
             @Override
             public void onPlayMusic(int position, View view) {
                 List<MusicInfo> data = mHomeMusicListAdapter.getData();
                 if(null!=data&&data.size()>0){
-                    MusicPlayerManager.getInstance().playMusic(data,position);
+                    MusicPlayerManager.getInstance().playPauseMusic(data,position);
                 }
             }
             //条目
@@ -198,13 +198,13 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
             if(1==page){
                 if(null!= mHomeMusicListAdapter){
                     mHomeMusicListAdapter.setNewData(data);
-                    MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法同步
                 }
             }else{
                 if(null!= mHomeMusicListAdapter){
                     mHomeMusicListAdapter.addData(data);
                 }
             }
+            MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
         }
     }
 
@@ -243,6 +243,16 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     //========================================播放器状态发生变化=====================================
 
+    /**
+     * 播放器发生了变化
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
+     */
+    @Override
+    public void onMusicPlayerState(MusicInfo musicInfo, int stateCode) {
+
+    }
+
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
 
@@ -264,11 +274,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     }
 
     @Override
-    public void onMusicChange(MusicInfo music) {
-
-    }
-
-    @Override
     public void onBufferingUpdate(int percent) {
 
     }
@@ -278,30 +283,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     }
 
-    @Override
-    public void startResult(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void pauseResult(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void onCompletion() {
-
-    }
-
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void onError(int what, int extra) {
-
-    }
 
     /**
      * 请求接收这个事件，是在Home界面中注册的

@@ -13,7 +13,14 @@ import com.music.player.lib.bean.MusicPlayerConfig;
 
 public interface OnUserPlayerEventListener {
     /**
-     * 检查当前正在播放的任务，建议在界面的onResume()中调用
+     * 播放器所有的播放状态回调至此
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
+     */
+    void onMusicPlayerState(MusicInfo musicInfo, int stateCode);
+
+    /**
+     * 检查当前正在播放的任务回调，在播放器控件初始化或列表初始画完成调用
      * @param musicInfo
      */
     void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer);
@@ -33,11 +40,6 @@ public interface OnUserPlayerEventListener {
      */
     void onMusicPlayerConfig(MusicPlayerConfig musicPlayerConfig);
     /**
-     * 切换了歌曲
-     * @param music
-     */
-    void onMusicChange(MusicInfo music);
-    /**
      * 缓冲百分比
      */
     void onBufferingUpdate(int percent);
@@ -45,32 +47,6 @@ public interface OnUserPlayerEventListener {
      * 播放器准备好了
      */
     void onPrepared(IMediaPlayer mediaPlayer);
-
-    /**
-     * 开始播放了
-     */
-    void startResult(MusicInfo musicInfo);
-
-    /**
-     * 暂停了播放
-     */
-    void pauseResult(MusicInfo musicInfo);
-
-    /**
-     * 播放完成了
-     */
-    void onCompletion();
-    /**
-     * 播放停止了
-     * @param musicInfo
-     */
-    void stopPlayer(MusicInfo musicInfo);
-    /**
-     * 播放失败了
-     * @param what
-     * @param extra
-     */
-    void onError(int what, int extra);
     /**
      * 自动创建播放任务
      * @param viewTupe
@@ -82,5 +58,4 @@ public interface OnUserPlayerEventListener {
      * @param durtion
      */
     void taskRemmainTime(long durtion);
-
 }
