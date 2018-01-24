@@ -974,6 +974,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             Logger.d(TAG,"回调=播放失败了");
             mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_ERROR);
         }
+        onCompletionPlay();
         return false;
     }
 
