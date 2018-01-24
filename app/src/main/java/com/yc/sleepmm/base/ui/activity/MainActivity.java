@@ -1,8 +1,6 @@
 package com.yc.sleepmm.base.ui.activity;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
@@ -11,11 +9,10 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.ui.adapter.MainAdapter;
 import com.yc.sleepmm.base.ui.fragment.IndexFragment;
-import com.yc.sleepmm.base.ui.fragment.SettingFragment;
+import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
 import com.yc.sleepmm.base.ui.fragment.SleepFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
