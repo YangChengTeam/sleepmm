@@ -20,7 +20,7 @@ public class APP extends MultiDexApplication {
         super.onCreate();
 //        RxUtils.init(this);
         MusicPlayerManager.getInstance().init(this);
-        MusicPlayerManager.getInstance().setDebug(true);
+        MusicPlayerManager.getInstance().setDebug(false);
         INSTANCE=this;
         MobSDK.init(INSTANCE, "23dc6f3757060", "c40753ae2913059b5443faa339dee6ed");
     }
