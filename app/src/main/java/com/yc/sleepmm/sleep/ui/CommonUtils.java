@@ -1,4 +1,4 @@
-package com.yc.sleepmm.util;
+package com.yc.sleepmm.sleep.ui;
 
 import android.content.ContentResolver;
 import android.content.Context;
