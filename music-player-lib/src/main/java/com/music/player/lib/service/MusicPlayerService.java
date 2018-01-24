@@ -824,7 +824,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
     private Notification getNotification(MusicInfo musicInfo) {
 //        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.remote_music_player_layout);
         NotificationCompat.Builder  notificationCompat=new NotificationCompat.Builder(this);
-        notificationCompat.setSmallIcon(R.mipmap.ic_launcher);
+        notificationCompat.setSmallIcon(R.drawable.ic_launcher);
         notificationCompat.setContentTitle("睡眠咩咩");
         notificationCompat.setContentText("正在播放:"+musicInfo.getMusicTitle());
         Intent intent = new Intent("com.music.player.action");//响应Action的Activity需要配置此Action

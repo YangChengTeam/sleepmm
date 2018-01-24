@@ -337,7 +337,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             //一个小时
             case PlayerAlarmModel.PLAYER_ALARM_ONE_HOUR:
                 msg="一个小时";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
+                btnAlarmModelIcon=R.drawable.ic_one_hour;
                 break;
             //无限制分钟
             case PlayerAlarmModel.PLAYER_ALARM_NORMAL:
