@@ -58,6 +58,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     private TextView mTvRandomPlay;
     private static int UI_COMPONENT_TYPE=Constants.UI_TYPE_HOME;
     private RequestOptions mOptions;
+    private boolean isCollect;//是否已收藏，全局应该同步
 
 
     public MusicPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -247,10 +248,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                 btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
                 break;
             //列表随机播放
-            case PlayerModel.PLAY_MODEL_RANDOM:
-                msg="随机";
-                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
-                break;
+//            case PlayerModel.PLAY_MODEL_RANDOM:
+//                msg="随机";
+//                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
+//                break;
             //单曲循环
             case PlayerModel.PLAY_MODEL_SINGER:
                 msg="单曲循环";
@@ -316,18 +317,12 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
     /**
      * 设置收藏ICON
-     * @param icon 要设置的收藏图标
+     * @param icon 收藏资源图标
      * @param isCollect 是否收藏
      */
     public void setCollectIcon(int icon,boolean isCollect){
-        if(null!=mIcCollect){
-            mIcCollect.setImageResource(icon);
-            if(isCollect){
-                mIcCollect.setColorFilter(Color.rgb(255,91,59));//#FFFF5B3B
-            }else{
-                setImageColorFilter(mIcCollect,mPlayerStyle);
-            }
-        }
+        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
+        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect);
     }
 
     /**
@@ -506,12 +501,24 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * 检查播放器播放任务回调
      * @param musicInfo
      * @param mediaPlayer
+     * 每次检查播放器正在播放的任务，控制器都需要实时刷新
      */
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
-        if(null!=musicInfo) Logger.d(TAG,"checkedPlayTaskResult=ID="+musicInfo.getMusicID());
-        if(null!=mediaPlayer&&mediaPlayer.isPlaying()){
-            mMusicPlayerSeekbar.setPlaying(true);
+        if(null!=musicInfo) Logger.d(TAG,"播放控制器收到任务检查回调,状态"+musicInfo.getPlauStatus());
+        if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
+        //封面
+        if(null!=mIcPlayerCover) {
+            if (null == mOptions) {
+                mOptions = new RequestOptions();
+                mOptions.error(R.drawable.ic_player_cover_default);
+                mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
+                mOptions.skipMemoryCache(true);//跳过内存缓存
+                mOptions.centerCrop();
+                mOptions.transform(new GlideCircleTransform(getContext()));
+            }
+            Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
+            if(null!=mMusicPlayerSeekbar) mMusicPlayerSeekbar.setPlaying(2==musicInfo.getPlauStatus()?true:false);//是否正在播放
         }
     }
 
@@ -600,6 +607,23 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         }
     }
 
+    /**
+     * 一处点赞，所有实例化的播放控制器都需要同步
+     * @param icon
+     * @param isCollect
+     */
+    @Override
+    public void changeCollectResult(int icon, boolean isCollect) {
+        if(null!=mIcCollect){
+            this.isCollect=isCollect;
+            mIcCollect.setImageResource(icon);
+            if(isCollect){
+                mIcCollect.setColorFilter(Color.rgb(255,91,59));//#FFFF5B3B
+            }else{
+                setImageColorFilter(mIcCollect,mPlayerStyle);
+            }
+        }
+    }
 
 
     //对持有者提供回调

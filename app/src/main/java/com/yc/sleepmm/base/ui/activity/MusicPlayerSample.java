@@ -36,7 +36,7 @@ import rx.functions.Action1;
 public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayerEventListener {
 
     private MusicPlayerController mMusicPlayerController;
-    private boolean isCollect;//是否收藏，需要调用者维护
+    private boolean isCollect=false;//是否收藏，需要调用者维护
     private MusicListAdapter mUsicListAdapter;
 
     @Override
@@ -67,9 +67,8 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         mMusicPlayerController.setUIComponentType(Constants.UI_TYPE_DETAILS);
         //设置是否显示返回按钮
         mMusicPlayerController.setBackButtonVisibility(true);
-        //设置是否收藏
-        isCollect=true;
-        mMusicPlayerController.setCollectIcon(R.drawable.ic_player_collect_true,isCollect);//相反，未收藏：R.drawable.ic_player_collect,false
+        //是否点赞,默认false
+        mMusicPlayerController.setCollectIcon(R.drawable.ic_player_collect,isCollect);//相反，未收藏：R.drawable.ic_player_collect,false
         //注册事件回调
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {
             //收藏事件触发了
@@ -79,7 +78,6 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
                 //设置是否收藏示例
                 mMusicPlayerController.setCollectIcon(isCollect?R.drawable.ic_player_collect_true:R.drawable.ic_player_collect,isCollect);
             }
-
             //随机播放触发了
             @Override
             public void onEventRandomPlay() {
@@ -99,6 +97,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         MusicPlayerManager.getInstance().addObservable(mMusicPlayerController);
         //注册播放变化监听
         MusicPlayerManager.getInstance().addPlayerStateListener(this);
+        MusicPlayerManager.getInstance().onResumeChecked();//先让播放器刷新起来
     }
 
     /**
@@ -113,10 +112,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         mUsicListAdapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                List<MusicInfo> data = mUsicListAdapter.getData();
-                if(null!=data&&data.size()>0){
-                    MusicPlayerManager.getInstance().playPauseMusic(data,position);
-                }
+                MusicPlayerManager.getInstance().playPauseMusic( mUsicListAdapter.getData(),position);
             }
         });
         recyclerView.setAdapter(mUsicListAdapter);
@@ -180,9 +176,6 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
 
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
-        if(null!=mUsicListAdapter){
-            mUsicListAdapter.notifyDataSetChanged(musicInfo);
-        }
     }
 
     @Override
@@ -224,6 +217,11 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
 
     @Override
     public void taskRemmainTime(long durtion) {
+
+    }
+
+    @Override
+    public void changeCollectResult(int icon, boolean isCollect) {
 
     }
 }

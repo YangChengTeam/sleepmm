@@ -112,10 +112,7 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
             //播放/暂停
             @Override
             public void onPlayMusic(int position, View view) {
-                List<MusicInfo> data = mHomeMusicListAdapter.getData();
-                if(null!=data&&data.size()>0){
-                    MusicPlayerManager.getInstance().playPauseMusic(data,position);
-                }
+                MusicPlayerManager.getInstance().playPauseMusic(mHomeMusicListAdapter.getData(),position);
             }
             //条目
             @Override
@@ -300,6 +297,11 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
 
     @Override
     public void taskRemmainTime(long durtion) {
+
+    }
+
+    @Override
+    public void changeCollectResult(int icon, boolean isCollect) {
 
     }
 }

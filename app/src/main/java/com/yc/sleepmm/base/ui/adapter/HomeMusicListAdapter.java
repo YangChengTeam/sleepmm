@@ -14,7 +14,6 @@ import com.music.player.lib.util.DateUtil;
 import com.music.player.lib.util.Logger;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.util.CommonUtils;
-
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -92,7 +91,6 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHol
                     break;
 
             }
-
             //播放\暂停
             helper.setOnClickListener(R.id.btn_play, new View.OnClickListener() {
                 @Override
@@ -113,27 +111,6 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHol
             });
         }
     }
-
-    /**
-     * 提供手动刷新，当检查播放器任务正在进行的时候，最终会回调至此
-     * @param musicInfo
-     */
-    public void notifyDataSetChanged(MusicInfo musicInfo){
-        if(null!=musicInfo&&!TextUtils.isEmpty(musicInfo.getMusicID())){
-            if(null!=mData&&mData.size()>0){
-                for (int i = 0; i < mData.size(); i++) {
-                    MusicInfo info = mData.get(i);
-                    if(null!=musicInfo&&musicInfo.getMusicID().equals(info.getMusicID())){
-                        info.setPlaying(true);
-                    }else{
-                        info.setPlaying(false);
-                    }
-                }
-                this.notifyDataSetChanged();
-            }
-        }
-    }
-
 
     /**
      * 刷新条目,这里刷新单个条目

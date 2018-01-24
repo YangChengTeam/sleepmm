@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.DateUtil;
+import com.music.player.lib.util.Logger;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.util.CommonUtils;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,7 +26,7 @@ import java.util.Observer;
 
 public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Observer{
 
-
+    private static final String TAG = "MusicListAdapter";
     private final LayoutInflater mLayoutInflater;
     private List<MusicInfo> mData;
 
@@ -41,7 +43,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         ViewHolder viewHolder= (ViewHolder) holder;
-        final MusicInfo musicInfo = mData.get(position);
+        MusicInfo musicInfo = mData.get(position);
         if(null!=musicInfo){
             String seconds = musicInfo.getMusicDurtion();
             if(TextUtils.isEmpty(seconds)){
@@ -60,24 +62,37 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
                 //播放中
                 case PlayerStatus.PLAYER_STATUS_PLAYING:
+                    viewHolder.tv_item_num.setVisibility(View.GONE);
+                    viewHolder.ic_play_anim.setVisibility(View.VISIBLE);
                     viewHolder.ic_play_anim.setImageResource(R.drawable.play_anim);
+                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
                     AnimationDrawable drawable = (AnimationDrawable) viewHolder.ic_play_anim.getDrawable();
                     if(null!=drawable){
+                        if(drawable.isRunning()) drawable.stop();
                         drawable.start();
                     }
-                    viewHolder.ic_play_anim.setVisibility(View.VISIBLE);
-                    viewHolder.tv_item_num.setVisibility(View.GONE);
                     break;
-                    //这里未做详细处理
                 //暂停中
                 case PlayerStatus.PLAYER_STATUS_PAUSE:
+                    viewHolder.ic_play_anim.setVisibility(View.VISIBLE);
+                    viewHolder.tv_item_num.setVisibility(View.GONE);
+                    viewHolder.ic_play_anim.setImageResource(R.drawable.play_anim);
+                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
+                    AnimationDrawable drawableAnimation = (AnimationDrawable) viewHolder.ic_play_anim.getDrawable();
+                    if(null!=drawableAnimation){
+                        drawableAnimation.stop();
+                    }
+                    break;
                 //播放完成或已停止
                 case PlayerStatus.PLAYER_STATUS_STOP:
                     //播放失败
                 case PlayerStatus.PLAYER_STATUS_ERROR:
+                    //为空
+                case PlayerStatus.PLAYER_STATUS_EMPOTY:
                     viewHolder.ic_play_anim.setImageResource(0);
                     viewHolder.ic_play_anim.setVisibility(View.GONE);
                     viewHolder.tv_item_num.setVisibility(View.VISIBLE);
+                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.white));
                     break;
 
             }
@@ -103,25 +118,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     /**
-     * 提供手动刷新，当检查播放器任务正在进行的时候，最终会回调至此
-     * @param musicInfo
-     */
-    public void notifyDataSetChanged(MusicInfo musicInfo){
-        if(null!=musicInfo&&null!=mData&&mData.size()>0){
-            int position=0;
-            for (int i = 0; i < mData.size(); i++) {
-                MusicInfo info = mData.get(i);
-                if(musicInfo.getMusicID().equals(info.getMusicID())){
-                    info.setPlauStatus(2);
-                    position=i;
-                    break;
-                }
-            }
-            this.notifyItemChanged(position);
-        }
-    }
-
-    /**
      * 刷新列表状态
      * @param o
      * @param arg
@@ -135,11 +131,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
                     if(musicInfo.getMusicID().equals(info.getMusicID())){
-                        position=i;
-                        break;
+                        info.setPlauStatus(musicInfo.getPlauStatus());
+                    }else{
+                        info.setPlauStatus(0);
                     }
                 }
-                this.notifyItemChanged(position);
+                Logger.d(TAG,"播放器示例界面列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"，位置："+position+",musicID："+musicInfo.getMusicID());
+                this.notifyDataSetChanged();
             }
         }
     }
