@@ -12,7 +12,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:screenOrientation="portrait">
 
-        <activity android:name=".base.ui.activity.MainActivity"
+        <activity android:name=".index.ui.activity.MainActivity"
             android:theme="@style/FullScreenTransparentStyle"
             android:launchMode="singleTop">
             <intent-filter>

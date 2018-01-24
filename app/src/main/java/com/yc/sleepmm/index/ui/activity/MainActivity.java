@@ -1,4 +1,4 @@
-package com.yc.sleepmm.base.ui.activity;
+package com.yc.sleepmm.index.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.ui.activity.BaseActivity;
 import com.yc.sleepmm.base.ui.adapter.MainAdapter;
 import com.yc.sleepmm.base.ui.fragment.IndexFragment;
 import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
