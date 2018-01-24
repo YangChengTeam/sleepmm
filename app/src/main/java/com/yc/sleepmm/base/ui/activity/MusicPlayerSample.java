@@ -115,15 +115,13 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
             public void onItemClick(int position, View view) {
                 List<MusicInfo> data = mUsicListAdapter.getData();
                 if(null!=data&&data.size()>0){
-                    MusicPlayerManager.getInstance().playMusic(data,position);
+                    MusicPlayerManager.getInstance().playPauseMusic(data,position);
                 }
             }
         });
         recyclerView.setAdapter(mUsicListAdapter);
         //注册观察者以刷新列表
         MusicPlayerManager.getInstance().addObservable(mUsicListAdapter);
-        //检查播放任务，在确保控制器初始化完成后和已注册播放器变化监听后调用
-        MusicPlayerManager.getInstance().onResumeChecked();
     }
 
     private void loadMusicList() {
@@ -176,6 +174,11 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
     //========================================播放器发生了变化========================================
 
     @Override
+    public void onMusicPlayerState(MusicInfo musicInfo, int stateCode) {
+
+    }
+
+    @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
         if(null!=mUsicListAdapter){
             mUsicListAdapter.notifyDataSetChanged(musicInfo);
@@ -198,43 +201,12 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
     }
 
     @Override
-    public void onMusicChange(MusicInfo music) {
-
-    }
-
-    @Override
     public void onBufferingUpdate(int percent) {
 
     }
 
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void startResult(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void pauseResult(MusicInfo musicInfo) {
-
-    }
-
-    @Override
-    public void onCompletion() {
-
-    }
-
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-
-    }
-
-
-    @Override
-    public void onError(int what, int extra) {
 
     }
 
