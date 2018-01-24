@@ -19,7 +19,7 @@ import com.music.player.lib.manager.MusicPlayerManager;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.ui.adapter.MainAdapter;
 import com.yc.sleepmm.base.ui.fragment.IndexFragment;
-import com.yc.sleepmm.base.ui.fragment.SettingFragment;
+import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
 import com.yc.sleepmm.base.ui.fragment.SleepFragment;
 import java.util.ArrayList;
 import java.util.List;
