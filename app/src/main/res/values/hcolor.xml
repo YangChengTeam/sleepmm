@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="comtitle0">#FF000000</color>
+    <color name="comtitle1">#FF333333</color>
+    <color name="comtitle2">#FF666666</color>
+    <color name="comtitle3">#FF999999</color>
+    <color name="app_style">#08A8EA</color>
+    <color name="line_color">#7F7F9F</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="btn_text_color">#FF69729b</color>
+    <color name="login_bg">#FFF8F8F8</color>
+    <color name="input_text_color">#FF010101</color>
+    <color name="input_hint_color">#FFAAAAAA</color>
+    <color name="gray_line">#FFCCCCCC</color>
+    <color name="bg_btn_get_code_true">#FFFF9C00</color>
+    <color name="bg_btn_get_code">#FFAAAAAA</color>
+    <color name="login_find_password">#FF102E64</color>
+</resources>

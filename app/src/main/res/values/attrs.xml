@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--通用输入框-->
+    <declare-styleable name="EtitTextInputAttribute">
+        <attr name="inputIcon" format="reference"></attr>
+        <attr name="cleanIcon" format="reference"></attr>
+        <attr name="hintText" format="string"></attr>
+        <attr name="hintTextSize" format="dimension"></attr>
+        <attr name="textSize" format="dimension"></attr>
+        <attr name="hintTextColor" format="color"></attr>
+        <attr name="TextColor" format="color"></attr>
+        <attr name="inputType" format="integer"></attr>
+    </declare-styleable>
+</resources>

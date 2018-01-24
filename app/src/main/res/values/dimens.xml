@@ -2,4 +2,5 @@
 <resources>
 
     <dimen name="fixed_height_bottom_padding">5dp</dimen>
+    <dimen name="top_title_bar_height">44dp</dimen>
 </resources>
