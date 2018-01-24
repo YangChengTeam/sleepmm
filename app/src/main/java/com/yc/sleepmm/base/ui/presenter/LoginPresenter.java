@@ -4,7 +4,7 @@ package com.yc.sleepmm.base.ui.presenter;
 import android.content.Context;
 import com.yc.sleepmm.base.rxnet.RxPresenter;
 import com.yc.sleepmm.base.ui.contract.LoginContract;
-import com.yc.sleepmm.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserDataInfo;
 
 /**
  * TinyHung@outlook.com

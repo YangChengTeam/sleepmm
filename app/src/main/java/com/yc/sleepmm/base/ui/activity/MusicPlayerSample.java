@@ -19,7 +19,7 @@ import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.ui.adapter.MusicListAdapter;
-import com.yc.sleepmm.bean.MediaMusicCategoryList;
+import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

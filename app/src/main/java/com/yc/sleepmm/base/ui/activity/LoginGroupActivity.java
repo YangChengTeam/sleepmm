@@ -1,16 +1,12 @@
 package com.yc.sleepmm.base.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,8 +23,8 @@ import com.yc.sleepmm.base.ui.dialog.LoadingProgressView;
 import com.yc.sleepmm.base.ui.fragment.LoginFragment;
 import com.yc.sleepmm.base.ui.fragment.LoginRegisterFragment;
 import com.yc.sleepmm.base.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.bean.UserDataInfo;
-import com.yc.sleepmm.constants.Constant;
+import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.constants.Constant;
 import java.util.Map;
 import butterknife.BindView;
 import cn.smssdk.EventHandler;

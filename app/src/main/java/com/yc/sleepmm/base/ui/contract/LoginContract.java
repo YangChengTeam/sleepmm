@@ -3,7 +3,7 @@ package com.yc.sleepmm.base.ui.contract;
 
 
 import com.yc.sleepmm.base.rxnet.BaseContract;
-import com.yc.sleepmm.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserDataInfo;
 
 /**
  * @time 2017/5/23 10:50

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.music.player.lib.bean.MusicInfo;
 import com.yc.sleepmm.base.rxnet.RxPresenter;
-import com.yc.sleepmm.bean.MediaMusicCategoryList;
+import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.base.ui.contract.HomeMusicListContract;
 import java.util.ArrayList;
 import java.util.HashMap;

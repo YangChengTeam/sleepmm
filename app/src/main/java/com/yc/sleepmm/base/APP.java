@@ -4,7 +4,8 @@ import android.support.multidex.MultiDexApplication;
 
 import com.mob.MobSDK;
 import com.music.player.lib.manager.MusicPlayerManager;
-import com.yc.sleepmm.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserDataInfo;
+
 
 /**
  * Created by wanglin  on 2018/1/10 15:19.

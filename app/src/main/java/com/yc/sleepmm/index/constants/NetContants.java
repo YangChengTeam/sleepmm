@@ -1,4 +1,4 @@
-package com.yc.sleepmm.constants;
+package com.yc.sleepmm.index.constants;
 
 /**
  * TinyHung@Outlook.com

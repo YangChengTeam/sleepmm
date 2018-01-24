@@ -1,4 +1,4 @@
-package com.yc.sleepmm.bean;
+package com.yc.sleepmm.index.bean;
 
 import java.io.Serializable;
 import java.util.List;

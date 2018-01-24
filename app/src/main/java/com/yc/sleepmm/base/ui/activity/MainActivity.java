@@ -1,4 +1,4 @@
-package com.yc.sleepmm.index.ui.activity;
+package com.yc.sleepmm.base.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
