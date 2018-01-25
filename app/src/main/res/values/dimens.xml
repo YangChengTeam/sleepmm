@@ -12,4 +12,8 @@
     <dimen name="text_12">12sp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_05">0.5dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="dp_3">3dp</dimen>
 </resources>
