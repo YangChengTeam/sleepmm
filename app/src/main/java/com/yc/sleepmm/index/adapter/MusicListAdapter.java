@@ -92,7 +92,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     viewHolder.ic_play_anim.setImageResource(0);
                     viewHolder.ic_play_anim.setVisibility(View.GONE);
                     viewHolder.tv_item_num.setVisibility(View.VISIBLE);
-                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.white));
+                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.coment_color));
                     break;
 
             }

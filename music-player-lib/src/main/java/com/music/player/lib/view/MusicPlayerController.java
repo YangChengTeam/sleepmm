@@ -37,7 +37,7 @@ import java.util.Observer;
 /**
  * TinyHung@Outlook.com
  * 2018/1/18
- * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者需要注册EventListener事件来处理其他由播放器回调的功能
+ * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者只需要注册EventListener事件来处理由播放器回调的其他事件
  */
 
 public class MusicPlayerController extends FrameLayout implements Observer, OnUserPlayerEventListener {
@@ -58,15 +58,15 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     private TextView mTvRandomPlay;
     private static int UI_COMPONENT_TYPE=Constants.UI_TYPE_HOME;
     private RequestOptions mOptions;
-    private boolean isCollect;//是否已收藏，全局应该同步
 
 
     public MusicPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        initView(context);
     }
 
-    private void init(Context context) {
+
+    private void initView(Context context) {
         inflate(context, R.layout.view_music_player_controller, this);
         mHandler = new Handler();
         mBtnLast = (ImageView) findViewById(R.id.btn_last);
@@ -92,11 +92,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         mMusicPlayerSeekbar.setOnClickListener(new MusicPlayerSeekBar.OnClickListener() {
             @Override
             public void onClickView() {
-                Logger.d(TAG,"onClickView");
                 boolean flag = MusicPlayerManager.getInstance().playPause();//暂停和播放
                 if(!flag){
-                    //通知所有UI组件，自动开始新的播放，如果UI组件愿意的话
-                    MusicPlayerManager.getInstance().autoStartNewPlayTasks(UI_COMPONENT_TYPE,0);//首页播放器控件发出播放命令，所有注册OnUserPlayerEventListener监听的UI，需要根据业务需求来决定是否播放
+                    //通知所有UI组件，自动开始新的播放
+                    MusicPlayerManager.getInstance().autoStartNewPlayTasks(UI_COMPONENT_TYPE,0);
                 }
             }
         });
@@ -104,12 +103,11 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         mMusicPlayerSeekbar.setOnSeekbarChangeListene(new MusicPlayerSeekBar.OnSeekbarChangeListene() {
             @Override
             public void onSeekBarChange(long progress) {
-                Logger.d(TAG,"seekProgress："+progress+"秒");
                 ToastUtils.showCenterToast("已设定"+ MusicPlayerUtils.stringHoursForTime(progress)+"后停止");
                 MusicPlayerManager.getInstance().setPlayerDurtion(progress);//设置定时结束播放的临界时间
             }
         });
-        //默认闹钟最大2个小时
+        //默认闹钟最大2个小时,调用者可自由设置
         mMusicPlayerSeekbar.setProgressMax(PlayerAlarmModel.TIME.MAX_TWO_HOUR);
         mMusicPlayerSeekbar.setProgress(MusicPlayerManager.getInstance().getPlayerAlarmDurtion());//使用用户最近设置的定时关闭时间
 
@@ -161,6 +159,49 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         MusicPlayerManager.getInstance().addPlayerStateListener(this);
         MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后才会初始化的
     }
+
+
+
+
+    /**
+     * 设置收藏ICON
+     * @param icon 收藏资源图标
+     * @param isCollect 是否收藏
+     */
+    public void setCollectIcon(int icon,boolean isCollect){
+        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
+        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect);
+    }
+
+    /**
+     * 是否显示返回按钮，默认不显示
+     * @param flag
+     */
+    public void setBackButtonVisibility(boolean flag){
+        if(null!=mBtnBack) mBtnBack.setVisibility(flag?VISIBLE:GONE);
+    }
+
+
+    /**
+     * 设置闹钟的最大时间
+     * @param maxProgress 单位秒
+     */
+    public void setAlarmSeekBarProgressMax(int maxProgress){
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setProgressMax(maxProgress);
+        }
+    }
+
+    /**
+     * 设置闹钟默认的初始时间
+     * @param progress 单位秒
+     */
+    public void setAlarmSeekBarProgress(int progress){
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setProgress(progress);
+        }
+    }
+
 
     /**
      * 观察者刷新，最好不要和onMusicPlayerState()同时处理
@@ -296,7 +337,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             //一个小时
             case PlayerAlarmModel.PLAYER_ALARM_ONE_HOUR:
                 msg="一个小时";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
+                btnAlarmModelIcon=R.drawable.ic_one_hour;
                 break;
             //无限制分钟
             case PlayerAlarmModel.PLAYER_ALARM_NORMAL:
@@ -314,24 +355,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         }
     }
 
-
-    /**
-     * 设置收藏ICON
-     * @param icon 收藏资源图标
-     * @param isCollect 是否收藏
-     */
-    public void setCollectIcon(int icon,boolean isCollect){
-        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
-        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect);
-    }
-
-    /**
-     * 是否显示返回按钮，默认不显示
-     * @param flag
-     */
-    public void setBackButtonVisibility(boolean flag){
-        if(null!=mBtnBack) mBtnBack.setVisibility(flag?VISIBLE:GONE);
-    }
 
     /**
      * 改变图片原有的颜色
@@ -391,65 +414,65 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             //默认
             case PlayerSetyle.PLAYER_STYLE_DEFAULT:
                 btnControllerColor=Color.rgb(168,177,204);//上一首，下一首
-                btnFunctionColor=Color.rgb(168,177,204);//播放模式、闹钟、收藏
+                btnFunctionColor=btnControllerColor;//播放模式、闹钟、收藏
                 titleColor=Color.rgb(255,255,255);//标题
-                progressBarBackgroundColor=Color.rgb(255,255,255);//#FFFFFFFF进度条背景背景颜色
-                btnBackColor=Color.rgb(255,255,255);//#FFFFFFFF返回按钮颜色
+                progressBarBackgroundColor=titleColor;//#FFFFFFFF进度条背景背景颜色
+                btnBackColor=titleColor;//#FFFFFFFF返回按钮颜色
                 break;
             //黑色
             case PlayerSetyle.PLAYER_STYLE_BLACK:
                 btnControllerColor=Color.rgb(204,204,204);//#FFCCCCCC
                 btnFunctionColor=Color.rgb(105,105,105);//#FF696969
                 titleColor=Color.rgb(0,0,0);//#00000000
-                progressBarBackgroundColor=Color.rgb(204,204,204);//#FFCCCCCC进度条背景背景颜色
-                btnBackColor=Color.rgb(0,0,0);
+                progressBarBackgroundColor=btnControllerColor;
+                btnBackColor=titleColor;
                 break;
             //白色
             case PlayerSetyle.PLAYER_STYLE_WHITE:
                 btnControllerColor=Color.rgb(255,255,255);
-                btnFunctionColor=Color.rgb(255,255,255);
-                titleColor=Color.rgb(255,255,255);
-                progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(255,255,255);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
+                progressBarBackgroundColor=btnControllerColor;
+                btnBackColor=btnControllerColor;
                 break;
             //蓝色
             case PlayerSetyle.PLAYER_STYLE_BLUE:
                 btnControllerColor=Color.rgb(18,148,246);//#FF1294F6
                 btnFunctionColor=Color.rgb(40,159,249);//#FF289FF9
-                titleColor=Color.rgb(18,148,246);
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(18,148,246);
+                btnBackColor=btnControllerColor;
                 break;
             //红色
             case PlayerSetyle.PLAYER_STYLE_RED:
                 btnControllerColor=Color.rgb(255,78,92);//#FFFF4E5C
-                btnFunctionColor=Color.rgb(255,78,92);
-                titleColor=Color.rgb(255,78,92);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(255,78,92);
+                btnBackColor=btnControllerColor;
                 break;
             //紫色
             case PlayerSetyle.PLAYER_STYLE_PURPLE:
                 btnControllerColor=Color.rgb(47,47,99);//#FF2F2F63
-                btnFunctionColor=Color.rgb(47,47,99);
-                titleColor=Color.rgb(47,47,99);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(47,47,99);
+                btnBackColor=btnControllerColor;
                 break;
             //绿色
             case PlayerSetyle.PLAYER_STYLE_GREEN:
                 btnControllerColor=Color.rgb(13,220,94);//#FF0DDC5E
-                btnFunctionColor=Color.rgb(13,220,94);
-                titleColor=Color.rgb(13,220,94);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(13,220,94);
+                btnBackColor=btnControllerColor;
                 break;
                 default:
                     btnControllerColor=Color.rgb(168,177,204);//#FFA8B1CC
-                    btnFunctionColor=Color.rgb(168,177,204);//#FFA8B1CC
+                    btnFunctionColor=btnControllerColor;//#FFA8B1CC
                     titleColor=Color.rgb(255,255,255);//#FFFFFFFF
-                    progressBarBackgroundColor=Color.rgb(255,255,255);//#FFFFFFFF
-                    btnBackColor=Color.rgb(255,255,255);
+                    progressBarBackgroundColor=titleColor;//#FFFFFFFF
+                    btnBackColor=titleColor;
         }
         if(null!=mBtnLast) mBtnLast.setColorFilter(btnControllerColor);
         if(null!=mBtnNext) mBtnNext.setColorFilter(btnControllerColor);
@@ -615,7 +638,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     @Override
     public void changeCollectResult(int icon, boolean isCollect) {
         if(null!=mIcCollect){
-            this.isCollect=isCollect;
             mIcCollect.setImageResource(icon);
             if(isCollect){
                 mIcCollect.setColorFilter(Color.rgb(255,91,59));//#FFFF5B3B

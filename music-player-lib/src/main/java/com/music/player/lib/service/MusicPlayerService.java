@@ -28,6 +28,7 @@ import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
+import com.music.player.lib.util.MusicPlayerUtils;
 import com.music.player.lib.util.SharedPreferencesUtil;
 import com.music.player.lib.util.ToastUtils;
 import java.io.IOException;
@@ -823,7 +824,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
     private Notification getNotification(MusicInfo musicInfo) {
 //        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.remote_music_player_layout);
         NotificationCompat.Builder  notificationCompat=new NotificationCompat.Builder(this);
-        notificationCompat.setSmallIcon(R.mipmap.ic_launcher);
+        notificationCompat.setSmallIcon(R.drawable.ic_launcher);
         notificationCompat.setContentTitle("睡眠咩咩");
         notificationCompat.setContentText("正在播放:"+musicInfo.getMusicTitle());
         Intent intent = new Intent("com.music.player.action");//响应Action的Activity需要配置此Action
@@ -971,7 +972,14 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             Logger.d(TAG,"回调=播放失败了");
             mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_ERROR);
         }
-        onCompletionPlay();
+        //有网络才会继续播放下一首
+        try {
+            if(MusicPlayerUtils.isCheckNetwork()){
+                onCompletionPlay();
+            }
+        }catch (Exception e){
+
+        }
         return false;
     }
 

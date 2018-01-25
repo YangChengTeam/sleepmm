@@ -1,6 +1,11 @@
 package com.music.player.lib.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
+
+import com.music.player.lib.manager.MusicPlayerManager;
 
 /**
  * TinyHung@Outlook.com
@@ -60,5 +65,22 @@ public class MusicPlayerUtils {
 
     public static boolean isJellyBeanMR1() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+    }
+
+    /**
+     * 获取当前设备是否有网
+     * @return
+     */
+    public static boolean isCheckNetwork(){
+        ConnectivityManager cm = (ConnectivityManager) MusicPlayerManager.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            return false;
+        }
+        int type = networkInfo.getType();
+        if (type == ConnectivityManager.TYPE_MOBILE || type == ConnectivityManager.TYPE_WIFI) {
+            return true;
+        }
+        return false;
     }
 }
