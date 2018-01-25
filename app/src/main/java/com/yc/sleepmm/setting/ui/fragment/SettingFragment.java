@@ -1,24 +1,18 @@
 package com.yc.sleepmm.setting.ui.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.utils.ToastUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
-import com.yc.sleepmm.pay.ui.activity.VipActivity;
+import com.yc.sleepmm.vip.ui.activity.VipActivity;
 import com.yc.sleepmm.setting.widget.BaseSettingView;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rx.functions.Action1;
 
 /**
@@ -60,7 +54,6 @@ public class SettingFragment extends BaseFragment {
         RxView.clicks(baseSettingViewVip).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "会员中心");
                 Intent intent = new Intent(getActivity(), VipActivity.class);
                 startActivity(intent);
             }

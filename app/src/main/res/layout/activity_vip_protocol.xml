@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_1b275d"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_25" />
+
+            <include layout="@layout/common_top_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_f0f0f0"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:gravity="center"
+                android:text="VIP会员服务协议"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="1、服务条款的接受与修改"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="      1.1、本协议是VIP会员专属与睡眠咩咩之间关于成为VIP会
+员且使用睡眠咩咩提供VIP会员服务所订立的协议。是VIP会员专
+属与睡眠咩咩之间关于成为VIP会员且使用睡眠咩咩提供VIP会员
+服务所订立的协议。"
+                android:lineSpacingExtra="@dimen/dp_5"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="      1.2、本协议是VIP会员专属与睡眠咩咩之间关于成为VIP会
+员且使用睡眠咩咩提供VIP会员服务所订立的协议。是VIP会员专
+属与睡眠咩咩之间关于成为VIP会员且使用睡眠咩咩提供VIP会员
+服务所订立的协议。"
+                android:lineSpacingExtra="@dimen/dp_5"
+                android:textColor="@color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

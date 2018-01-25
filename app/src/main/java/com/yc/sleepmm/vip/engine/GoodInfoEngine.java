@@ -1,9 +1,10 @@
-package com.yc.sleepmm.pay.engine;
+package com.yc.sleepmm.vip.engine;
 
 import android.content.Context;
 
 import com.kk.securityhttp.engin.BaseEngin;
-import com.yc.sleepmm.pay.bean.GoodInfo;
+import com.yc.sleepmm.vip.bean.GoodInfo;
+import com.yc.sleepmm.vip.bean.PayInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,22 @@ public class GoodInfoEngine extends BaseEngin<List<GoodInfo>> {
                 goodInfos.add(new GoodInfo("会员半年", "25"));
 
                 return goodInfos;
+            }
+        });
+
+    }
+
+
+    public Observable<List<PayInfo>> getPayInfos() {
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<PayInfo>>() {
+            @Override
+            public List<PayInfo> call(String s) {
+
+                List<PayInfo> list = new ArrayList<>();
+                list.add(new PayInfo("支付宝", "alipay"));
+                list.add(new PayInfo("微信", "wxpay"));
+
+                return list;
             }
         });
 
