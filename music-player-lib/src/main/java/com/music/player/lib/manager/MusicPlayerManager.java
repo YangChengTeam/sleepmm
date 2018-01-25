@@ -432,6 +432,19 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         Logger.IS_DEBUG=flag;
     }
 
+    /**
+     *
+     * @param icon
+     * @param isCollect
+     */
+    public void changeCollectResult(int icon, boolean isCollect) {
+        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
+            for (OnUserPlayerEventListener onUserPlayerEventListener : mUserCallBackListenerList) {
+                onUserPlayerEventListener.changeCollectResult(icon,isCollect);
+            }
+        }
+    }
+
 
     /**
      * bindService()必需

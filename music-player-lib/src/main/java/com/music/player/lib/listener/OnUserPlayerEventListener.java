@@ -58,4 +58,10 @@ public interface OnUserPlayerEventListener {
      * @param durtion
      */
     void taskRemmainTime(long durtion);
+    /**
+     * 一处点赞，所有同步
+     * @param icon
+     * @param isCollect
+     */
+    void changeCollectResult(int icon, boolean isCollect);
 }
