@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/music-player-lib/music-player-lib.iml" filepath="$PROJECT_DIR$/music-player-lib/music-player-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/pay/pay.iml" filepath="$PROJECT_DIR$/pay/pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxbus/rxbus.iml" filepath="$PROJECT_DIR$/rxbus/rxbus.iml" />
       <module fileurl="file://$PROJECT_DIR$/share/share.iml" filepath="$PROJECT_DIR$/share/share.iml" />
       <module fileurl="file://$PROJECT_DIR$/sleepmm.iml" filepath="$PROJECT_DIR$/sleepmm.iml" />
       <module fileurl="file://D:\AndroidStudioProjects\sleepmm\sleepmm.iml" filepath="D:\AndroidStudioProjects\sleepmm\sleepmm.iml" />

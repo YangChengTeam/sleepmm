@@ -8,32 +8,38 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:screenOrientation="portrait">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name=".index.ui.activity.MainActivity"
-            android:theme="@style/FullScreenTransparentStyle"
-            android:launchMode="singleTop">
+        <activity
+            android:name=".main.ui.activity.MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/FullScreenTransparentStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <!--需要响应music_lib的点击通知Action事件-->
-                <action android:name="com.music.player.action"/>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="com.music.player.action" />
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.ys.location.category" />
             </intent-filter>
         </activity>
         <!--登录、注册、找回密码-->
-        <activity android:name=".index.ui.activity.LoginGroupActivity"
-            android:screenOrientation="portrait" android:theme="@style/FullScreenTransparentStyle">
+        <activity
+            android:name=".index.ui.activity.LoginGroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTransparentStyle">
 
         </activity>
+
+        <activity android:name=".pay.ui.activity.VipActivity" />
         <!--单个Activity主题-->
-        <activity android:name=".index.ui.activity.MusicPlayerSample"
-                  android:theme="@style/FullScreenTransparentStyle">
-        </activity>
+        <activity
+            android:name=".index.ui.activity.MusicPlayerSample"
+            android:theme="@style/FullScreenTransparentStyle"></activity>
 
         <!--友盟-->
         <activity
@@ -41,7 +47,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5a684f2ab27b0a360100010b" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="app_online" />
     </application>
 
 </manifest>

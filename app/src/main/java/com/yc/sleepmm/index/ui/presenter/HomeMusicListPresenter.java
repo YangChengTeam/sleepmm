@@ -2,17 +2,21 @@
 package com.yc.sleepmm.index.ui.presenter;
 
 import android.content.Context;
+
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.music.player.lib.bean.MusicInfo;
+import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.index.rxnet.RxPresenter;
-import com.yc.sleepmm.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.index.ui.contract.HomeMusicListContract;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
 
 /**
  * TinyHung@outlook.com

@@ -3,4 +3,17 @@
 
     <dimen name="fixed_height_bottom_padding">5dp</dimen>
     <dimen name="top_title_bar_height">44dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_25">25dp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_12">12sp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_05">0.5dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="dp_3">3dp</dimen>
 </resources>

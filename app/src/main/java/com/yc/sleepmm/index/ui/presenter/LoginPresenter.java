@@ -2,9 +2,11 @@
 package com.yc.sleepmm.index.ui.presenter;
 
 import android.content.Context;
+
+import com.yc.sleepmm.index.bean.UserDataInfo;
 import com.yc.sleepmm.index.rxnet.RxPresenter;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
-import com.yc.sleepmm.bean.UserDataInfo;
+
 
 /**
  * TinyHung@outlook.com

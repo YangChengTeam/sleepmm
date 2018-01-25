@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.music.player.lib.util.ToastUtils;
 import com.umeng.socialize.UMAuthListener;
@@ -18,19 +19,22 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
-import com.yc.sleepmm.base.ui.activity.BaseActivity;
+import com.yc.sleepmm.base.view.BaseActivity;
+import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 import com.yc.sleepmm.index.ui.fragment.LoginFragment;
 import com.yc.sleepmm.index.ui.fragment.LoginRegisterFragment;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.bean.UserDataInfo;
-import com.yc.sleepmm.constants.Constant;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
+
 
 /**
  * TinyHung@Outlook.com

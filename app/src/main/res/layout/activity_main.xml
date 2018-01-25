@@ -3,21 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@mipmap/main_bg"
-    tools:context="com.yc.sleepmm.index.ui.activity.MainActivity">
+    android:orientation="vertical"
+    tools:context=".main.ui.activity.MainActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/main_bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
         android:layout_alignParentBottom="true"
-        android:background="#70000000"/>
+        android:layout_weight="0"
+        android:background="#70000000" />
 </LinearLayout>

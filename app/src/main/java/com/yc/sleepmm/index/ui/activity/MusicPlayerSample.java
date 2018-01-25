@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
@@ -19,11 +20,13 @@ import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.index.adapter.MusicListAdapter;
-import com.yc.sleepmm.bean.MediaMusicCategoryList;
+import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
