@@ -18,7 +18,7 @@ public abstract class BasePresenter<M, V extends IView> implements IPresenter {
 
     protected M mEngine;
 
-    protected V view;
+    protected V mView;
 
     protected Context mContext;
     protected boolean mFirstLoad = true;
@@ -28,7 +28,7 @@ public abstract class BasePresenter<M, V extends IView> implements IPresenter {
     }
 
     public BasePresenter(Context mContext, V view) {
-        this.view = view;
+        this.mView = view;
         this.mContext = mContext;
         mSubscriptions = new CompositeSubscription();
     }

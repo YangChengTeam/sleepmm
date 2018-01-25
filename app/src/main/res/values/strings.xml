@@ -11,6 +11,12 @@
     <string name="individuality_skin">个性皮肤</string>
     <string name="opinion_feedback">意见反馈</string>
     <string name="system_setting">系统设置</string>
+    <string name="vip_protocol">会员协议</string>
+    <string name="vip_right">会员权益</string>
+    <string name="vip_type">会员种类</string>
+    <string name="quality_music">高品质乐曲</string>
+    <string name="content_know">内容早知道</string>
+    <string name="charge">充 值</string>
 
 
 </resources>

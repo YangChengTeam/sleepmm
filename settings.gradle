@@ -1,1 +1,1 @@
-include ':app', ':pay', ':share', ':music-player-lib'
+include ':app', ':pay', ':share', ':music-player-lib', ':rxbus'

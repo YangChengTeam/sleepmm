@@ -34,6 +34,8 @@
             android:theme="@style/FullScreenTransparentStyle">
 
         </activity>
+
+        <activity android:name=".pay.ui.activity.VipActivity" />
         <!--单个Activity主题-->
         <activity
             android:name=".index.ui.activity.MusicPlayerSample"
