@@ -58,7 +58,9 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             switch (musicInfo.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
-
+                    viewHolder.tv_item_num.setVisibility(View.VISIBLE);
+                    viewHolder.ic_play_anim.setVisibility(View.GONE);
+                    viewHolder.tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
                     break;
                 //播放中
                 case PlayerStatus.PLAYER_STATUS_PLAYING:

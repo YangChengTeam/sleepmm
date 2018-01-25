@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
@@ -21,12 +20,10 @@ import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.index.adapter.MusicListAdapter;
 import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -90,6 +87,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
             public void onEventRandomPlay() {
                 ToastUtils.showCenterToast("点击了来一首");
                 //调用以下任意方法触发音乐播放
+//                MusicPlayerManager.getInstance().playPauseMusic("音乐列表","position");此方法支持播放、暂停
 //                MusicPlayerManager.getInstance().playMusic("音乐列表","position");
 //                MusicPlayerManager.getInstance().playMusic("position");
 //                MusicPlayerManager.getInstance().playMusic("单个音乐对象");

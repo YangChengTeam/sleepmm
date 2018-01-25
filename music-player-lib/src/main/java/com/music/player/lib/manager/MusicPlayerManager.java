@@ -177,8 +177,9 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     /**
      * 播放新的音乐
      * @param musicInfo
+     * * 此方法已被playPauseMusic()替代，新增暂停、播放特性
      */
-
+    @Deprecated
     public void  playMusic(MusicInfo musicInfo){
         if(null==mContext){
             throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
@@ -193,7 +194,9 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     /**
      * 播放指定位置音乐
      * @param pistion
+     * * 此方法已被playPauseMusic()替代，新增暂停、播放特性
      */
+    @Deprecated
     public void playMusic(int pistion){
         if(null==mContext){
             throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");

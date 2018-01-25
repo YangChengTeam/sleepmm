@@ -10,17 +10,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.adapter.AppFragmentPagerAdapter;
 import com.yc.sleepmm.base.view.BaseFragment;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 
 /**
@@ -132,7 +129,6 @@ public class IndexFragment extends BaseFragment {
 
     /**
      * 返回当前正在显示的角标位置
-     *
      * @return
      */
     public int getCurrentIndex() {
@@ -141,7 +137,5 @@ public class IndexFragment extends BaseFragment {
         }
         return 0;
     }
-
-
 }
 
