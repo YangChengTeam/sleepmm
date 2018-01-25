@@ -21,7 +21,16 @@ public class MusicInfo {
     private String msuicAlbumIcon;//专辑封面
     private String msuicAlbumAuthor;//专辑作者
     private int playModel;//播放模式
+    private int plauStatus;//0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
     private boolean isPlaying;//是否正在播放
+
+    public int getPlauStatus() {
+        return plauStatus;
+    }
+
+    public void setPlauStatus(int plauStatus) {
+        this.plauStatus = plauStatus;
+    }
 
     public String getMusicID() {
         return musicID;

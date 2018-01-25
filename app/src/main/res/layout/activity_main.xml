@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/main_bg"
-    tools:context="com.yc.sleepmm.base.ui.activity.MainActivity">
+    android:orientation="vertical"
+    tools:context=".main.ui.activity.MainActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/main_bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/transparent" />
-
-</RelativeLayout>
+        android:layout_weight="0"
+        android:background="#70000000" />
+</LinearLayout>

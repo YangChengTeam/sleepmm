@@ -4,5 +4,13 @@
     <string name="main_index">音你而来</string>
     <string name="main_sleep">睡眠SPA</string>
     <string name="main_miemie">咩咩</string>
+    <string name="vip_center">会员中心</string>
+    <string name="find_center">发现中心</string>
+    <string name="person_favor">个人收藏</string>
+    <string name="alarm_setting">闹钟设置</string>
+    <string name="individuality_skin">个性皮肤</string>
+    <string name="opinion_feedback">意见反馈</string>
+    <string name="system_setting">系统设置</string>
+
 
 </resources>

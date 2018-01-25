@@ -27,6 +27,7 @@ import com.music.player.lib.mode.GlideCircleTransform;
 import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerSetyle;
+import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.MusicPlayerUtils;
 import com.music.player.lib.util.ToastUtils;
@@ -36,7 +37,7 @@ import java.util.Observer;
 /**
  * TinyHung@Outlook.com
  * 2018/1/18
- * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者需要注册EventListener事件来处理其他由播放器回调的功能
+ * 音乐播放器控制器,这个自定义控制器实现了Observer接口，内部自己负责刷新正在播放的音乐，调用者只需要注册EventListener事件来处理由播放器回调的其他事件
  */
 
 public class MusicPlayerController extends FrameLayout implements Observer, OnUserPlayerEventListener {
@@ -61,10 +62,11 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
     public MusicPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        initView(context);
     }
 
-    private void init(Context context) {
+
+    private void initView(Context context) {
         inflate(context, R.layout.view_music_player_controller, this);
         mHandler = new Handler();
         mBtnLast = (ImageView) findViewById(R.id.btn_last);
@@ -90,11 +92,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         mMusicPlayerSeekbar.setOnClickListener(new MusicPlayerSeekBar.OnClickListener() {
             @Override
             public void onClickView() {
-                Logger.d(TAG,"onClickView");
                 boolean flag = MusicPlayerManager.getInstance().playPause();//暂停和播放
                 if(!flag){
-                    //通知所有UI组件，自动开始新的播放，如果UI组件愿意的话
-                    MusicPlayerManager.getInstance().autoStartNewPlayTasks(UI_COMPONENT_TYPE,0);//首页播放器控件发出播放命令，所有注册OnUserPlayerEventListener监听的UI，需要根据业务需求来决定是否播放
+                    //通知所有UI组件，自动开始新的播放
+                    MusicPlayerManager.getInstance().autoStartNewPlayTasks(UI_COMPONENT_TYPE,0);
                 }
             }
         });
@@ -102,12 +103,11 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         mMusicPlayerSeekbar.setOnSeekbarChangeListene(new MusicPlayerSeekBar.OnSeekbarChangeListene() {
             @Override
             public void onSeekBarChange(long progress) {
-                Logger.d(TAG,"seekProgress："+progress+"秒");
                 ToastUtils.showCenterToast("已设定"+ MusicPlayerUtils.stringHoursForTime(progress)+"后停止");
                 MusicPlayerManager.getInstance().setPlayerDurtion(progress);//设置定时结束播放的临界时间
             }
         });
-        //默认闹钟最大2个小时
+        //默认闹钟最大2个小时,调用者可自由设置
         mMusicPlayerSeekbar.setProgressMax(PlayerAlarmModel.TIME.MAX_TWO_HOUR);
         mMusicPlayerSeekbar.setProgress(MusicPlayerManager.getInstance().getPlayerAlarmDurtion());//使用用户最近设置的定时关闭时间
 
@@ -160,31 +160,109 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后才会初始化的
     }
 
+
+
+
+    /**
+     * 设置收藏ICON
+     * @param icon 收藏资源图标
+     * @param isCollect 是否收藏
+     */
+    public void setCollectIcon(int icon,boolean isCollect){
+        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
+        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect);
+    }
+
+    /**
+     * 是否显示返回按钮，默认不显示
+     * @param flag
+     */
+    public void setBackButtonVisibility(boolean flag){
+        if(null!=mBtnBack) mBtnBack.setVisibility(flag?VISIBLE:GONE);
+    }
+
+
+    /**
+     * 设置闹钟的最大时间
+     * @param maxProgress 单位秒
+     */
+    public void setAlarmSeekBarProgressMax(int maxProgress){
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setProgressMax(maxProgress);
+        }
+    }
+
+    /**
+     * 设置闹钟默认的初始时间
+     * @param progress 单位秒
+     */
+    public void setAlarmSeekBarProgress(int progress){
+        if(null!=mMusicPlayerSeekbar){
+            mMusicPlayerSeekbar.setProgress(progress);
+        }
+    }
+
+
+    /**
+     * 观察者刷新，最好不要和onMusicPlayerState()同时处理
+     * @param o 哪个被观察者发出的通知
+     * @param arg 更新的内容
+     */
     @Override
     public void update(Observable o, Object arg) {
+        //为空无需处理
         if(null!=arg){
-            Logger.d(TAG,"播放控制器--收到观察者通知新播放任务");
             MusicInfo musicInfo= (MusicInfo) arg;
-            //正在播放
-            if(null!=musicInfo){
-                if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
-                //封面
-                if(null!=mIcPlayerCover){
-                    if(null==mOptions){
-                        mOptions = new RequestOptions();
-                        mOptions.error(R.drawable.ic_player_cover_default);
-                        mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
-                        mOptions.skipMemoryCache(true);//跳过内存缓存
-                        mOptions.centerCrop();
-                        mOptions.transform(new GlideCircleTransform(getContext()));
+            switch (musicInfo.getPlauStatus()) {
+                //播放任务为空
+                case PlayerStatus.PLAYER_STATUS_EMPOTY:
+                    Logger.d(TAG,"播放为空");
+                    break;
+                //异步缓冲中
+                case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
+                    Logger.d(TAG,"异步缓冲中");
+                    if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
+                    //封面
+                    if(null!=mIcPlayerCover){
+                        if(null==mOptions){
+                            mOptions = new RequestOptions();
+                            mOptions.error(R.drawable.ic_player_cover_default);
+                            mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
+                            mOptions.skipMemoryCache(true);//跳过内存缓存
+                            mOptions.centerCrop();
+                            mOptions.transform(new GlideCircleTransform(getContext()));
+                        }
+                        Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
                     }
-                    Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
-                }
-            }
-        }else{
-            Logger.d(TAG,"播放控制器--收到观察者通知播放任务已完成或销毁");
-            if(null!=mMusicPlayerSeekbar){
-                mMusicPlayerSeekbar.setPlaying(false);
+                    break;
+                //开始播放中
+                case PlayerStatus.PLAYER_STATUS_PLAYING:
+                    Logger.d(TAG,"开始播放中");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(true);
+                    }
+                    break;
+                //暂停了播放
+                case PlayerStatus.PLAYER_STATUS_PAUSE:
+                    Logger.d(TAG,"暂停了播放");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(false);
+                    }
+                    break;
+                //结束、强行停止播放
+                case PlayerStatus.PLAYER_STATUS_STOP:
+                    Logger.d(TAG,"结束、强行停止播放");
+                    if(null!=mMusicPlayerSeekbar)mMusicPlayerSeekbar.setPlaying(false);
+                    if(null!=mTvMusicTitle) mTvMusicTitle.setText("");
+                    //封面
+                    if(null!=mIcPlayerCover)mIcPlayerCover.setImageResource(R.drawable.ic_player_cover_default);
+                //播放失败
+                case PlayerStatus.PLAYER_STATUS_ERROR:
+                    Logger.d(TAG,"播放失败");
+                    if(null!=mMusicPlayerSeekbar){
+                        mMusicPlayerSeekbar.setPlaying(false);
+                    }
+                    break;
             }
         }
     }
@@ -211,10 +289,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                 btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
                 break;
             //列表随机播放
-            case PlayerModel.PLAY_MODEL_RANDOM:
-                msg="随机";
-                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
-                break;
+//            case PlayerModel.PLAY_MODEL_RANDOM:
+//                msg="随机";
+//                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
+//                break;
             //单曲循环
             case PlayerModel.PLAY_MODEL_SINGER:
                 msg="单曲循环";
@@ -259,7 +337,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             //一个小时
             case PlayerAlarmModel.PLAYER_ALARM_ONE_HOUR:
                 msg="一个小时";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
+                btnAlarmModelIcon=R.drawable.ic_one_hour;
                 break;
             //无限制分钟
             case PlayerAlarmModel.PLAYER_ALARM_NORMAL:
@@ -277,30 +355,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         }
     }
 
-
-    /**
-     * 设置收藏ICON
-     * @param icon 要设置的收藏图标
-     * @param isCollect 是否收藏
-     */
-    public void setCollectIcon(int icon,boolean isCollect){
-        if(null!=mIcCollect){
-            mIcCollect.setImageResource(icon);
-            if(isCollect){
-                mIcCollect.setColorFilter(Color.rgb(255,91,59));//#FFFF5B3B
-            }else{
-                setImageColorFilter(mIcCollect,mPlayerStyle);
-            }
-        }
-    }
-
-    /**
-     * 是否显示返回按钮，默认不显示
-     * @param flag
-     */
-    public void setBackButtonVisibility(boolean flag){
-        if(null!=mBtnBack) mBtnBack.setVisibility(flag?VISIBLE:GONE);
-    }
 
     /**
      * 改变图片原有的颜色
@@ -360,65 +414,65 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             //默认
             case PlayerSetyle.PLAYER_STYLE_DEFAULT:
                 btnControllerColor=Color.rgb(168,177,204);//上一首，下一首
-                btnFunctionColor=Color.rgb(168,177,204);//播放模式、闹钟、收藏
+                btnFunctionColor=btnControllerColor;//播放模式、闹钟、收藏
                 titleColor=Color.rgb(255,255,255);//标题
-                progressBarBackgroundColor=Color.rgb(255,255,255);//#FFFFFFFF进度条背景背景颜色
-                btnBackColor=Color.rgb(255,255,255);//#FFFFFFFF返回按钮颜色
+                progressBarBackgroundColor=titleColor;//#FFFFFFFF进度条背景背景颜色
+                btnBackColor=titleColor;//#FFFFFFFF返回按钮颜色
                 break;
             //黑色
             case PlayerSetyle.PLAYER_STYLE_BLACK:
                 btnControllerColor=Color.rgb(204,204,204);//#FFCCCCCC
                 btnFunctionColor=Color.rgb(105,105,105);//#FF696969
                 titleColor=Color.rgb(0,0,0);//#00000000
-                progressBarBackgroundColor=Color.rgb(204,204,204);//#FFCCCCCC进度条背景背景颜色
-                btnBackColor=Color.rgb(0,0,0);
+                progressBarBackgroundColor=btnControllerColor;
+                btnBackColor=titleColor;
                 break;
             //白色
             case PlayerSetyle.PLAYER_STYLE_WHITE:
                 btnControllerColor=Color.rgb(255,255,255);
-                btnFunctionColor=Color.rgb(255,255,255);
-                titleColor=Color.rgb(255,255,255);
-                progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(255,255,255);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
+                progressBarBackgroundColor=btnControllerColor;
+                btnBackColor=btnControllerColor;
                 break;
             //蓝色
             case PlayerSetyle.PLAYER_STYLE_BLUE:
                 btnControllerColor=Color.rgb(18,148,246);//#FF1294F6
                 btnFunctionColor=Color.rgb(40,159,249);//#FF289FF9
-                titleColor=Color.rgb(18,148,246);
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(18,148,246);
+                btnBackColor=btnControllerColor;
                 break;
             //红色
             case PlayerSetyle.PLAYER_STYLE_RED:
                 btnControllerColor=Color.rgb(255,78,92);//#FFFF4E5C
-                btnFunctionColor=Color.rgb(255,78,92);
-                titleColor=Color.rgb(255,78,92);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(255,78,92);
+                btnBackColor=btnControllerColor;
                 break;
             //紫色
             case PlayerSetyle.PLAYER_STYLE_PURPLE:
                 btnControllerColor=Color.rgb(47,47,99);//#FF2F2F63
-                btnFunctionColor=Color.rgb(47,47,99);
-                titleColor=Color.rgb(47,47,99);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(47,47,99);
+                btnBackColor=btnControllerColor;
                 break;
             //绿色
             case PlayerSetyle.PLAYER_STYLE_GREEN:
                 btnControllerColor=Color.rgb(13,220,94);//#FF0DDC5E
-                btnFunctionColor=Color.rgb(13,220,94);
-                titleColor=Color.rgb(13,220,94);
+                btnFunctionColor=btnControllerColor;
+                titleColor=btnControllerColor;
                 progressBarBackgroundColor=Color.rgb(255,255,255);
-                btnBackColor=Color.rgb(13,220,94);
+                btnBackColor=btnControllerColor;
                 break;
                 default:
                     btnControllerColor=Color.rgb(168,177,204);//#FFA8B1CC
-                    btnFunctionColor=Color.rgb(168,177,204);//#FFA8B1CC
+                    btnFunctionColor=btnControllerColor;//#FFA8B1CC
                     titleColor=Color.rgb(255,255,255);//#FFFFFFFF
-                    progressBarBackgroundColor=Color.rgb(255,255,255);//#FFFFFFFF
-                    btnBackColor=Color.rgb(255,255,255);
+                    progressBarBackgroundColor=titleColor;//#FFFFFFFF
+                    btnBackColor=titleColor;
         }
         if(null!=mBtnLast) mBtnLast.setColorFilter(btnControllerColor);
         if(null!=mBtnNext) mBtnNext.setColorFilter(btnControllerColor);
@@ -453,18 +507,41 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         this.UI_COMPONENT_TYPE=uiTypeHome;
     }
 
+
     //=====================================监听来自播放器的回调=======================================
+
+    /**
+     * 播放器状态回调,建议不要和update()同时处理
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放, 5：播放失败,详见：PlayerStatus类
+     */
+    @Override
+    public void onMusicPlayerState(MusicInfo musicInfo, int stateCode) {
+
+    }
 
     /**
      * 检查播放器播放任务回调
      * @param musicInfo
      * @param mediaPlayer
+     * 每次检查播放器正在播放的任务，控制器都需要实时刷新
      */
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
-        if(null!=musicInfo) Logger.d(TAG,"checkedPlayTaskResult=ID="+musicInfo.getMusicID());
-        if(null!=mediaPlayer&&mediaPlayer.isPlaying()){
-            mMusicPlayerSeekbar.setPlaying(true);
+        if(null!=musicInfo) Logger.d(TAG,"播放控制器收到任务检查回调,状态"+musicInfo.getPlauStatus());
+        if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
+        //封面
+        if(null!=mIcPlayerCover) {
+            if (null == mOptions) {
+                mOptions = new RequestOptions();
+                mOptions.error(R.drawable.ic_player_cover_default);
+                mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
+                mOptions.skipMemoryCache(true);//跳过内存缓存
+                mOptions.centerCrop();
+                mOptions.transform(new GlideCircleTransform(getContext()));
+            }
+            Glide.with(getContext()).load(musicInfo.getMusicCover()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
+            if(null!=mMusicPlayerSeekbar) mMusicPlayerSeekbar.setPlaying(2==musicInfo.getPlauStatus()?true:false);//是否正在播放
         }
     }
 
@@ -506,15 +583,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     }
 
     /**
-     * 播放器任务发生了变化
-     * @param music
-     */
-    @Override
-    public void onMusicChange(MusicInfo music) {
-        if(null!=music) Logger.d(TAG,"onMusicChange:"+music.getMusicID());
-    }
-
-    /**
      * 缓冲进度
      * @param percent
      */
@@ -533,64 +601,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         if(null!=mMusicPlayerSeekbar){
             mMusicPlayerSeekbar.setPlaying(true);
         }
-    }
-
-    /**
-     * 开始播放了
-     * @param musicInfo
-     */
-    @Override
-    public void startResult(MusicInfo musicInfo) {
-        if(null!=musicInfo) Logger.d(TAG,"startResult=ID="+musicInfo.getMusicID());
-        ToastUtils.showCenterToast("开始播放了");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(true);
-        }
-    }
-
-    /**
-     * 暂停播放了
-     * @param musicInfo
-     */
-    @Override
-    public void pauseResult(MusicInfo musicInfo) {
-        if(null!=musicInfo) Logger.d(TAG,"pauseResult=ID="+musicInfo.getMusicID());
-        ToastUtils.showCenterToast("暂停播放了");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放完成了
-     */
-    @Override
-    public void onCompletion() {
-        Logger.d(TAG,"onCompletion");
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 停止播放了
-     * @param musicInfo
-     */
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-        if(null!=mMusicPlayerSeekbar){
-            mMusicPlayerSeekbar.setPlaying(false);
-        }
-    }
-
-    /**
-     * 播放失败
-     * @param what
-     * @param extra
-     */
-    @Override
-    public void onError(int what, int extra) {
-        Logger.d(TAG,"onError：what="+what+",extra="+extra);
     }
 
     /**
@@ -620,6 +630,22 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         }
     }
 
+    /**
+     * 一处点赞，所有实例化的播放控制器都需要同步
+     * @param icon
+     * @param isCollect
+     */
+    @Override
+    public void changeCollectResult(int icon, boolean isCollect) {
+        if(null!=mIcCollect){
+            mIcCollect.setImageResource(icon);
+            if(isCollect){
+                mIcCollect.setColorFilter(Color.rgb(255,91,59));//#FFFF5B3B
+            }else{
+                setImageColorFilter(mIcCollect,mPlayerStyle);
+            }
+        }
+    }
 
 
     //对持有者提供回调

@@ -3,7 +3,6 @@ package com.music.player.lib.listener;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
 import com.music.player.lib.bean.MusicInfo;
-import com.music.player.lib.bean.MusicPlayerConfig;
 
 /**
  * 播放进度监听器
@@ -12,28 +11,18 @@ import com.music.player.lib.bean.MusicPlayerConfig;
  */
 
 public interface OnPlayerEventListener {
-    /**
-     * 切换歌曲
-     * @param music
-     */
-    void onMusicChange(MusicInfo music);
 
     /**
-     * 播放完成
+     * 播放器所有状态回调
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放, 5：播放失败,详见：PlayerStatus类
      */
-    void onCompletion();
-
-    /**
-     * 播放停止了
-     * @param musicInfo
-     */
-    void stopPlayer(MusicInfo musicInfo);
+    void onMusicPlayerState(MusicInfo musicInfo, int stateCode);
 
     /**
      * 播放器准备好了
      */
     void onPrepared(IMediaPlayer mediaPlayer);
-
     /**
      * 缓冲百分比
      */
@@ -49,28 +38,12 @@ public interface OnPlayerEventListener {
      * 设置进度完成回调
      */
     void onSeekComplete();
-    /**
-     * 播放失败
-     * @param what
-     * @param extra
-     */
-    void onError(int what, int extra);
 
     /**
      * 检查当前正在播放的任务，建议在界面的onResume()中调用
      * @param musicInfo
      */
     void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer);
-
-    /**
-     * 暂停了播放
-     */
-    void pauseResult(MusicInfo musicInfo);
-
-    /**
-     * 开始播放了
-     */
-    void startResult(MusicInfo musicInfo);
 
     /**
      * 改变了播放器播放模式回调

@@ -161,9 +161,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     }
 
     /**
-     * 检查当前正在播放的任务，建议在RecyclerView适配器或者播放控制器初始化后调用
+     * 检查当前正在播放的任务，在播放器控件初始化或列表初始画完成后调用
      */
-
     public void onResumeChecked() {
         if(null==mContext){
             throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
@@ -210,7 +209,10 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * 播放一个全新的列表,并指定位置
      * @param pistion 指定播放的位置
      * @param musicInfos 任务列表
+     * 此方法已被playPauseMusic()替代，新增暂停、播放特性
+     * 此方法只会播放新的任务
      */
+    @Deprecated
     public void playMusic(List<MusicInfo> musicInfos,int pistion){
         if(null==mContext){
             throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
@@ -222,6 +224,19 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         }
     }
 
+
+    /**
+     * 播放或者暂停
+     * @param data
+     * @param position
+     */
+    public void playPauseMusic(List<MusicInfo> data, int position) {
+        if(serviceIsNoEmpty()){
+            mMusicPlayerServiceBunder.playPauseMusic(data,position);
+        }else{
+            throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
+        }
+    }
 
     /**
      * 开始\暂停播放
@@ -420,6 +435,20 @@ public class MusicPlayerManager implements OnPlayerEventListener {
 
 
     /**
+     * 检查收藏结果回调
+     * @param icon
+     * @param isCollect
+     */
+    public void changeCollectResult(int icon, boolean isCollect) {
+        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
+            for (OnUserPlayerEventListener onUserPlayerEventListener : mUserCallBackListenerList) {
+                onUserPlayerEventListener.changeCollectResult(icon,isCollect);
+            }
+        }
+    }
+
+
+    /**
      * bindService()必需
      */
     private class MusicPlayerServiceConnection implements ServiceConnection {
@@ -488,38 +517,19 @@ public class MusicPlayerManager implements OnPlayerEventListener {
 
     //=================================播放状态回调，回调至调用者=====================================
 
+    /**
+     * 播放器所有状态回调
+     * @param musicInfo 当前播放的任务，未播放为空
+     * @param stateCode 类别Code: 0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放, 5：播放失败,详见：PlayerStatus类
+     */
     @Override
-    public void onMusicChange(MusicInfo music) {
+    public void onMusicPlayerState(MusicInfo musicInfo, int stateCode) {
         if(null!=mSubjectObservable){
-            mSubjectObservable.updataSubjectObserivce(music);
+            mSubjectObservable.updataSubjectObserivce(musicInfo);
         }
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onMusicChange(music);
-            }
-        }
-    }
-
-    @Override
-    public void onCompletion() {
-        if(null!=mSubjectObservable){
-            mSubjectObservable.updataSubjectObserivce(null);
-        }
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onCompletion();
-            }
-        }
-    }
-
-    @Override
-    public void stopPlayer(MusicInfo musicInfo) {
-        if(null!=mSubjectObservable){
-            mSubjectObservable.updataSubjectObserivce(null);
-        }
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.stopPlayer(musicInfo);
+                onPlayerEventListener.onMusicPlayerState(musicInfo,stateCode);
             }
         }
     }
@@ -554,19 +564,6 @@ public class MusicPlayerManager implements OnPlayerEventListener {
 
 
     @Override
-    public void onError(int what, int extra) {
-        if(null!=mSubjectObservable){
-            mSubjectObservable.updataSubjectObserivce(null);
-        }
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.onError(what,extra);
-            }
-        }
-    }
-
-
-    @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
         if(null!=mSubjectObservable){
             mSubjectObservable.updataSubjectObserivce(musicInfo);
@@ -574,25 +571,6 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
                 onPlayerEventListener.checkedPlayTaskResult(musicInfo,mediaPlayer);
-            }
-        }
-    }
-
-
-    @Override
-    public void pauseResult(MusicInfo musicInfo) {
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.pauseResult(musicInfo);
-            }
-        }
-    }
-
-    @Override
-    public void startResult(MusicInfo musicInfo) {
-        if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
-            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-                onPlayerEventListener.startResult(musicInfo);
             }
         }
     }
