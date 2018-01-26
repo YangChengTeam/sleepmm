@@ -102,7 +102,13 @@ public class SettingFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-
+        RxView.clicks(ivAvatar).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                SelectPicFragment selectPicFragment = new SelectPicFragment();
+                selectPicFragment.show(getFragmentManager(), null);
+            }
+        });
 
     }
 

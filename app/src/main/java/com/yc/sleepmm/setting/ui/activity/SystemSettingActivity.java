@@ -1,6 +1,5 @@
 package com.yc.sleepmm.setting.ui.activity;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -13,7 +12,6 @@ import com.yc.sleepmm.base.view.BaseActivity;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.functions.Action1;
 
 /**
@@ -27,8 +25,6 @@ public class SystemSettingActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_vip_protocol)
     TextView tvVipProtocol;
-    @BindView(R.id.switch1)
-    Switch switch1;
 
 
     @Override

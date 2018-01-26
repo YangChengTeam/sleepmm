@@ -9,6 +9,7 @@ import com.mob.MobSDK;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
+import com.vondear.rxtools.RxUtils;
 import com.yc.sleepmm.index.bean.UserDataInfo;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class APP extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-//        RxUtils.init(this);
+        RxUtils.init(this);
         INSTANCE = this;
         Observable.just("").subscribeOn(Schedulers.io()).subscribe(new Action1<String>() {
             @Override

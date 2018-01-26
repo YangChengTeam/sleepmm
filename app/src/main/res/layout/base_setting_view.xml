@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-
         android:src="@mipmap/vip_center" />
 
     <TextView
@@ -21,7 +20,7 @@
         android:layout_toRightOf="@id/iv_setting_icon"
         android:text="会员中心"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_16" />
+        android:textSize="@dimen/text_14" />
 
     <ImageView
         android:layout_width="wrap_content"

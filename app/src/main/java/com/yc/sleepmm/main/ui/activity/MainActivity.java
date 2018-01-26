@@ -8,11 +8,13 @@ import android.view.KeyEvent;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.kk.utils.LogUtil;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.ui.fragment.IndexFragment;
 import com.yc.sleepmm.main.ui.adapter.MainAdapter;
+import com.yc.sleepmm.setting.constants.Constant;
 import com.yc.sleepmm.sleep.ui.fragment.SleepFragment;
 import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
 
@@ -46,6 +48,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         MainAdapter mainAdapter = new MainAdapter(getSupportFragmentManager(), mList);
         mMainViewPager.setAdapter(mainAdapter); //视图加载适配器
         mMainViewPager.addOnPageChangeListener(this);
+        mMainViewPager.setOffscreenPageLimit(2);
 
 
         mainBottomNavigationBar.setMode(BottomNavigationBar.MODE_DEFAULT);
@@ -110,4 +113,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         MusicPlayerManager.getInstance().deleteObservers();
         MusicPlayerManager.getInstance().deteleAllPlayerStateListener();
     }
+
+
 }
