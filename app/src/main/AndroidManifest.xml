@@ -40,7 +40,9 @@
         <activity
             android:name=".index.ui.activity.MusicPlayerSample"
             android:theme="@style/FullScreenTransparentStyle"></activity>
-
+        <activity
+            android:name=".sleep.ui.SleepDetailActivity"
+            android:theme="@style/FullScreenTransparentStyle"></activity>
         <!--友盟-->
         <activity
             android:name=".wxapi.WXEntryActivity"

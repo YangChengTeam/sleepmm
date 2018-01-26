@@ -60,4 +60,6 @@ dependencies {
     compile 'com.androidkun:XTabLayout:1.0.9'
 
     implementation project(':rxbus')
+
+    compile 'com.blankj:utilcode:1.12.0'
 }
