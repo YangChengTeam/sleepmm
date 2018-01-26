@@ -32,7 +32,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="@string/vip_protocol"
-            android:textColor="@color/white"
+            android:textColor="@color/gray_6d76a0"
             android:textSize="@dimen/text_12" />
 
     </RelativeLayout>

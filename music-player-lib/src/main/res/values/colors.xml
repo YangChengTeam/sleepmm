@@ -13,4 +13,6 @@
     <color name="music_plsyer_pro">#10A1DD</color>
     <color name="black">#000000</color>
     <color name="yellow_ffb400">#FFB400</color>
+
+    <color name="sleep_text_color">#696969</color>
 </resources>

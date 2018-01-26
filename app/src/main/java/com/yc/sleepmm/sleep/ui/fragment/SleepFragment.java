@@ -9,10 +9,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
-import com.yc.sleepmm.index.ui.activity.MusicPlayerSample;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
 import com.yc.sleepmm.sleep.bean.SpaDataInfo;
 import com.yc.sleepmm.sleep.bean.SpaItemInfo;
+import com.yc.sleepmm.sleep.ui.SleepDetailActivity;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class SleepFragment extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(getActivity(), MusicPlayerSample.class);
+                Intent intent = new Intent(getActivity(), SleepDetailActivity.class);
                 startActivity(intent);
             }
         });

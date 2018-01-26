@@ -131,7 +131,9 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     @Override
     protected void onVisible() {
         super.onVisible();
-        loadMusicList();
+        if(null!=mMusicListPresenter&&!mMusicListPresenter.isIeGetMusicList()&&null!=mHomeMusicListAdapter&&(null==mHomeMusicListAdapter.getData()||mHomeMusicListAdapter.getData().size()<=0)){
+            loadMusicList();
+        }
     }
 
     private void loadMusicList() {

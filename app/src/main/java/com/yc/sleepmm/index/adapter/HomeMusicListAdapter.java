@@ -48,7 +48,10 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHol
             switch (item.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
-
+                    helper.setVisible(R.id.tv_item_num,true);
+                    helper.setVisible(R.id.ic_play_anim,false);
+                    helper.setImageResource(R.id.ic_item_play,R.drawable.ic_play_pause);
+                    helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //播放中
                 case PlayerStatus.PLAYER_STATUS_PLAYING:
