@@ -7,6 +7,10 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.kk.utils.ToastUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
+import com.yc.sleepmm.setting.ui.activity.FindCenterActivity;
+import com.yc.sleepmm.setting.ui.activity.OptionFeedbackActivity;
+import com.yc.sleepmm.setting.ui.activity.SkinActivity;
+import com.yc.sleepmm.setting.ui.activity.SystemSettingActivity;
 import com.yc.sleepmm.vip.ui.activity.VipActivity;
 import com.yc.sleepmm.setting.widget.BaseSettingView;
 
@@ -46,7 +50,6 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void init() {
 
-
         initListener();
     }
 
@@ -61,7 +64,8 @@ public class SettingFragment extends BaseFragment {
         RxView.clicks(baseSettingViewFind).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "发现中心");
+                Intent intent = new Intent(getActivity(), FindCenterActivity.class);
+                startActivity(intent);
             }
         });
         RxView.clicks(baseSettingViewPerson).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -73,25 +77,29 @@ public class SettingFragment extends BaseFragment {
         RxView.clicks(baseSettingViewAlarm).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "闹钟设置");
+                AlarmFragment alarmFragment = new AlarmFragment();
+                alarmFragment.show(getFragmentManager(), null);
             }
         });
         RxView.clicks(baseSettingViewSkin).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "个性皮肤");
+                Intent intent = new Intent(getActivity(), SkinActivity.class);
+                startActivity(intent);
             }
         });
         RxView.clicks(baseSettingViewFeedback).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "意见反馈");
+                Intent intent = new Intent(getActivity(), OptionFeedbackActivity.class);
+                startActivity(intent);
             }
         });
         RxView.clicks(baseSettingViewSystem).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "系统设置");
+                Intent intent = new Intent(getActivity(), SystemSettingActivity.class);
+                startActivity(intent);
             }
         });
 

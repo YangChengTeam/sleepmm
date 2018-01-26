@@ -18,6 +18,20 @@
     <string name="content_know">内容早知道</string>
     <string name="charge">充 值</string>
     <string name="vip_miemie">咩咩会员</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确 定</string>
+    <string name="open_plan">定时开启模式</string>
+    <string name="open_2g">打开2G/3G/4G下载音频</string>
+    <string name="clear_cache">清理缓存</string>
+    <string name="logout">退出登录</string>
+
+    <string-array name="items">
+        <item>10分钟后关闭</item>
+        <item>20分钟后关闭</item>
+        <item>30分钟后关闭</item>
+        <item>1小时后关闭</item>
+
+    </string-array>
 
 
 </resources>

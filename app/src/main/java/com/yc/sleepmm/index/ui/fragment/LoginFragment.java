@@ -20,7 +20,7 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.setting.ui.activity.Utils;
+import com.yc.sleepmm.setting.utils.Utils;
 import butterknife.BindView;
 
 /**

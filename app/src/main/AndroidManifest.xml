@@ -47,6 +47,18 @@
             android:name=".vip.ui.activity.VipProtocolActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".setting.ui.activity.FindCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".setting.ui.activity.SkinActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".setting.ui.activity.OptionFeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".setting.ui.activity.SystemSettingActivity"
+            android:screenOrientation="portrait" />
         <!--友盟-->
         <activity
             android:name=".wxapi.WXEntryActivity"

@@ -1,4 +1,4 @@
-package com.yc.sleepmm.setting.ui.activity;
+package com.yc.sleepmm.setting.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
