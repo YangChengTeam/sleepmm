@@ -2,10 +2,8 @@ package com.yc.sleepmm.setting.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -17,9 +15,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.LogUtil;
+import com.vondear.rxtools.RxPhotoTool;
 import com.yc.sleepmm.R;
-import com.yc.sleepmm.setting.constants.Constant;
 
 import java.util.concurrent.TimeUnit;
 
@@ -96,17 +93,21 @@ public class SelectPicFragment extends BottomSheetDialogFragment {
         RxView.clicks(mTvTakeAlbum).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(Intent.ACTION_PICK); // 打开相册
-                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, Constant.TAKE_THUMB);
+                RxPhotoTool.openLocalImage(getActivity());
+
+//                Intent intent = new Intent(Intent.ACTION_PICK); // 打开相册
+//                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+//                startActivityForResult(intent, Constant.TAKE_THUMB);
                 dismiss();
             }
         });
         RxView.clicks(mTvTakePhoto).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 启动系统相机
-                startActivityForResult(intent, Constant.TAKE_PHOTO);
+
+                RxPhotoTool.openCameraImage(getActivity());
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 启动系统相机
+//                startActivityForResult(intent, Constant.TAKE_PHOTO);
                 dismiss();
             }
         });
@@ -114,18 +115,4 @@ public class SelectPicFragment extends BottomSheetDialogFragment {
 
 
 
-        @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (null != data) {
-            switch (requestCode) {
-                case Constant.TAKE_THUMB:
-                    LogUtil.msg(data.getData().toString());
-                    break;
-                case Constant.TAKE_PHOTO:
-                    LogUtil.msg(data.getData().toString());
-                    break;
-            }
-        }
-    }
 }
