@@ -82,9 +82,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         mMusic_id = arguments.getString("music_id");
-        if(null!=arguments){
-            Logger.d(TAG,"ID="+ mMusic_id);
-        }
     }
 
     @Override
@@ -95,7 +92,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
         mMusicListPresenter.attachView(this);
         IndexFragment parentFragment = (IndexFragment) getParentFragment();
         if(null!=parentFragment&&0==parentFragment.getCurrentIndex()){
-            Logger.d(TAG,"当前显示的是第一个子界面");
             loadMusicList();
         }
     }
@@ -139,7 +135,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     private void loadMusicList() {
         if(null!=mHomeMusicListAdapter&&null!=mMusicListPresenter&&!mMusicListPresenter.isIeGetMusicList()){
             page++;
-            Logger.d(TAG,"loadMusicList="+page);
             mMusicListPresenter.getMusicList(mMusic_id,page,pageSize);
         }
     }
@@ -165,7 +160,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     @Override
     protected void onRefresh() {
         super.onRefresh();
-        Logger.d(TAG,"onRefresh=重试");
         showLoadingView();
         page=0;
         loadMusicList();
@@ -290,7 +284,6 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
      */
     @Override
     public void autoStartNewPlayTasks(int viewTupe, int position) {
-        Logger.d(TAG,"界面:=="+mMusic_id+"显示状态"+getUserVisibleHint());
         //如果是自己，且正在显示，处理自动播放事件
         if(viewTupe==HomeMusicListFragment.THIS_TOKIN&&getUserVisibleHint()&&null!=mHomeMusicListAdapter){
             MusicPlayerManager.getInstance().playMusic(mHomeMusicListAdapter.getData(),0);//默认播放第0个

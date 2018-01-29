@@ -149,7 +149,6 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * 检查播放器配置
      */
     public void checkedPlayerConfig() {
-        Logger.d(TAG,"checkedPlayerConfig=检查用户播放器设置,闹钟:"+SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30));
         MusicPlayerConfig musicPlayerConfig=new MusicPlayerConfig();
         musicPlayerConfig.setPlayModel(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL,PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
         musicPlayerConfig.setAlarmModel(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30));
