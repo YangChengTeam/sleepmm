@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.ToastUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.setting.ui.activity.FindCenterActivity;
 import com.yc.sleepmm.setting.ui.activity.OptionFeedbackActivity;
 import com.yc.sleepmm.setting.ui.activity.SkinActivity;
 import com.yc.sleepmm.setting.ui.activity.SystemSettingActivity;
-import com.yc.sleepmm.vip.ui.activity.VipActivity;
+import com.yc.sleepmm.setting.ui.activity.UserKeepActivity;
 import com.yc.sleepmm.setting.widget.BaseSettingView;
+import com.yc.sleepmm.vip.ui.activity.VipActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -71,7 +71,8 @@ public class SettingFragment extends BaseFragment {
         RxView.clicks(baseSettingViewPerson).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                ToastUtil.toast(getActivity(), "个人收藏");
+                Intent intent = new Intent(getActivity(), UserKeepActivity.class);
+                startActivity(intent);
             }
         });
         RxView.clicks(baseSettingViewAlarm).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -103,8 +104,5 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-
     }
-
-
 }

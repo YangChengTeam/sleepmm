@@ -15,4 +15,6 @@
     <color name="yellow_ffb400">#FFB400</color>
 
     <color name="sleep_text_color">#696969</color>
+
+    <color name="donation_color">#ff4d4d</color>
 </resources>
