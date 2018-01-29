@@ -138,7 +138,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         info.setPlauStatus(0);
                     }
                 }
-                Logger.d(TAG,"播放器示例界面列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"，位置："+position+",musicID："+musicInfo.getMusicID());
                 this.notifyDataSetChanged();
             }
         }

@@ -273,7 +273,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param tips 是否土司提示用户
      */
     private void changePlayerModel(int playModel,boolean tips) {
-        Logger.d(TAG,"播放器设置发生了变化：播放器随机模式："+playModel+",播放器样式："+mPlayerStyle+",是否弹窗：="+tips);
+
         int btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
         String msg="列表循环";
         switch (playModel) {
@@ -315,7 +315,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param tips 是否土司提示
      */
     private void changePlayerAlarmModel(int model,boolean tips) {
-        Logger.d(TAG,"播放器设置发生了变化：播放器闹钟模式："+model+",播放器样式："+mPlayerStyle+",是否弹窗：="+tips);
+
         int btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
         String msg="30分钟";
         switch (model){
@@ -528,7 +528,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
-        if(null!=musicInfo) Logger.d(TAG,"播放控制器收到任务检查回调,状态"+musicInfo.getPlauStatus());
+
         if(null!=mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getMusicTitle());
         //封面
         if(null!=mIcPlayerCover) {
@@ -551,7 +551,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void changePlayModelResult(int playModel) {
-        Logger.d(TAG,"changePlayModelResult==playModel:"+playModel);
+
         if(null!=mIcPlayMode){
             changePlayerModel(playModel,true);
         }
@@ -563,7 +563,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void changeAlarmModelResult(int model) {
-        Logger.d(TAG,"changeAlarmModelResult==playModel:"+model);
+
         if(null!=mIcAlarm){
             changePlayerAlarmModel(model,true);
         }
@@ -575,7 +575,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void onMusicPlayerConfig(MusicPlayerConfig musicPlayerConfig) {
-        if(null!=musicPlayerConfig) Logger.d(TAG,"检查用户设置的播放模式回调"+musicPlayerConfig.getPlayModel()+",闹钟模式："+musicPlayerConfig.getAlarmModel());
         if(null!=musicPlayerConfig&&null!=mIcPlayMode&&null!=mIcAlarm){
             changePlayerModel(musicPlayerConfig.getPlayModel(),false);
             changePlayerAlarmModel(musicPlayerConfig.getAlarmModel(),false);
@@ -597,7 +596,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
-        Logger.d(TAG,"onPrepared");
+
         if(null!=mMusicPlayerSeekbar){
             mMusicPlayerSeekbar.setPlaying(true);
         }
@@ -610,7 +609,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void autoStartNewPlayTasks(int viewTupe, int position) {
-        Logger.d(TAG,"autoStartNewPlayTasks：viewTupe="+viewTupe+",position="+position);
+
     }
 
     /**
@@ -619,7 +618,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     @Override
     public void taskRemmainTime(final long durtion) {
-        Logger.d(TAG,"taskRemmainTime：durtion="+durtion);
+
         if(null!=mHandler){
             mHandler.post(new Runnable() {
                 @Override

@@ -38,7 +38,7 @@
                         android:textSize="@dimen/text_16" />
 
                     <Switch
-                        android:id="@+id/switch1"
+                        android:id="@+id/switch_timing"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
@@ -79,7 +79,7 @@
                         android:textSize="@dimen/text_16" />
 
                     <Switch
-
+                        android:id="@+id/switch_open2g"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"

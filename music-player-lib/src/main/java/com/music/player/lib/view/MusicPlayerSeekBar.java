@@ -20,7 +20,6 @@ import com.music.player.lib.util.MusicPlayerUtils;
 
 public class MusicPlayerSeekBar extends View {
 
-    private final String TAG = "MusicPlayerSeekBar";
     private Context mContext = null;
     private Drawable mThumbDrawable = null;
     private int mThumbHeight = 0;
@@ -212,6 +211,7 @@ public class MusicPlayerSeekBar extends View {
         }
     }
 
+
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -229,10 +229,8 @@ public class MusicPlayerSeekBar extends View {
             case MotionEvent.ACTION_UP:
                 float newDownX = event.getX();
                 float newDownY = event.getY();
-                Logger.d(TAG,"newDownX="+newDownX+",newDownY="+newDownY+",mDownX="+mDownX+",mDownY="+mDownY);
                 //如果松手时X轴坐标小于按下时X坐标上下10个像素&&如果松手时Y轴坐标小于按下时Y坐标上下10个像素即在点击范围内
                 if(newDownX<(mDownX+10)&&newDownX>(mDownX-10)&&newDownY<(mDownY+10)&&newDownY>(mDownY-10)){
-                    Logger.d(TAG,"用户触摸行为符合单击事件");
                     mDownY=0;mDownY=0;
                     if(null!=mOnClickListener){
                         mOnClickListener.onClickView();
@@ -257,7 +255,6 @@ public class MusicPlayerSeekBar extends View {
             if (radian < 0){
                 radian = radian + 2*Math.PI;
             }
-            Logger.d(TAG,"seekTo radian = " + radian);
             setThumbPosition(radian);
             mSeekBarDegree = (float) Math.round(Math.toDegrees(radian));
             mCurrentProgress = (int) (mSeekBarMax * mSeekBarDegree / 360);
@@ -313,15 +310,18 @@ public class MusicPlayerSeekBar extends View {
     }
     
     private void setThumbPosition(double radian) {
-        Logger.d(TAG,"setThumbPosition radian = " + radian);
+
         double x = mSeekBarCenterX + mSeekBarRadius * Math.cos(radian);
         double y = mSeekBarCenterY + mSeekBarRadius * Math.sin(radian);
         mThumbLeft = (float) (x - mThumbWidth / 2);
         mThumbTop = (float) (y - mThumbHeight / 2);
     }
 
+    /**
+     * 设置进度条
+     * @param progress
+     */
     public  void setProgress(long progress) {
-        Logger.d(TAG,"setProgress progress = " + progress);
         if (progress > mSeekBarMax){
             progress = mSeekBarMax;
         }
@@ -330,7 +330,7 @@ public class MusicPlayerSeekBar extends View {
         }
         mCurrentProgress = progress;
         mSeekBarDegree = (progress * 360 / mSeekBarMax);
-        Logger.d(TAG,"setProgress mSeekBarDegree = " + mSeekBarDegree);
+
         setThumbPosition(Math.toRadians(mSeekBarDegree));
 
         invalidate();
@@ -341,7 +341,7 @@ public class MusicPlayerSeekBar extends View {
     }
     
     public void setProgressMax(int max){
-        Logger.d(TAG,"setProgressMax max = " + max);
+
         mSeekBarMax = max;
     }
     
@@ -354,7 +354,7 @@ public class MusicPlayerSeekBar extends View {
     }
     
     public void setProgressWidth(int width){
-        Logger.d(TAG,"setProgressWidth width = " + width);
+
         mSeekbarProgressPaint.setStrokeWidth(width);
         mSeekBarBackgroundPaint.setStrokeWidth(width);
     }
@@ -373,12 +373,12 @@ public class MusicPlayerSeekBar extends View {
     }
     
     public void setProgressTextSize(int size){
-        Logger.d(TAG,"setProgressTextSize size = " + size);
+
         mProgressTextPaint.setTextSize(size);
     }
     
     public void setProgressTextStrokeWidth(int width){
-        Logger.d(TAG,"setProgressTextStrokeWidth width = " + width);
+
         mProgressTextPaint.setStrokeWidth(width);
     }
     

@@ -134,7 +134,6 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHol
                         info.setPlauStatus(0);
                     }
                 }
-                Logger.d(TAG,"列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"位置："+position+",musicID："+musicInfo.getMusicID());
                 this.notifyDataSetChanged();
             }
         }

@@ -56,7 +56,7 @@ public class MediaSessionManager {
         MediaMetadataCompat.Builder metaData = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, music.getMusicTitle())
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, music.getMusicAuthor())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, music.getMusicAlbum())
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, music.getMusicCover())
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, music.getMusicAlbumTitle())
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, Long.parseLong(music.getMusicDurtion()))
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);

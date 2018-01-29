@@ -1,7 +1,5 @@
 package com.music.player.lib.bean;
 
-
-
 /**
  * TinyHung@Outlook.com
  * 2018/1/18.
@@ -15,14 +13,9 @@ public class MusicInfo {
     private String musicCover;//音乐封面
     private String musicAuthor;//音乐作者
     private String musicDurtion;//音乐时长
-    private String upTime;//更新时间
-    private String musicAlbum;//专辑
     private String musicAlbumTitle;//专辑名称
-    private String msuicAlbumIcon;//专辑封面
-    private String msuicAlbumAuthor;//专辑作者
-    private int playModel;//播放模式
+
     private int plauStatus;//0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
-    private boolean isPlaying;//是否正在播放
 
     public int getPlauStatus() {
         return plauStatus;
@@ -75,64 +68,14 @@ public class MusicInfo {
     public String getMusicDurtion() {
         return musicDurtion;
     }
-
     public void setMusicDurtion(String musicDurtion) {
         this.musicDurtion = musicDurtion;
     }
-
-    public String getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(String upTime) {
-        this.upTime = upTime;
-    }
-
-    public String getMusicAlbum() {
-        return musicAlbum;
-    }
-
-    public void setMusicAlbum(String musicAlbum) {
-        this.musicAlbum = musicAlbum;
-    }
-
     public String getMusicAlbumTitle() {
         return musicAlbumTitle;
     }
-
     public void setMusicAlbumTitle(String musicAlbumTitle) {
         this.musicAlbumTitle = musicAlbumTitle;
     }
 
-    public String getMsuicAlbumIcon() {
-        return msuicAlbumIcon;
-    }
-
-    public void setMsuicAlbumIcon(String msuicAlbumIcon) {
-        this.msuicAlbumIcon = msuicAlbumIcon;
-    }
-
-    public String getMsuicAlbumAuthor() {
-        return msuicAlbumAuthor;
-    }
-
-    public void setMsuicAlbumAuthor(String msuicAlbumAuthor) {
-        this.msuicAlbumAuthor = msuicAlbumAuthor;
-    }
-
-    public int getPlayModel() {
-        return playModel;
-    }
-
-    public void setPlayModel(int playModel) {
-        this.playModel = playModel;
-    }
-
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public void setPlaying(boolean playing) {
-        isPlaying = playing;
-    }
 }
