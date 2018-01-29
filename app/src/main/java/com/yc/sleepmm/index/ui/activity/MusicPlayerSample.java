@@ -138,10 +138,8 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
                     for (MediaMusicCategoryList.DataBean dataBean : data.getData()) {
                         MusicInfo musicInfo=new MusicInfo();
                         musicInfo.setMusicID(dataBean.getId());
-                        musicInfo.setMusicAlbum(dataBean.getTitle());
                         musicInfo.setMusicTitle(dataBean.getTitle());
                         musicInfo.setMusicDurtion(dataBean.getSeconds());
-                        musicInfo.setMsuicAlbumIcon(dataBean.getCover());
                         musicInfo.setMusicCover(dataBean.getCover());
                         musicInfo.setMusicAuthor(dataBean.getAuthor());
                         musicInfo.setMusicAlbumTitle(dataBean.getTitle());
