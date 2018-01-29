@@ -2,7 +2,10 @@ package com.yc.sleepmm.setting.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -13,6 +16,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.utils.ToastUtil;
 import com.vondear.rxtools.RxPhotoTool;
+import com.vondear.rxtools.view.dialog.RxDialogEditSureCancel;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.setting.constants.BusAction;
@@ -50,6 +54,11 @@ public class SettingFragment extends BaseFragment {
     BaseSettingView baseSettingViewFeedback;
     @BindView(R.id.baseSettingView_system)
     BaseSettingView baseSettingViewSystem;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.ll_login)
+    LinearLayout llLogin;
+
     private SelectPicFragment selectPicFragment;
 
 
@@ -121,6 +130,28 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
+        RxView.clicks(tvName).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                final RxDialogEditSureCancel rxDialogEditSureCancel = new RxDialogEditSureCancel(getActivity());//提示弹窗
+                rxDialogEditSureCancel.getTitleView().setText("请输入你的昵称");
+                rxDialogEditSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tvName.setText(rxDialogEditSureCancel.getEditText().getText().toString());
+                        rxDialogEditSureCancel.cancel();
+                    }
+                });
+                rxDialogEditSureCancel.getCancelView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rxDialogEditSureCancel.cancel();
+                    }
+                });
+                rxDialogEditSureCancel.show();
+            }
+        });
+
     }
 
 
@@ -146,4 +177,7 @@ public class SettingFragment extends BaseFragment {
     public void getPicture(Uri uri) {
         roadImageView(uri, ivAvatar);
     }
+
+
+
 }
