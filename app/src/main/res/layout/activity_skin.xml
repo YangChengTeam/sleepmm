@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/common_top_view" />
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_skin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/pay_bg"
+            android:paddingLeft="@dimen/dp_10" />
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -61,6 +61,8 @@ public abstract class IPayImpl {
     private static int times = 5;
 
     public static void checkOrder(final OrderInfo orderInfo, final IPayCallback iPayCallback, final String url) {
+
+
         if (!isGen) return;
         if (n == 0) {
             if (loadingDialog == null) {

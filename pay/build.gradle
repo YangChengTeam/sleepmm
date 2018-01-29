@@ -42,6 +42,8 @@ dependencies {
     compile 'com.kk:loading:1.0.2'
     compile 'com.kk:securityhttp:1.0.16'
     compile files('libs/libammsdk.jar')
-    compile files('libs/pay_sdk_al_wx2.0.4.jar')
+//    compile files('libs/pay_sdk_al_wx2.0.4.jar')
     compile 'com.afollestad.material-dialogs:core:0.9.0.2@aar'
+    compile 'com.github.vondear:RxTools:v1.7.6.4'
+
 }
