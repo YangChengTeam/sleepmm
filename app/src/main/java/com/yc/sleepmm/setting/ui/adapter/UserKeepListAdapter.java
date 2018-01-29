@@ -1,4 +1,4 @@
-package com.yc.sleepmm.index.adapter;
+package com.yc.sleepmm.setting.ui.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.music.player.lib.bean.MusicInfo;
@@ -14,22 +15,18 @@ import com.music.player.lib.util.DateUtil;
 import com.music.player.lib.util.Logger;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.index.util.CommonUtils;
+
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * TinyHung@Outlook.com
- * 2018/1/21.
- * 首页音乐列表
- */
 
-public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHolder> implements Observer{
+public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHolder> implements Observer{
 
-    private static final String TAG = HomeMusicListAdapter.class.getSimpleName();
+    private static final String TAG = UserKeepListAdapter.class.getSimpleName();
 
-    public HomeMusicListAdapter(@Nullable List<MusicInfo> data) {
-        super(R.layout.item_re_home_music_list,data);
+    public UserKeepListAdapter(@Nullable List<MusicInfo> data) {
+        super(R.layout.fragment_user_keep_item,data);
     }
 
 
@@ -134,6 +131,7 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHol
                         info.setPlauStatus(0);
                     }
                 }
+                Logger.d(TAG,"列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"位置："+position+",musicID："+musicInfo.getMusicID());
                 this.notifyDataSetChanged();
             }
         }

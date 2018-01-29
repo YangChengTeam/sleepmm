@@ -2,7 +2,6 @@ package com.music.player.lib.util;
 
 import android.util.Log;
 
-
 /**
  * TinyHung@outlook.com
  * 2017/1/18

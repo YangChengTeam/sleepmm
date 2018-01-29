@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/rxbus/rxbus.iml" filepath="$PROJECT_DIR$/rxbus/rxbus.iml" />
       <module fileurl="file://$PROJECT_DIR$/share/share.iml" filepath="$PROJECT_DIR$/share/share.iml" />
       <module fileurl="file://$PROJECT_DIR$/sleepmm.iml" filepath="$PROJECT_DIR$/sleepmm.iml" />
-      <module fileurl="file://F:\AndroidStudioProjects\sleepmm\.idea\sleepmm.iml" filepath="F:\AndroidStudioProjects\sleepmm\.idea\sleepmm.iml" />
     </modules>
   </component>
 </project>

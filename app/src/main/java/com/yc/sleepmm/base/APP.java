@@ -3,6 +3,7 @@ package com.yc.sleepmm.base;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
+import com.blankj.utilcode.util.Utils;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.mob.MobSDK;
@@ -32,7 +33,12 @@ public class APP extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+//        RxUtils.init(this);
+        Utils.init(this);
+
         RxTool.init(this);
+
 
         INSTANCE = this;
         Observable.just("").subscribeOn(Schedulers.io()).subscribe(new Action1<String>() {

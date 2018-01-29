@@ -110,7 +110,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
                 TIMER_DURTION=-1;
                 break;
         }
-        Logger.d(TAG,"用户配置中心设置了"+(TIMER_DURTION/60)+"分钟");
         currentDurtion=0;
         //为防止界面刷新不及时
         if(null!=mOnPlayerEventListener){
@@ -123,7 +122,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * @param fiexdTimerAlarmModel
      */
     private void setAralmFiexdTimer(int fiexdTimerAlarmModel) {
-        Logger.d(TAG,"设置中心，定时关闭档次"+fiexdTimerAlarmModel);
         this.mPlayAlarmModel=fiexdTimerAlarmModel;
         changeAlarmDurtion(mPlayAlarmModel);
     }
@@ -155,12 +153,12 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.d(TAG,"onCreate");
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.d(TAG,"onStartCommand");
+
         //注册广播
 //        mMusicActionReceiver = new MusicActionReceiver();
 //        IntentFilter intentFilter=new IntentFilter();
@@ -178,7 +176,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
 
     @Override
     public void onDestroy() {
-        Logger.d(TAG,"onDestroy");
+
         stop();
         if(null!=mAudioFocusManager){
             mAudioFocusManager.abandonAudioFocus();
@@ -239,7 +237,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * @return
      */
     public boolean playPause() {
-        Logger.d(TAG,"playPause");
+
         if(null!=mMusicInfos&&mMusicInfos.size()>0){
             if(mediaPlayerNoEmpty()){
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
@@ -248,7 +246,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
                     stopTimer();
                     if(null!=mOnPlayerEventListener){
                         musicInfo.setPlauStatus(3);//暂停播放
-                        Logger.d(TAG,"playPause：回调=暂停播放了");
                         mOnPlayerEventListener.onMusicPlayerState(musicInfo, PlayerStatus.PLAYER_STATUS_PAUSE);
                     }
                     return true;
@@ -257,7 +254,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
                     startTimer();
                     if(null!=mOnPlayerEventListener){
                         musicInfo.setPlauStatus(2);//开始播放
-                        Logger.d(TAG,"playPause：回调=开始播放了");
                         mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_PLAYING);
                     }
                     return true;
@@ -303,7 +299,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         public void run() {
             //时间到了，结束播放任务,结束定时计时器任务
             if(-1!=TIMER_DURTION&&currentDurtion>=TIMER_DURTION){
-                Logger.d(TAG,"时间到了，任务结束。停止音频播放");
                 if(null!=mOnPlayerEventListener){
                     mOnPlayerEventListener.taskRemmainTime(TIMER_DURTION-currentDurtion);
                 }
@@ -319,7 +314,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             }else{
                 currentDurtion=currentDurtion+1;
                 long mutin = (TIMER_DURTION - currentDurtion) / 60;
-                Logger.d(TAG,"倒计时："+mutin+"分"+(TIMER_DURTION - currentDurtion)%60+"秒");
                 if(null!=mOnPlayerEventListener){
                     mOnPlayerEventListener.taskRemmainTime(TIMER_DURTION-currentDurtion);
                 }
@@ -354,7 +348,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         }else{
             mPlayAlarmModel++;
         }
-        Logger.d(TAG,"changeAlarmModel:新设定的定时档次"+mPlayAlarmModel);
         changeAlarmDurtion(mPlayAlarmModel);
     }
 
@@ -388,7 +381,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.changeAlarmModelResult(playAlarmModel);
         }
-        Logger.d(TAG,"用户设置了"+(TIMER_DURTION/60)+"分钟");
         currentDurtion=0;
         //为防止界面刷新不及时
         if(null!=mOnPlayerEventListener){
@@ -407,7 +399,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
 //        }else{
 //            mPlayModel++;
 //        }
-        Logger.d(TAG,"changePlayModel:mPlayModel="+mPlayModel);
         SharedPreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_MODEL,mPlayModel);
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.changePlayModelResult(mPlayModel);
@@ -475,47 +466,38 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         if(null!=data&&data.size()>0){
             //当前播放列表不为空，有任务在进行
             if(null!=mMusicInfos&&mMusicInfos.size()>0){
-                Logger.d(TAG,"playPauseMusic：当前播放列表不为空");
                 MusicInfo musicInfo = data.get(position);
                 MusicInfo currentPlayInfo = mMusicInfos.get(mPlayPosition);
                 //如果当前正在播放的任务和新的播放任务是同一首歌，直接暂停、开始播放
                 if(null!=musicInfo&&null!=currentPlayInfo&& TextUtils.equals(musicInfo.getMusicID(),currentPlayInfo.getMusicID())){
-                    Logger.d(TAG,"playPauseMusic：当前正在播放的任务和新的播放任务是同一首歌");
                     if(mediaPlayerNoEmpty()){
                         if(mMediaPlayer.isPlaying()){
-                            Logger.d(TAG,"playPauseMusic：当前正在播放的任务和新的播放任务是同一首歌且正在播放，暂停");
                             mMediaPlayer.pause();
                             stopTimer();
                             currentPlayInfo.setPlauStatus(3);
                             if(null!=mOnPlayerEventListener){
-                                Logger.d(TAG,"playPauseMusic：回调==暂停播放了");
                                 mOnPlayerEventListener.onMusicPlayerState(currentPlayInfo,PlayerStatus.PLAYER_STATUS_PAUSE);
                             }
                             return;
                         }else{
-                            Logger.d(TAG,"playPauseMusic：当前正在播放的任务和新的播放任务是同一首歌且已暂停，播放");
                             mMediaPlayer.start();
                             startTimer();
                             currentPlayInfo.setPlauStatus(2);
                             if(null!=mOnPlayerEventListener){
-                                Logger.d(TAG,"playPauseMusic：回调==开始播放了");
                                 mOnPlayerEventListener.onMusicPlayerState(currentPlayInfo,PlayerStatus.PLAYER_STATUS_PLAYING);
                             }
                             return;
                         }
                     }else{
-                        Logger.d(TAG,"playPauseMusic：播放器未初始化");
                         playMusic(data,position);
                         return;
                     }
                 //正在播放的和新任务不时同一首歌
                 }else{
-                    Logger.d(TAG,"playPauseMusic：当前正在播放的任务和新的播放任务不是同一首歌，开新播放任务");
                     playMusic(data,position);
                     return;
                 }
             }else{
-                Logger.d(TAG,"playPauseMusic：当前播放列表为空，直接播放新的任务");
                 playMusic(data,position);
                 return;
             }
@@ -541,12 +523,10 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             mMediaPlayer.prepareAsync();
             musicInfo.setPlauStatus(1);//准备中
             if(null!=mOnPlayerEventListener){
-                Logger.d(TAG,"回调=准备播放了");
                 mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_ASYNCPREPARE);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Logger.d(TAG,"播放异常："+e.getMessage());
         }
     }
 
@@ -554,7 +534,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * 开始播放
      */
     public void  start(){
-        Logger.d(TAG,"start");
         if(mediaPlayerNoEmpty()){
             mMediaPlayer.start();
             startTimer();
@@ -565,7 +544,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * 暂停播放
      */
     public void pause() {
-        Logger.d(TAG,"pause");
+
         if(mediaPlayerNoEmpty()){
             if(mMediaPlayer.isPlaying()){
                 mMediaPlayer.pause();
@@ -583,7 +562,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             stop();
             return;
         }
-        Logger.d(TAG,"next 当前循环模式"+getPlayMode());
         if(null!=mMusicInfos&&mMusicInfos.size()>0){
             switch (getPlayMode()) {
                 //列表顺序播放，不循环
@@ -632,7 +610,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             stop();
             return;
         }
-        Logger.d(TAG,"last 当前循环模式"+getPlayMode());
         if(null!=mMusicInfos&&mMusicInfos.size()>0){
             switch (getPlayMode()) {
                 //列表顺序播放，不循环
@@ -678,7 +655,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      */
     private void checkedPlayTask() {
         if(null!=mMediaPlayer&&null!=mMusicInfos&&mMusicInfos.size()>0){
-            Logger.d(TAG,"checkedPlayTask：播放服务已初始化且播放器列表不为空");
             if(null!=mOnPlayerEventListener){
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
                 musicInfo.setPlauStatus(PlayerStatus.PLAYER_STATUS_PAUSE);
@@ -698,7 +674,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             stop();
             return;
         }
-        Logger.d(TAG,"onCompletionPlay=当前循环模式:"+getPlayMode());
         if(null!=mMusicInfos&&mMusicInfos.size()>0){
             switch (getPlayMode()) {
                 //列表顺序播放，不循环
@@ -741,14 +716,13 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * @param durtion
      */
     public void seekTo(int durtion) {
-        Logger.d(TAG,"seekTo:"+durtion);
         if(mediaPlayerNoEmpty()){
             mMediaPlayer.seekTo(durtion);
         }
     }
 
     public void prev() {
-        Logger.d(TAG,"prev:");
+        Logger.d(TAG,"prev");
     }
 
 
@@ -776,7 +750,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      * 停止播放
      */
     public void stop() {
-        Logger.d(TAG,"stop:");
         if(mediaPlayerNoEmpty()){
             if(mMediaPlayer.isPlaying()){
                 mMediaPlayer.stop();
@@ -796,10 +769,8 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             if(null!=mMusicInfos&&mMusicInfos.size()>0){
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
                 musicInfo.setPlauStatus(4);
-                Logger.d(TAG,"回调=停止播放了");
                 mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_STOP);
             }else{
-                Logger.d(TAG,"回调=没有任务在播放");
                 mOnPlayerEventListener.onMusicPlayerState(null,PlayerStatus.PLAYER_STATUS_EMPOTY);
             }
         }
@@ -892,7 +863,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             if(null!=mMusicInfos&&mMusicInfos.size()>0){
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
                 musicInfo.setPlauStatus(2);
-                Logger.d(TAG,"回调=开始播放了");
                 mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_PLAYING);
             }
         }
@@ -925,7 +895,6 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
             if(null!=mMusicInfos&&mMusicInfos.size()>0){
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
                 musicInfo.setPlauStatus(4);
-                Logger.d(TAG,"回调=结束播放了");
                 mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_STOP);
             }
         }
@@ -965,11 +934,12 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      */
     @Override
     public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+        Logger.d(TAG,"onError");
         release();
         if(null!=mMusicInfos&&mMusicInfos.size()>0){
             MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
             musicInfo.setPlauStatus(4);
-            Logger.d(TAG,"回调=播放失败了");
+
             mOnPlayerEventListener.onMusicPlayerState(musicInfo,PlayerStatus.PLAYER_STATUS_ERROR);
         }
         //有网络才会继续播放下一首
@@ -992,7 +962,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
      */
     @Override
     public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
-        Logger.d(TAG,"播放器发生了变化:i=="+i+",i1=="+i1);
+        Logger.d(TAG,"onInfo:i=="+i+",i1=="+i1);
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.onInfo(i,i1);
         }
