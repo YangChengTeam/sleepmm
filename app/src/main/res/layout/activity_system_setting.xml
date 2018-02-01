@@ -134,11 +134,11 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/white"
+            android:background="@drawable/logout_btn_ripper"
             android:gravity="center"
             android:text="@string/logout"
             android:textColor="@color/black"

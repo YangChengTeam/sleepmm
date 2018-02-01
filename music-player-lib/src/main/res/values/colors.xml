@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
+    <color name="white1">#21FFFFFF</color>
+    <color name="white2">#B2FFFFFF</color>
     <color name="gray">#CCCCCC</color>
     <color name="gray_qian">#EEEEEE</color>
     <color name="coment_color">#FF333333</color>
@@ -11,4 +13,8 @@
     <color name="music_plsyer_pro">#10A1DD</color>
     <color name="black">#000000</color>
     <color name="yellow_ffb400">#FFB400</color>
+
+    <color name="sleep_text_color">#696969</color>
+
+    <color name="donation_color">#ff4d4d</color>
 </resources>

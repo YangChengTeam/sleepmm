@@ -45,6 +45,12 @@
             android:name=".index.ui.activity.MusicPlayerSample"
             android:theme="@style/FullScreenTransparentStyle"></activity>
         <activity
+            android:name=".sleep.ui.SleepDetailActivity"
+            android:theme="@style/FullScreenTransparentStyle"></activity>
+        <activity
+            android:name=".setting.ui.activity.UserKeepActivity"
+            android:theme="@style/FullScreenTransparentStyle"></activity>
+        <activity
             android:name=".vip.ui.activity.VipProtocolActivity"
             android:screenOrientation="portrait" />
 

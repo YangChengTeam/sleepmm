@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_25" />
+            android:layout_height="@dimen/dp_25"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/main_left_arrow" />
+                android:src="@mipmap/main_left_arrow"/>
 
             <TextView
                 android:id="@+id/tv_title"
@@ -32,10 +32,9 @@
                 android:layout_centerInParent="true"
                 android:text="@string/system_setting"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_16" />
+                android:textSize="@dimen/text_16"/>
 
             <TextView
-
                 android:id="@+id/tv_vip_protocol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:text="@string/vip_protocol"
                 android:textColor="@color/gray_6d76a0"
-                android:textSize="@dimen/text_12" />
+                android:textSize="@dimen/text_12"/>
 
         </RelativeLayout>
     </LinearLayout>

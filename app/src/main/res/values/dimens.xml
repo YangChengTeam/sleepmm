@@ -2,6 +2,9 @@
 <resources>
 
     <dimen name="fixed_height_bottom_padding">5dp</dimen>
+    <dimen name="fixed_height_top_padding_inactive">5dp</dimen>
+    <dimen name="fixed_label_active">12sp</dimen>
+    <dimen name="fixed_icon_grid">20dp</dimen>
     <dimen name="top_title_bar_height">44dp</dimen>
     <dimen name="dp_5">5dp</dimen>
     <dimen name="dp_30">30dp</dimen>

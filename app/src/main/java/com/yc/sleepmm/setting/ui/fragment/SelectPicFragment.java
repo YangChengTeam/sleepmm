@@ -50,7 +50,6 @@ public class SelectPicFragment extends BottomSheetDialogFragment {
         WindowManager.LayoutParams windowParams = window.getAttributes();
         //这里设置透明度
         windowParams.dimAmount = 0.5f;
-//        windowParams.width = (int) (ScreenUtil.getWidth(mContext) * 0.98);
         window.setAttributes(windowParams);
     }
 
@@ -94,10 +93,6 @@ public class SelectPicFragment extends BottomSheetDialogFragment {
             @Override
             public void call(Void aVoid) {
                 RxPhotoTool.openLocalImage(getActivity());
-
-//                Intent intent = new Intent(Intent.ACTION_PICK); // 打开相册
-//                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-//                startActivityForResult(intent, Constant.TAKE_THUMB);
                 dismiss();
             }
         });
@@ -106,13 +101,11 @@ public class SelectPicFragment extends BottomSheetDialogFragment {
             public void call(Void aVoid) {
 
                 RxPhotoTool.openCameraImage(getActivity());
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 启动系统相机
-//                startActivityForResult(intent, Constant.TAKE_PHOTO);
+
                 dismiss();
             }
         });
     }
-
 
 
 }

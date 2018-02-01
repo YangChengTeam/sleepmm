@@ -137,35 +137,35 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            switch (requestCode) {
-                case RxPhotoTool.GET_IMAGE_FROM_PHONE://选择相册之后的处理
-                    if (resultCode == RESULT_OK) {
-//                    RxPhotoTool.cropImage(ActivityUser.this, );// 裁剪图片
-                        initUCrop(data.getData());
-                    }
+        switch (requestCode) {
+            case RxPhotoTool.GET_IMAGE_FROM_PHONE://选择相册之后的处理
+                if (resultCode == RESULT_OK) {
+//                    RxPhotoTool.cropImage(MainActivity.this,data.getData() );// 裁剪图片
+                    initUCrop(data.getData());
+                }
 
-                    break;
-                case RxPhotoTool.GET_IMAGE_BY_CAMERA://选择照相机之后的处理
-                    if (resultCode == RESULT_OK) {
+                break;
+            case RxPhotoTool.GET_IMAGE_BY_CAMERA://选择照相机之后的处理
+                if (resultCode == RESULT_OK) {
                    /* data.getExtras().get("data");*/
 //                    RxPhotoTool.cropImage(ActivityUser.this, RxPhotoTool.imageUriFromCamera);// 裁剪图片
-                        initUCrop(RxPhotoTool.imageUriFromCamera);
-                    }
+                    initUCrop(RxPhotoTool.imageUriFromCamera);
+                }
 
-                    break;
-                case RxPhotoTool.CROP_IMAGE://普通裁剪后的处理
+                break;
+            case RxPhotoTool.CROP_IMAGE://普通裁剪后的处理
 //                    roadImageView(RxPhotoTool.cropImageUri, ivAvatar);
-                    RxBus.get().post(BusAction.GET_PICTURE, RxPhotoTool.cropImageUri);
-                    break;
+                RxBus.get().post(BusAction.GET_PICTURE, RxPhotoTool.cropImageUri);
+                break;
 
-                case UCrop.REQUEST_CROP://UCrop裁剪之后的处理
-                    if (resultCode == RESULT_OK) {
-                        Uri resultUri = UCrop.getOutput(data);
+            case UCrop.REQUEST_CROP://UCrop裁剪之后的处理
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = UCrop.getOutput(data);
 //                       roadImageView(resultUri, ivAvatar);
-                        RxBus.get().post(BusAction.GET_PICTURE, resultUri);
-                    }
-                    break;
-            }
+                    RxBus.get().post(BusAction.GET_PICTURE, resultUri);
+                }
+                break;
+        }
     }
 
 
