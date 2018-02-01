@@ -2,7 +2,6 @@
 package com.yc.sleepmm.index.ui.presenter;
 
 import android.content.Context;
-
 import com.yc.sleepmm.index.bean.UserDataInfo;
 import com.yc.sleepmm.index.rxnet.RxPresenter;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
@@ -76,6 +75,15 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void makePassword(String account,String password, String code) {
+
+    }
+
+    /**
+     * 获取验证码
+     * @param phoneNumber
+     */
+    @Override
+    public void getCode(String phoneNumber) {
 
     }
 }

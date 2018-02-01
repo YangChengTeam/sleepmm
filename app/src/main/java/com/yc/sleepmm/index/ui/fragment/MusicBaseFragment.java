@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.hwangjr.rxbus.RxBus;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.index.rxnet.RxPresenter;
 import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 
 import butterknife.BindView;
@@ -56,6 +59,7 @@ public abstract class MusicBaseFragment extends Fragment {
             contentView.addView(mChildView);
         }
         ButterKnife.bind(this, rootView);
+        RxBus.get().register(this);
         return rootView;
     }
 
@@ -218,7 +222,7 @@ public abstract class MusicBaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        RxBus.get().unregister(this);
     }
 
     @Override

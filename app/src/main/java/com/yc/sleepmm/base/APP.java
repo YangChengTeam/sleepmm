@@ -5,7 +5,6 @@ import android.support.multidex.MultiDexApplication;
 
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
-import com.mob.MobSDK;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
@@ -42,9 +41,7 @@ public class APP extends MultiDexApplication {
             }
         });
         MusicPlayerManager.getInstance().init(this);
-        MusicPlayerManager.getInstance().setDebug(false);
-
-        MobSDK.init(INSTANCE, "23dc6f3757060", "c40753ae2913059b5443faa339dee6ed");
+        MusicPlayerManager.getInstance().setDebug(true);
     }
 
 

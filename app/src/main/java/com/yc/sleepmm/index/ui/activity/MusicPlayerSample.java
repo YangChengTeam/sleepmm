@@ -79,7 +79,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
             @Override
             public void onEventCollect() {
                 isCollect=!isCollect;
-                //设置是否收藏示例
+                //设置是否收藏示例, 传入MusicInfo可以确定所有实例化的播放器组件是否需要改变图片，仅当目标ID一致才会改变图标
                 mMusicPlayerController.setCollectIcon(isCollect?R.drawable.ic_player_collect_true:R.drawable.ic_player_collect,isCollect);
             }
             //随机播放触发了
@@ -224,7 +224,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
     }
 
     @Override
-    public void changeCollectResult(int icon, boolean isCollect) {
+    public void changeCollectResult(int icon, boolean isCollect,String musicID) {
 
     }
 }

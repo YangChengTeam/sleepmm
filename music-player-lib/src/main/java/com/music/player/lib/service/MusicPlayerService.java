@@ -29,7 +29,7 @@ import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.MusicPlayerUtils;
-import com.music.player.lib.util.SharedPreferencesUtil;
+import com.music.player.lib.util.PreferencesUtil;
 import com.music.player.lib.util.ToastUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -330,7 +330,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
         TIMER_DURTION=durtion;
         currentDurtion=0;
         //若用户滑动进度条改变了时长，默认重新设置为30分钟
-        SharedPreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30);
+        PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30);
         //为防止界面刷新不及时
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.taskRemmainTime(TIMER_DURTION-currentDurtion);
@@ -377,7 +377,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
                 TIMER_DURTION=-1;
                 break;
         }
-        SharedPreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,playAlarmModel);
+        PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,playAlarmModel);
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.changeAlarmModelResult(playAlarmModel);
         }
@@ -399,7 +399,7 @@ public class MusicPlayerService extends Service implements IMediaPlayer.OnPrepar
 //        }else{
 //            mPlayModel++;
 //        }
-        SharedPreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_MODEL,mPlayModel);
+        PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_MODEL,mPlayModel);
         if(null!=mOnPlayerEventListener){
             mOnPlayerEventListener.changePlayModelResult(mPlayModel);
         }

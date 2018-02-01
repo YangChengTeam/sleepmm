@@ -62,6 +62,7 @@ public interface OnUserPlayerEventListener {
      * 一处点赞，所有同步
      * @param icon
      * @param isCollect
+     * @param musicID 双向校验目标对象
      */
-    void changeCollectResult(int icon, boolean isCollect);
+    void changeCollectResult(int icon, boolean isCollect,String musicID);
 }

@@ -13,6 +13,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public abstract class BasePresenter<M, V extends IView> implements IPresenter {
+
     @NonNull
     protected CompositeSubscription mSubscriptions;
 

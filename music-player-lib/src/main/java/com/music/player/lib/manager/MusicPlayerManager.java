@@ -17,7 +17,7 @@ import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.service.MusicPlayerService;
 import com.music.player.lib.util.Logger;
-import com.music.player.lib.util.SharedPreferencesUtil;
+import com.music.player.lib.util.PreferencesUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
@@ -60,10 +60,10 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      */
     public void init(Context context){
         this.mContext=context.getApplicationContext();
-        SharedPreferencesUtil.init(context,context.getPackageName() + "music_play_config", Context.MODE_MULTI_PROCESS);
-        if(1!=SharedPreferencesUtil.getInstance().getInt(Constants.SP_FIRST_START,0)){
-            SharedPreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30);
-            SharedPreferencesUtil.getInstance().putInt(Constants.SP_FIRST_START,1);
+        PreferencesUtil.init(context,context.getPackageName() + "music_play_config", Context.MODE_MULTI_PROCESS);
+        if(1!= PreferencesUtil.getInstance().getInt(Constants.SP_FIRST_START,0)){
+            PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30);
+            PreferencesUtil.getInstance().putInt(Constants.SP_FIRST_START,1);
         }
     }
 
@@ -150,8 +150,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      */
     public void checkedPlayerConfig() {
         MusicPlayerConfig musicPlayerConfig=new MusicPlayerConfig();
-        musicPlayerConfig.setPlayModel(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL,PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
-        musicPlayerConfig.setAlarmModel(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30));
+        musicPlayerConfig.setPlayModel(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL,PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
+        musicPlayerConfig.setAlarmModel(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM,PlayerAlarmModel.PLAYER_ALARM_30));
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onUserPlayerEventListener : mUserCallBackListenerList) {
                 onUserPlayerEventListener.onMusicPlayerConfig(musicPlayerConfig);
@@ -440,11 +440,12 @@ public class MusicPlayerManager implements OnPlayerEventListener {
      * 检查收藏结果回调
      * @param icon
      * @param isCollect
+     * @param musicID
      */
-    public void changeCollectResult(int icon, boolean isCollect) {
+    public void changeCollectResult(int icon, boolean isCollect,String musicID) {
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onUserPlayerEventListener : mUserCallBackListenerList) {
-                onUserPlayerEventListener.changeCollectResult(icon,isCollect);
+                onUserPlayerEventListener.changeCollectResult(icon,isCollect,musicID);
             }
         }
     }
@@ -459,8 +460,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
             if(null!=service){
                 mMusicPlayerServiceBunder = (MusicPlayerService.MusicPlayerServiceBunder) service;
                 mMusicPlayerServiceBunder.setOnPlayerEventListener(MusicPlayerManager.this);//注册播放状态Event状态监听
-                mMusicPlayerServiceBunder.setPlayMode(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL,PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
-                mMusicPlayerServiceBunder.setPlayAlarmMode(SharedPreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM, PlayerAlarmModel.PLAYER_ALARM_NORMAL));
+                mMusicPlayerServiceBunder.setPlayMode(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL,PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
+                mMusicPlayerServiceBunder.setPlayAlarmMode(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM, PlayerAlarmModel.PLAYER_ALARM_NORMAL));
                 if (null!=mConnectionCallback) {
                     mConnectionCallback.onServiceConnected(mMusicPlayerServiceBunder.getService());
                 }

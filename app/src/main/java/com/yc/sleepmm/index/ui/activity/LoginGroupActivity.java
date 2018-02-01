@@ -2,7 +2,6 @@ package com.yc.sleepmm.index.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.music.player.lib.util.ToastUtils;
 import com.umeng.socialize.UMAuthListener;
@@ -27,14 +26,9 @@ import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 import com.yc.sleepmm.index.ui.fragment.LoginFragment;
 import com.yc.sleepmm.index.ui.fragment.LoginRegisterFragment;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-
+import com.yc.sleepmm.setting.constants.BusAction;
 import java.util.Map;
-
 import butterknife.BindView;
-import cn.smssdk.EventHandler;
-import cn.smssdk.OnSendMessageHandler;
-import cn.smssdk.SMSSDK;
-
 
 /**
  * TinyHung@Outlook.com
@@ -62,7 +56,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
     LinearLayout llOtherLoginView;
 
     private LoginPresenter mLoginPresenter;
-    private EventHandler mEventHandler;
     private LoadingProgressView mLoadingProgressedView;
 
     @Override
@@ -112,35 +105,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
         addReplaceFragment(new LoginFragment(),"登录","注册");//初始化默认登录界面
         tvOtherLoginTips.setText("快捷登录");
         showOthreLoginView(true);
-        initSMS();
-    }
-
-    /**
-     * 初始化短信监听
-     */
-    private void initSMS() {
-        mEventHandler = new EventHandler(){
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-                //回调完成
-                if (result == SMSSDK.RESULT_COMPLETE) {
-//                    EventBus.getDefault().post(new SMSEventMessage(100,""));
-                    //验证码正确
-                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-//                        EventBus.getDefault().post(new SMSEventMessage(101,""));
-                        //获取验证码成功
-                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-//                        EventBus.getDefault().post(new SMSEventMessage(102,""));
-                        //返回支持发送验证码的国家列表
-                    }else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                    }
-                }else{
-                    Throwable throwable = (Throwable) data;
-//                    EventBus.getDefault().post(new SMSEventMessage(99, throwable.toString()));
-                }
-            }
-        };
-        SMSSDK.registerEventHandler(mEventHandler);
     }
 
     /**
@@ -180,32 +144,20 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
     }
 
     /**
-     * 获取验证码
-     * @param country
+     * 修改密码成功
      * @param account
      */
-    public void getCode(String country, String account) {
-        SMSSDK.getVerificationCode(country, account, new OnSendMessageHandler() {
-            @Override
-            public boolean onSendMessage(String country, String account) {
-                return false;//发送短信之前调用，返回TRUE表示无需真正发送验证码
-            }
-        });
-    }
-
     public void makePasswordFinlish(String account) {
-//        SMSEventMessage smsEventMessage=new SMSEventMessage();
-//        smsEventMessage.setSmsCode(99);
-//        smsEventMessage.setAccount(account);
-//        onBackPressed();
-//        EventBus.getDefault().post(smsEventMessage);
+        onBackPressed();
+        //通知登录界面，填入用户账号，准备登录
+        RxBus.get().post(BusAction.LOGIN_COMPER,account);
     }
 
 
 
     //=====================================QQ、微信、微博登录========================================
     /**
-     * 登录到服务器
+     * 拿到用户信息后登录到应用服务器
      * @param userDataInfo
      */
     private void login(UserDataInfo userDataInfo) {
@@ -257,19 +209,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
 //        EventBus.getDefault().post(messageEvent);
     }
 
-    /**
-     * 账号密码登录
-     * @param account
-     * @param password
-     */
-    public void login(String account,String password){
-//        SMSEventMessage smsEventMessage=new SMSEventMessage();
-//        smsEventMessage.setSmsCode(98);
-//        smsEventMessage.setAccount(account);
-//        smsEventMessage.setPassword(password);
-//        onBackPressed();
-//        EventBus.getDefault().post(smsEventMessage);
-    }
 
     /**
      * QQ、微信、微博 登录
@@ -277,20 +216,12 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
      */
     public void login(SHARE_MEDIA media) {
         showProgressDialog("登录中，请稍后..",true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                closeProgressDialog();
-                ToastUtils.showCenterToast("登陆失败，没有人写后台！");
-            }
-        },1800);
-        return;
-//        boolean isauth = UMShareAPI.get(LoginGroupActivity.this).isAuthorize(LoginGroupActivity.this, media);//判断当前APP有没有授权登录
-//        if (isauth) {
-//            UMShareAPI.get(LoginGroupActivity.this).getPlatformInfo(LoginGroupActivity.this, media, LoginAuthListener);//获取用户信息
-//        } else {
-//            UMShareAPI.get(LoginGroupActivity.this).doOauthVerify(LoginGroupActivity.this, media, LoginAuthListener);//用户授权登录
-//        }
+        boolean isauth = UMShareAPI.get(LoginGroupActivity.this).isAuthorize(LoginGroupActivity.this, media);//判断当前APP有没有授权登录
+        if (isauth) {
+            UMShareAPI.get(LoginGroupActivity.this).getPlatformInfo(LoginGroupActivity.this, media, LoginAuthListener);//获取用户信息
+        } else {
+            UMShareAPI.get(LoginGroupActivity.this).doOauthVerify(LoginGroupActivity.this, media, LoginAuthListener);//用户授权登录
+        }
     }
 
 
@@ -344,7 +275,7 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
                     if(TextUtils.isEmpty(userDataInfo.getNickname())&&TextUtils.isEmpty(userDataInfo.getFigureurl_qq_2())){
                         login(platform);
                     }else{
-                        //登录App成功,防止微博
+                        //登录App成功,防止微博获取不到用户信息
                         if(!TextUtils.isEmpty(userDataInfo.getOpenid())){
                             login(userDataInfo);
                         }else{
@@ -411,6 +342,11 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
     }
 
     @Override
+    public void showGetCodeResult(String data) {
+
+    }
+
+    @Override
     public void onBackPressed() {
         //只剩登录一个界面了
         if(getSupportFragmentManager().getBackStackEntryCount()==1&&!LoginGroupActivity.this.isFinishing()){
@@ -435,7 +371,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
 
     @Override
     public void onDestroy() {
-        SMSSDK.unregisterEventHandler(mEventHandler);
         super.onDestroy();
         closeProgressDialog();
         if(null!=mLoginPresenter) mLoginPresenter.detachView();
