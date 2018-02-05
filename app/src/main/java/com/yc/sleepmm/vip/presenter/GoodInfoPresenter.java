@@ -2,6 +2,8 @@ package com.yc.sleepmm.vip.presenter;
 
 import android.content.Context;
 
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.vip.bean.GoodInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
@@ -55,7 +57,7 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoEngine, GoodInfoCon
 
     @Override
     public void getPayInfos() {
-        Subscription subscription = mEngine.getPayInfos().subscribe(new Subscriber<List<PayInfo>>() {
+        Subscription subscription = mEngine.getPayInfos().subscribe(new Subscriber<ResultInfo<List<PayInfo>>>() {
             @Override
             public void onCompleted() {
 
@@ -67,8 +69,10 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoEngine, GoodInfoCon
             }
 
             @Override
-            public void onNext(List<PayInfo> payInfos) {
-                mView.showPayInfos(payInfos);
+            public void onNext(ResultInfo<List<PayInfo>> listResultInfo) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
+                    mView.showPayInfos(listResultInfo.data);
+                }
             }
         });
         mSubscriptions.add(subscription);

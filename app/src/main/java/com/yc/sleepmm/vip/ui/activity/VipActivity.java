@@ -1,14 +1,17 @@
 package com.yc.sleepmm.vip.ui.activity;
 
 import android.content.Intent;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jakewharton.rxbinding.view.RxView;
+import com.kk.utils.ScreenUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.vip.bean.GoodInfo;
@@ -39,6 +42,8 @@ public class VipActivity extends BaseActivity<GoodInfoPresenter> implements Good
     RecyclerView recyclerViewGood;
     @BindView(R.id.recyclerView_pay)
     RecyclerView recyclerViewPay;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
     private VipGoodAdapter vipGoodAdapter;
     private VipPayAdapter vipPayAdapter;
 
@@ -53,6 +58,11 @@ public class VipActivity extends BaseActivity<GoodInfoPresenter> implements Good
 
         tvTitle.setText(getString(R.string.vip_miemie));
         mPresenter = new GoodInfoPresenter(this, this);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) nestedScrollView.getLayoutParams();
+        layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT - ScreenUtil.dip2px(this, 40);
+        nestedScrollView.setLayoutParams(layoutParams);
+
         recyclerViewGood.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         vipGoodAdapter = new VipGoodAdapter(null);
         recyclerViewGood.setAdapter(vipGoodAdapter);
@@ -107,4 +117,5 @@ public class VipActivity extends BaseActivity<GoodInfoPresenter> implements Good
     public void showPayInfos(List<PayInfo> payInfos) {
         vipPayAdapter.setNewData(payInfos);
     }
+
 }

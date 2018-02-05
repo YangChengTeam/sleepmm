@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private void applyPermission() {
         RxPermissionsTool.
                 with(this).
-                addPermission(Manifest.permission.READ_EXTERNAL_STORAGE).
+                addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).
                 addPermission(Manifest.permission.CAMERA).
                 initPermission();
     }

@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import rx.functions.Action1;
+import skin.support.SkinCompatManager;
 
 /**
  * Created by wanglin  on 2018/1/26 12:03.
@@ -64,9 +65,14 @@ public class SkinActivity extends BaseActivity<SkinPresenter> implements SkinCon
         skinAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (position == 0) {
+                    SkinCompatManager.getInstance().restoreDefaultTheme();
+                }
+                if (position == 1) {
+                    SkinCompatManager.getInstance().loadSkin("green.skin", null, SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS);
+                }
 
-
-                return false;
+                return true;
 
             }
         });
