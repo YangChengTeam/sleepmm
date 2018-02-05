@@ -11,7 +11,7 @@ public interface NetContants {
 
     String DEBUG_HOST="http://api.sleep.slpi1.com/v1/";
     String HOST_USER_GET_CODE = "user/code";
-    String HOST_USER_FIND_PASSWORD = "user/resetPassword";
+    String HOST_USER_FIND_PASSWORD = "user/reset";
     String HOST_USER_REGISTER = "user/reg";
     String HOST_USER_LOGIN = "user/login";
 }

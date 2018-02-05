@@ -19,6 +19,7 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
+import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.fragment.IndexFragment;
 import com.yc.sleepmm.main.ui.adapter.MainAdapter;
 import com.yc.sleepmm.setting.constants.BusAction;
@@ -211,5 +212,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .withMaxResultSize(1000, 1000)
                 .withOptions(options)
                 .start(this);
+    }
+
+    public void login() {
+        startActivityForResult(new Intent(MainActivity.this, LoginGroupActivity.class), com.yc.sleepmm.index.constants.Constant.INTENT_LOGIN_REQUESTCODE);
+        overridePendingTransition(R.anim.menu_enter, 0);//进场动画
     }
 }

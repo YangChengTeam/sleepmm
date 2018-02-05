@@ -3,18 +3,26 @@ package com.yc.sleepmm.base;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.vondear.rxtools.RxTool;
-import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.constants.Constant;
+import com.yc.sleepmm.index.manager.ApplicationManager;
+import com.yc.sleepmm.index.util.ACache;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -32,6 +40,7 @@ public class APP extends MultiDexApplication {
 
 
     private static APP INSTANCE;
+    private UserInfo mUserInfo;
 
     @Override
     public void onCreate() {
@@ -46,21 +55,37 @@ public class APP extends MultiDexApplication {
                 init();
             }
         });
+        //友盟统计、分享
+        PlatformConfig.setWeixin("wx2d62a0f011b43f32", "c43aeb050a3eab9f723c04cfc0525800");//设置微信SDK账号
+        PlatformConfig.setSinaWeibo("994868311", "908f16503b8ebe004cdf9395cebe1b14","http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setQQZone("1106176094","Pkas3I3J2OpaZzsH");//设置QQ/空间SDK账号
+        UMShareAPI.get(INSTANCE);
+
         MusicPlayerManager.getInstance().init(this);
         MusicPlayerManager.getInstance().setDebug(true);
+        ACache cache = ACache.get(INSTANCE);
+        ApplicationManager.getInstance().setCacheExample(cache);//初始化后需要设置给通用管理者
+        UserInfo userInfo = (UserInfo) ApplicationManager.getInstance().getCacheExample().getAsObject(Constant.SP_USER_USERINFO);
+        setUserData(userInfo,false);
     }
+
+
 
 
     public static APP getInstance() {
         return INSTANCE;
     }
 
-    public UserDataInfo getUserData() {
-        return new UserDataInfo();
+    public UserInfo getUserData() {
+        return mUserInfo;
     }
 
-    public void setUserData(UserDataInfo userDataInfo, boolean isPlant) {
-
+    public void setUserData(UserInfo userInfo, boolean isPlant) {
+        this.mUserInfo=userInfo;
+        if(isPlant){
+            ApplicationManager.getInstance().getCacheExample().remove(Constant.SP_USER_USERINFO);
+            ApplicationManager.getInstance().getCacheExample().put(Constant.SP_USER_USERINFO, (Serializable) userInfo);
+        }
     }
 
     public String getUid() {

@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
@@ -30,7 +33,6 @@ import butterknife.BindView;
  */
 
 public class LoginRegisterFragment extends MusicBaseFragment implements LoginContract.View {
-
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -134,23 +136,11 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
      * @param account 手机号码
      */
     private void getCode(String country, String account) {
-        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
-            showProgressDialog("获取验证码中，请稍后...",true);
-
+        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()&&null!=mLoginPresenter){
+            showGetCodeDisplay();
+            showProgressDialog("获取验证码中...",true);
+            mLoginPresenter.getCode(account);
         }
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        EventBus.getDefault().unregister(this);
     }
 
 
@@ -158,11 +148,15 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
      * 改变获取验证码按钮状态
      */
     private void showGetCodeDisplay() {
-        totalTime=60;
-        tvGetCode.setClickable(false);
-        tvGetCode.setTextColor(CommonUtils.getColor(R.color.coment_color));
-        tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code);
-        if(null!=mHandler) mHandler.postDelayed(taskRunnable,0);
+        if(null!=taskRunnable&&null!=mHandler){
+            mHandler.removeCallbacks(taskRunnable);
+            mHandler.removeMessages(0);
+            totalTime=60;
+            tvGetCode.setClickable(false);
+            tvGetCode.setTextColor(CommonUtils.getColor(R.color.coment_color));
+            tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code);
+            if(null!=mHandler) mHandler.postDelayed(taskRunnable,0);
+        }
     }
 
     /**
@@ -189,7 +183,7 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     Runnable taskRunnable=new Runnable() {
         @Override
         public void run() {
-            tvGetCode.setText(totalTime+"S后重试");
+            tvGetCode.setText(totalTime+"秒后重试");
             totalTime--;
             if(totalTime<0){
                 //还原
@@ -233,13 +227,8 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
             return;
         }
 
-        if(!Utils.isNumberCode(code,4)){
-            etCode.startAnimation(mInputAnimation);
-            ToastUtils.showCenterToast("验证码格式不正确");
-            return;
-        }
-
         if(null!= mLoginPresenter &&!mLoginPresenter.isRegister()){
+
             showProgressDialog("提交注册中...",true);
             // TODO: 2017/6/20 用户注册
             mLoginPresenter.registerAccount(account,password,code);
@@ -331,11 +320,11 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     public void onDestroyView() {
         super.onDestroyView();
         closeProgressDialog();
+        initGetCodeBtn();
         if(null!=mInputAnimation){
             mInputAnimation.cancel();
             mInputAnimation=null;
         }
-        initGetCodeBtn();
         if(null!=mHandler){
             mHandler.removeCallbacks(taskRunnable);
             mHandler=null;
@@ -353,24 +342,38 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     }
 
     @Override
-    public void showLoginAccountResult(String data) {
+    public void showLoginAccountResult(UserInfo data) {
 
     }
 
+
     @Override
-    public void showRegisterAccountResult(String data) {
+    public void showRegisterAccountResult(UserInfo data) {
         closeProgressDialog();
-        ToastUtils.showCenterToast(data);
+        if(null!=data&&!TextUtils.isEmpty(data.getId())){
+            ToastUtils.showCenterToast("注册成功");
+            APP.getInstance().setUserData(data,true);
+            if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
+                mLoginGroupActivity.registerResultFinlish();//登录完成
+            }
+        }
     }
 
     @Override
-    public void showFindPasswordResult(String data) {
+    public void showFindPasswordResult(UserInfo data) {
 
     }
 
     @Override
     public void showGetCodeResult(String data) {
+        closeProgressDialog();
+        ToastUtils.showCenterToast(data);
+    }
 
+    @Override
+    public void showRequstError(String data) {
+        closeProgressDialog();
+        ToastUtils.showCenterToast(data);
     }
 
     @Override
