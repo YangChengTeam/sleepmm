@@ -14,14 +14,8 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.jakewharton.rxbinding.view.RxView;
-
-import com.kk.utils.ToastUtil;
 import com.vondear.rxtools.RxPhotoTool;
-
 import com.vondear.rxtools.view.dialog.RxDialogEditSureCancel;
-
-
-
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.setting.constants.BusAction;
@@ -29,10 +23,7 @@ import com.yc.sleepmm.setting.ui.activity.FindCenterActivity;
 import com.yc.sleepmm.setting.ui.activity.OptionFeedbackActivity;
 import com.yc.sleepmm.setting.ui.activity.SkinActivity;
 import com.yc.sleepmm.setting.ui.activity.SystemSettingActivity;
-
 import com.yc.sleepmm.setting.ui.activity.UserKeepActivity;
-
-
 import com.yc.sleepmm.setting.widget.BaseSettingView;
 import com.yc.sleepmm.vip.ui.activity.VipActivity;
 
@@ -172,9 +163,10 @@ public class SettingFragment extends BaseFragment {
     public File roadImageView(Uri uri, ImageView imageView) {
         Glide.with(this).
                 load(uri).
-                apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).circleCrop().placeholder(R.mipmap.default_avatar).
-                        error(R.mipmap.default_avatar).
-                        fallback(R.mipmap.default_avatar)).
+                apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).circleCrop()
+                        .placeholder(R.mipmap.default_avatar)
+                        .error(R.mipmap.default_avatar)
+                        .fallback(R.mipmap.default_avatar)).
                 thumbnail(0.5f).
                 into(imageView);
 

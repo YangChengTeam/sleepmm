@@ -11,8 +11,8 @@ import android.view.WindowManager;
 
 import com.hwangjr.rxbus.RxBus;
 import com.umeng.analytics.MobclickAgent;
+import com.vondear.rxtools.RxLogTool;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.base.view.IView;
 
 import butterknife.ButterKnife;
 
@@ -31,7 +31,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         try {
             ButterKnife.bind(this);
         } catch (Exception e) {
-//            RxLogUtils.e("--> 初始化失败");
+            RxLogTool.e("--> 初始化失败  " + e.getMessage());
         }
         //顶部透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -72,4 +72,5 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         RxBus.get().unregister(this);
 
     }
+
 }

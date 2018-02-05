@@ -1,12 +1,15 @@
 package com.yc.sleepmm.vip.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * Created by wanglin  on 2018/1/25 14:41.
  */
 
 public class PayInfo {
-
+    @JSONField(name = "pay_way_name")
     private String title;
+    @JSONField(name = "pay_way_title")
     private String payway;
 
     public PayInfo() {

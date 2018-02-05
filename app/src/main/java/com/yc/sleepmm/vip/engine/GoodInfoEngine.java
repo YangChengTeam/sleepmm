@@ -2,7 +2,12 @@ package com.yc.sleepmm.vip.engine;
 
 import android.content.Context;
 
-import com.kk.securityhttp.engin.BaseEngin;
+
+import com.alibaba.fastjson.TypeReference;
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.engin.HttpCoreEngin;
+import com.yc.sleepmm.base.model.BaseEngine;
+import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.vip.bean.GoodInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
 
@@ -18,15 +23,11 @@ import rx.schedulers.Schedulers;
  * Created by wanglin  on 2018/1/25 13:33.
  */
 
-public class GoodInfoEngine extends BaseEngin<List<GoodInfo>> {
+public class GoodInfoEngine extends BaseEngine {
     public GoodInfoEngine(Context context) {
         super(context);
     }
 
-    @Override
-    public String getUrl() {
-        return null;
-    }
 
     public Observable<List<GoodInfo>> getGoodInfoList() {
         return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<GoodInfo>>() {
@@ -45,18 +46,9 @@ public class GoodInfoEngine extends BaseEngin<List<GoodInfo>> {
     }
 
 
-    public Observable<List<PayInfo>> getPayInfos() {
-        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<PayInfo>>() {
-            @Override
-            public List<PayInfo> call(String s) {
-
-                List<PayInfo> list = new ArrayList<>();
-                list.add(new PayInfo("支付宝", "alipay"));
-                list.add(new PayInfo("微信", "wxpay"));
-
-                return list;
-            }
-        });
+    public Observable<ResultInfo<List<PayInfo>>> getPayInfos() {
+        return HttpCoreEngin.get(mContext).rxpost(NetConstant.orders_payWay_url, new TypeReference<ResultInfo<List<PayInfo>>>() {
+        }.getType(), null, true, true, true);
 
     }
 }
