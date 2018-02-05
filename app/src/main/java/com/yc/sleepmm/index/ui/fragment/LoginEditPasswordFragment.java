@@ -236,7 +236,7 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
 
         if(null!= mLoginPresenter &&!mLoginPresenter.isMakePassword()){
             showProgressDialog("修改密码中...",true);
-            mLoginPresenter.makePassword(account,password,code);
+            mLoginPresenter.findPassword(account,code,password);
         }
     }
 
@@ -332,7 +332,7 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
     }
 
     @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(String data) {
         closeProgressDialog();
         ToastUtils.showCenterToast(data);
         if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){

@@ -153,62 +153,6 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 //        EventBus.getDefault().unregister(this);
     }
 
-    /**
-     * 监听短信
-     */
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onMessageEvent(SMSEventMessage event) {
-//        if(null!=event){
-//            closeProgressDialog();
-//            switch (event.getSmsCode()) {
-//                //发送验证码失败
-//                case 99:
-//                    initGetCodeBtn();
-//                    try {
-//                        if(!TextUtils.isEmpty(event.getMessage())){
-//                            try {
-//                                JSONObject jsonObject=new JSONObject(event.getMessage());
-//                                if(null!=jsonObject&&jsonObject.length()>0){
-//                                    if(null!=jsonObject.getString("detail")){
-//                                        ToastUtils.showCenterToast(jsonObject.getString("detail"));
-//                                    }else{
-//                                        ToastUtils.showCenterToast("发送验证码失败");
-//                                    }
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }catch (Exception e){
-//
-//                    }
-//                    break;
-//
-//                //获取支持的国家列表成功
-//                case 103:
-////                    HashMap<String, String> stringStringHashMap = (HashMap<String, String>) event.getMessage();
-////                    //保存至本地
-////                    SerMap serMap=new SerMap();
-////                    serMap.setMap(stringStringHashMap);
-////                    VideoApplication.mACache.put(Constant.CACHE_COUNTRY_NUMBER_LIST,serMap,Constant.CACHE_TIME);
-//                    break;
-//                //短信验证码验证成功
-//                case 100:
-//                    break;
-//                //获取验证码成功
-//                case 102:
-//                    showGetCodeDisplay();
-//                    ToastUtils.showCenterToast("已成功发送验证码");
-//                    break;
-//                //短信验证码已提交完成
-//                case 101:
-//                    //请求后台服务器验证
-//
-//                    break;
-//
-//            }
-//        }
-//    }
 
     /**
      * 改变获取验证码按钮状态
@@ -420,7 +364,7 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     }
 
     @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(String data) {
 
     }
 

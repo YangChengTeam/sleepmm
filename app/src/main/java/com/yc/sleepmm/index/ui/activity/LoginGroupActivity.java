@@ -337,7 +337,7 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
     }
 
     @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(String data) {
 
     }
 

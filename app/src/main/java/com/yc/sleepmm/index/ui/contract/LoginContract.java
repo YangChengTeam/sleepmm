@@ -16,7 +16,7 @@ public interface LoginContract {
         void showLoginOtherResult(String data);
         void showLoginAccountResult(String data);
         void showRegisterAccountResult(String data);
-        void showMakePasswordResult(String data);
+        void showFindPasswordResult(String data);
         void showGetCodeResult(String data);
     }
 
@@ -28,7 +28,7 @@ public interface LoginContract {
         //注册用户
         void registerAccount(String account,String password,String code);
         //修改密码
-        void makePassword(String account,String password,String code);
+        void findPassword(String phoneNumber, String code, String newPassword);
         //获取验证码
         void getCode(String phoneNumber);
     }

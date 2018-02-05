@@ -2,9 +2,19 @@
 package com.yc.sleepmm.index.ui.presenter;
 
 import android.content.Context;
+import com.alibaba.fastjson.TypeReference;
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.engin.HttpCoreEngin;
+import com.orhanobut.logger.Logger;
 import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.constants.NetContants;
 import com.yc.sleepmm.index.rxnet.RxPresenter;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
+import java.util.HashMap;
+import java.util.Map;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 
 /**
@@ -14,6 +24,8 @@ import com.yc.sleepmm.index.ui.contract.LoginContract;
  */
 
 public class LoginPresenter extends RxPresenter<LoginContract.View> implements LoginContract.Presenter<LoginContract.View> {
+
+    private static final String TAG = "LoginPresenter";
 
     public LoginPresenter(Context context) {
         super(context);
@@ -52,7 +64,30 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void loginAccount(String account, String password) {
-
+        if(isLogin) return;
+        isLogin=true;
+        Logger.d(TAG,"account="+account+",password="+password);
+        Map<String,String> params=new HashMap<>();
+        params.put("mobile", account);
+        params.put("password", password);
+        Subscription subscribe = HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_LOGIN, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<String>>() {
+            @Override
+            public void call(ResultInfo<String> data) {
+                isLogin=false;
+                if(null!=data){
+                    Logger.d("loginAccount","data="+data.data);
+                    if(1==data.code){
+                        if(null!=mView)mView.showLoginAccountResult(data.data);
+                    }else{
+                        if(null!=mView)mView.showErrorView();
+                    }
+                }else{
+                    if(null!=mView)mView.showErrorView();
+                }
+            }
+        });
+        addSubscrebe(subscribe);
     }
 
 
@@ -64,18 +99,62 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void registerAccount(String account, String password, String code) {
-
+        if(isRegister) return;
+        isRegister=true;
+        Map<String,String> params=new HashMap<>();
+        params.put("mobile", account);
+        params.put("code", code);
+        params.put("password", password);
+        Subscription subscribe = HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_REGISTER, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<String>>() {
+            @Override
+            public void call(ResultInfo<String> data) {
+                isRegister=false;
+                if(null!=data){
+                    if(1==data.code){
+                        if(null!=mView)mView.showLoginAccountResult(data.data);
+                    }else{
+                        if(null!=mView)mView.showErrorView();
+                    }
+                }else{
+                    if(null!=mView)mView.showErrorView();
+                }
+            }
+        });
+        addSubscrebe(subscribe);
     }
 
     /**
-     * 修改密码
-     * @param account
-     * @param password
+     * 找回密码\修改密码
+     * @param phoneNumber
      * @param code
+     * @param newPassword
      */
     @Override
-    public void makePassword(String account,String password, String code) {
-
+    public void findPassword(String phoneNumber, String code, String newPassword) {
+        if(isMakePassword) return;
+        isMakePassword=true;
+        Map<String,String> params=new HashMap<>();
+        params.put("mobile", phoneNumber);
+        params.put("code", code);
+        params.put("new_password", newPassword);
+        Subscription subscribe = HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_FIND_PASSWORD, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<String>>() {
+            @Override
+            public void call(ResultInfo<String> data) {
+                isMakePassword=false;
+                if(null!=data){
+                    if(1==data.code){
+                        if(null!=mView)mView.showLoginAccountResult(data.data);
+                    }else{
+                        if(null!=mView)mView.showErrorView();
+                    }
+                }else{
+                    if(null!=mView)mView.showErrorView();
+                }
+            }
+        });
+        addSubscrebe(subscribe);
     }
 
     /**
@@ -84,6 +163,24 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void getCode(String phoneNumber) {
-
+        Map<String,String> params=new HashMap<>();
+        params.put("mobile", phoneNumber);
+        params.put("user_id", "0");
+        Subscription subscribe = HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_GET_CODE, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<String>>() {
+            @Override
+            public void call(ResultInfo<String> data) {
+                if(null!=data){
+                    if(1==data.code){
+                        if(null!=mView)mView.showLoginAccountResult(data.data);
+                    }else{
+                        if(null!=mView)mView.showErrorView();
+                    }
+                }else{
+                    if(null!=mView)mView.showErrorView();
+                }
+            }
+        });
+        addSubscrebe(subscribe);
     }
 }
