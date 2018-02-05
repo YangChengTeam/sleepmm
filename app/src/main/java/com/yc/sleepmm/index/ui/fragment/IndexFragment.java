@@ -2,8 +2,6 @@ package com.yc.sleepmm.index.ui.fragment;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.yc.sleepmm.R;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -13,9 +11,9 @@ import android.view.View;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.view.MusicPlayerController;
-import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.adapter.AppFragmentPagerAdapter;
 import com.yc.sleepmm.base.view.BaseFragment;
+import com.yc.sleepmm.main.ui.activity.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -69,8 +67,7 @@ public class IndexFragment extends BaseFragment {
             @Override
             public void onEventRandomPlay() {
                 //其他界面使用播放控制器示例
-                startActivity(new Intent(getActivity(), LoginGroupActivity.class));
-                getActivity().overridePendingTransition(R.anim.menu_enter, 0);//进场动画
+                login();
             }
 
             @Override
@@ -81,6 +78,14 @@ public class IndexFragment extends BaseFragment {
         //注册观察者
         MusicPlayerManager.getInstance().addObservable(mPlayerController);
     }
+
+    private void login() {
+        MainActivity activity = (MainActivity) getActivity();
+        if(null!=activity&&!activity.isFinishing()){
+            activity.login();
+        }
+    }
+
 
     /**
      * 初始化分类列表

@@ -1,34 +1,39 @@
 package com.yc.sleepmm.index.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.GoagalInfo;
+import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.ToastUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
-import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 import com.yc.sleepmm.index.ui.fragment.LoginFragment;
 import com.yc.sleepmm.index.ui.fragment.LoginRegisterFragment;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.setting.constants.BusAction;
 import java.util.Map;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * TinyHung@Outlook.com
@@ -36,7 +41,9 @@ import butterknife.BindView;
  * 用户登录、注册、修改密码
  */
 
-public class LoginGroupActivity extends BaseActivity implements LoginContract.View {
+public class LoginGroupActivity extends AppCompatActivity implements LoginContract.View {
+
+    private static final String TAG = "LoginGroupActivity";
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -63,15 +70,21 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
         super.onCreate(savedInstanceState);
         mLoginPresenter = new LoginPresenter(this);
         mLoginPresenter.attachView(this);
+        //顶部透明
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
+        setContentView(R.layout.activity_login_group);
+        ButterKnife.bind(this);
+        initViews();
     }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_login_group;
-    }
-
-    @Override
-    public void init() {
+    private void initViews() {
         View.OnClickListener onClickListener=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,17 +156,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
         llOtherLoginView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
     }
 
-    /**
-     * 修改密码成功
-     * @param account
-     */
-    public void makePasswordFinlish(String account) {
-        onBackPressed();
-        //通知登录界面，填入用户账号，准备登录
-        RxBus.get().post(BusAction.LOGIN_COMPER,account);
-    }
-
-
 
     //=====================================QQ、微信、微博登录========================================
     /**
@@ -166,47 +168,34 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
         }
     }
 
+
     /**
-     * 第三方账号登录成功
+     * 用户注册\修改密码成功
      */
-    public void closeForResult() {
-        if(null!= APP.getInstance().getUserData()&&!TextUtils.isEmpty(APP.getInstance().getUserData().getOpenid())){
-            //携带登录成功消息
-            Intent intent=new Intent();
-            intent.putExtra(Constant.INTENT_LOGIN_STATE,true);
-            setResult(Constant.INTENT_LOGIN_RESULTCODE,intent);
-            finish();
-        }else{
-            ToastUtils.showCenterToast("登录异常，请重新登录!");
-        }
+    public void registerResultFinlish() {
+        onBackPressed();
+        loginResultFinlish();
     }
 
     /**
-     * 手机账号登录成功
+     * 手机号码、第三方登录成功调用此方法
      */
-    public void closeForResult(UserDataInfo data) {
-        //手机账号登录需要补全用户信息
-        if(null!=APP.getInstance().getUserData()&&null!=data&&!TextUtils.isEmpty(APP.getInstance().getUserData().getOpenid())){
-            Intent intent=new Intent();
-            intent.putExtra(Constant.INTENT_LOGIN_STATE,true);
-            setResult(Constant.INTENT_LOGIN_RESULTCODE,intent);
-            finish();
-        }else{
-            ToastUtils.showCenterToast("登录异常，请重新登录!");
+    public void loginResultFinlish() {
+        UserInfo userData = APP.getInstance().getUserData();
+        if(null!=userData&&TextUtils.isEmpty(userData.getMobile())){
+            //如果第三方用户登录成功，可以在这里判断是否需要补全手机号码等信息
+            Logger.d("loginResultFinlish","用户使用的第三方账号登录");
         }
+        setResult(Constant.INTENT_LOGIN_RESULTCODE);
+        onBackPressed();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
-        //这个时候DialogFragment无法回调onActivityResult方法.由父窗体来回调结果到子View中,发出订阅的事件，如果用户信息编辑的界面已经初始化可以收到订阅消息
-//        MessageEvent messageEvent=new MessageEvent();
-//        messageEvent.setData(data);
-//        messageEvent.setMessage("CAMERA_REQUEST");
-//        messageEvent.setRequestCode(requestCode);
-//        messageEvent.setResultState(resultCode);
-//        EventBus.getDefault().post(messageEvent);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
     }
 
 
@@ -215,7 +204,6 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
      * @param media
      */
     public void login(SHARE_MEDIA media) {
-        showProgressDialog("登录中，请稍后..",true);
         boolean isauth = UMShareAPI.get(LoginGroupActivity.this).isAuthorize(LoginGroupActivity.this, media);//判断当前APP有没有授权登录
         if (isauth) {
             UMShareAPI.get(LoginGroupActivity.this).getPlatformInfo(LoginGroupActivity.this, media, LoginAuthListener);//获取用户信息
@@ -250,6 +238,7 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
             }
             try{
                 if(null!=data&&data.size()>0){
+                    Logger.d(TAG,"data="+data.toString());
                     UserDataInfo userDataInfo=new UserDataInfo();
                     userDataInfo.setIemil(GoagalInfo.get().uuid);
                     userDataInfo.setLoginType(loginType+"");
@@ -307,6 +296,7 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
 
 
 
+
     //======================================登录到服务器回调=========================================
 
     @Override
@@ -323,26 +313,32 @@ public class LoginGroupActivity extends BaseActivity implements LoginContract.Vi
     public void showLoginOtherResult(String data) {
         closeProgressDialog();
         APP.getInstance().setUserData(null,true);
-        closeForResult();
+        loginResultFinlish();
     }
 
     @Override
-    public void showLoginAccountResult(String data) {
+    public void showLoginAccountResult(UserInfo data) {
+
+    }
+
+
+    @Override
+    public void showRegisterAccountResult(UserInfo data) {
 
     }
 
     @Override
-    public void showRegisterAccountResult(String data) {
-
-    }
-
-    @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(UserInfo data) {
 
     }
 
     @Override
     public void showGetCodeResult(String data) {
+
+    }
+
+    @Override
+    public void showRequstError(String data) {
 
     }
 

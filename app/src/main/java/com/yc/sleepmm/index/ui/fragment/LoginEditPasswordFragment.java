@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
@@ -122,7 +124,6 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
             etAccount.startAnimation(mInputAnimation);
             return;
         }
-
         getCode("86",account);
     }
 
@@ -132,9 +133,10 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
      * @param account 手机号码
      */
     private void getCode(String country, String account) {
-        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
-            showProgressDialog("获取验证码中，请稍后...",true);
-
+        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()&&null!=mLoginPresenter){
+            showGetCodeDisplay();
+            showProgressDialog("获取验证码中...",true);
+            mLoginPresenter.getCode(account);
         }
     }
 
@@ -158,11 +160,14 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
      * 改变获取验证码按钮状态
      */
     private void showGetCodeDisplay() {
-        totalTime=60;
-        tvGetCode.setClickable(false);
-        tvGetCode.setTextColor(CommonUtils.getColor(R.color.coment_color));
-        tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code);
-        if(null!=mHandler) mHandler.postDelayed(taskRunnable,0);
+        if(null!=taskRunnable&&null!=mHandler){
+            mHandler.removeCallbacks(taskRunnable);
+            totalTime=60;
+            tvGetCode.setClickable(false);
+            tvGetCode.setTextColor(CommonUtils.getColor(R.color.coment_color));
+            tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code);
+            mHandler.postDelayed(taskRunnable,0);
+        }
     }
 
 
@@ -220,23 +225,19 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
         }
 
         if(TextUtils.isEmpty(password)){
+            ToastUtils.showCenterToast("请设置新密码");
             etPassword.startAnimation(mInputAnimation);
             return;
         }
 
         if(TextUtils.isEmpty(code)){
+            ToastUtils.showCenterToast("请输入接收到的验证码");
             etCode.startAnimation(mInputAnimation);
             return;
         }
-        if(!Utils.isNumberCode(code,4)){
-            etCode.startAnimation(mInputAnimation);
-            ToastUtils.showCenterToast("验证码格式不正确");
-            return;
-        }
-
         if(null!= mLoginPresenter &&!mLoginPresenter.isMakePassword()){
             showProgressDialog("修改密码中...",true);
-            mLoginPresenter.makePassword(account,password,code);
+            mLoginPresenter.findPassword(account,code,password);
         }
     }
 
@@ -322,27 +323,37 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
     }
 
     @Override
-    public void showLoginAccountResult(String data) {
+    public void showLoginAccountResult(UserInfo data) {
 
     }
 
     @Override
-    public void showRegisterAccountResult(String data) {
+    public void showRegisterAccountResult(UserInfo data) {
 
     }
 
     @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(UserInfo data) {
         closeProgressDialog();
-        ToastUtils.showCenterToast(data);
-        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
-            mLoginGroupActivity.makePasswordFinlish(etAccount.getText().toString().trim());
+        if(null!=data&&!TextUtils.isEmpty(data.getId())){
+            ToastUtils.showCenterToast("修改密码成功");
+            APP.getInstance().setUserData(data,true);
+            if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
+                mLoginGroupActivity.registerResultFinlish();//修改密码完成
+            }
         }
     }
 
     @Override
     public void showGetCodeResult(String data) {
+        closeProgressDialog();
+        ToastUtils.showCenterToast(data);
+    }
 
+    @Override
+    public void showRequstError(String data) {
+        closeProgressDialog();
+        ToastUtils.showCenterToast(data);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.yc.sleepmm.index.ui.contract;
 
 
 import com.yc.sleepmm.index.bean.UserDataInfo;
+import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.rxnet.BaseContract;
 
 
@@ -14,10 +15,11 @@ public interface LoginContract {
 
     interface View extends BaseContract.BaseView {
         void showLoginOtherResult(String data);
-        void showLoginAccountResult(String data);
-        void showRegisterAccountResult(String data);
-        void showMakePasswordResult(String data);
+        void showLoginAccountResult(UserInfo data);
+        void showRegisterAccountResult(UserInfo data);
+        void showFindPasswordResult(UserInfo data);
         void showGetCodeResult(String data);
+        void showRequstError(String data);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
@@ -28,7 +30,7 @@ public interface LoginContract {
         //注册用户
         void registerAccount(String account,String password,String code);
         //修改密码
-        void makePassword(String account,String password,String code);
+        void findPassword(String phoneNumber, String code, String newPassword);
         //获取验证码
         void getCode(String phoneNumber);
     }

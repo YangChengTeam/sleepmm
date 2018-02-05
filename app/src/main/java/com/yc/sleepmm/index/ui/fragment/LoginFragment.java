@@ -14,16 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
+
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.utils.Utils;
 import butterknife.BindView;
 
@@ -36,7 +35,6 @@ import butterknife.BindView;
 public class LoginFragment extends MusicBaseFragment implements LoginContract.View {
 
     private static final String TAG = "LoginFragment";
-
     @BindView(R.id.tv_retrieve_password)
     TextView tvRetrievePassword;
     @BindView(R.id.btn_login)
@@ -49,7 +47,6 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     EditText etAccount;
     @BindView(R.id.et_password)
     EditText etPassword;
-
     private Animation mInputAnimation;
     private LoginPresenter mLoginPresenter;
     private LoginGroupActivity mLoginGroupActivity;
@@ -117,45 +114,46 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
         mLoginPresenter.attachView(this);
     }
 
-    @Subscribe(
-       thread = EventThread.MAIN_THREAD,
-       tags = {@Tag(BusAction.LOGIN_COMPER)}
-    )
-    /**
-     * 接收找回密码界面的通知消息
-     */
-    public void loginCopmper(String account) {
-        Logger.d(TAG,"account="+account);
-        if(!TextUtils.isEmpty(account)){
-            etAccount.setText(account);
-            etAccount.setSelection(account.length());
-        }
-    }
+//    @Subscribe(
+//       thread = EventThread.MAIN_THREAD,
+//       tags = {@Tag(BusAction.LOGIN_COMPER)}
+//    )
+//    /**
+//     * 接收找回密码界面的通知消息
+//     */
+//    public void loginCopmper(String account) {
+//        if(!TextUtils.isEmpty(account)){
+//            etAccount.setText(account);
+//            etAccount.setSelection(account.length());
+//        }
+//    }
 
 
     /**
      * 用户使用账号登录
      */
     private void createAccountLogin() {
-        String account = etAccount.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        if(TextUtils.isEmpty(account)){
-            ToastUtils.showCenterToast("手机号码不能为空");
-            etAccount.startAnimation(mInputAnimation);
-            return;
-        }
-        if(TextUtils.isEmpty(password)){
-            ToastUtils.showCenterToast("密码不能为空");
-            etPassword.startAnimation(mInputAnimation);
-            return;
-        }
-        if(!Utils.isPhoneNumber(account)){
-            ToastUtils.showCenterToast("手机号码格式不正确");
-            return;
-        }
-        if(null!= mLoginPresenter &&!mLoginPresenter.isLogin()){
-            showProgressDialog("登录中,请稍后...",true);
-            mLoginPresenter.loginAccount(account,password);
+        if(null!=etAccount&&null!=etPassword){
+            String account = etAccount.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+            if(TextUtils.isEmpty(account)){
+                ToastUtils.showCenterToast("手机号码不能为空");
+                etAccount.startAnimation(mInputAnimation);
+                return;
+            }
+            if(TextUtils.isEmpty(password)){
+                ToastUtils.showCenterToast("密码不能为空");
+                etPassword.startAnimation(mInputAnimation);
+                return;
+            }
+            if(!Utils.isPhoneNumber(account)){
+                ToastUtils.showCenterToast("手机号码格式不正确");
+                return;
+            }
+            if(null!= mLoginPresenter &&!mLoginPresenter.isLogin()){
+                showProgressDialog("登录中,请稍后...",true);
+                mLoginPresenter.loginAccount(account,password);
+            }
         }
     }
 
@@ -260,28 +258,36 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     }
 
     @Override
-    public void showLoginAccountResult(String data) {
+    public void showLoginAccountResult(UserInfo data) {
         closeProgressDialog();
-        //登录成功
-        ToastUtils.showCenterToast(data);
-        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
-
+        if(null!=data&&!TextUtils.isEmpty(data.getId())){
+            APP.getInstance().setUserData(data,true);
+            if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
+                mLoginGroupActivity.loginResultFinlish();
+            }
         }
     }
 
     @Override
-    public void showRegisterAccountResult(String data) {
+    public void showRegisterAccountResult(UserInfo data) {
 
     }
 
     @Override
-    public void showMakePasswordResult(String data) {
+    public void showFindPasswordResult(UserInfo data) {
 
     }
+
 
     @Override
     public void showGetCodeResult(String data) {
 
+    }
+
+    @Override
+    public void showRequstError(String data) {
+        closeProgressDialog();
+        ToastUtils.showCenterToast(data);
     }
 
     @Override

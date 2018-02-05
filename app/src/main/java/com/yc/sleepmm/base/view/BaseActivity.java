@@ -1,5 +1,6 @@
 package com.yc.sleepmm.base.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,11 +11,16 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.hwangjr.rxbus.RxBus;
+import com.music.player.lib.util.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.RxLogTool;
 import com.yc.sleepmm.base.presenter.BasePresenter;
+
 import com.yc.sleepmm.base.util.EmptyUtils;
 import com.yc.sleepmm.base.util.UIUtils;
+
+import com.yc.sleepmm.index.constants.Constant;
+
 
 import butterknife.ButterKnife;
 
@@ -94,4 +100,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //用户登录成功
+        if(Constant.INTENT_LOGIN_REQUESTCODE==requestCode&&Constant.INTENT_LOGIN_RESULTCODE==resultCode){
+            Logger.d("onActivityResult","登录成功");
+        }
+    }
 }
