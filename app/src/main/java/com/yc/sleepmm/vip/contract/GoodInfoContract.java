@@ -2,8 +2,7 @@ package com.yc.sleepmm.vip.contract;
 
 import com.yc.sleepmm.base.view.IPresenter;
 import com.yc.sleepmm.base.view.IView;
-import com.yc.sleepmm.vip.bean.GoodInfo;
-import com.yc.sleepmm.vip.bean.PayInfo;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 
 import java.util.List;
 
@@ -14,13 +13,14 @@ import java.util.List;
 public interface GoodInfoContract {
 
     interface View extends IView {
-        void showGoodInfos(List<GoodInfo> goodInfos);
-        void showPayInfos(List<PayInfo> payInfos);
+        void showGoodInfos(List<GoodsInfo> goodInfos);
+
     }
 
     interface Presenter extends IPresenter {
 
-      void getGoodInfos();
-        void getPayInfos();
+        void getGoodInfos(String type_id, int page, int limit);
+
+
     }
 }

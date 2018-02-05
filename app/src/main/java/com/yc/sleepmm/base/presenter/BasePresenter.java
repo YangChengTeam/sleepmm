@@ -22,6 +22,7 @@ public abstract class BasePresenter<M, V extends IView> implements IPresenter {
     protected V mView;
 
     protected Context mContext;
+
     protected boolean mFirstLoad = true;
 
     public BasePresenter(V view) {
@@ -29,21 +30,26 @@ public abstract class BasePresenter<M, V extends IView> implements IPresenter {
     }
 
     public BasePresenter(Context mContext, V view) {
-        this.mView = view;
         this.mContext = mContext;
         mSubscriptions = new CompositeSubscription();
+        this.mView = view;
     }
 
     @Override
     public void subscribe() {
-        loadData(mFirstLoad);
+        loadData(false);
+
+    }
+
+    public void loadData(boolean forceUpdate) {
+        loadData(forceUpdate || mFirstLoad, true);
         mFirstLoad = false;
     }
 
-    protected abstract void loadData(boolean forceUpdate);
+    public abstract void loadData(boolean forceUpdate, boolean showLoadingUI);
 
     @Override
-    public void unSubscribe() {
+    public void unsubscribe() {
         mSubscriptions.clear();
     }
 }

@@ -14,12 +14,12 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.kk.utils.ScreenUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
-import com.yc.sleepmm.vip.bean.GoodInfo;
-import com.yc.sleepmm.vip.bean.PayInfo;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.contract.GoodInfoContract;
 import com.yc.sleepmm.vip.presenter.GoodInfoPresenter;
 import com.yc.sleepmm.vip.ui.adapter.VipGoodAdapter;
 import com.yc.sleepmm.vip.ui.adapter.VipPayAdapter;
+import com.yc.sleepmm.vip.utils.PaywayHelper;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -68,7 +68,7 @@ public class VipActivity extends BaseActivity<GoodInfoPresenter> implements Good
         recyclerViewGood.setAdapter(vipGoodAdapter);
 
         recyclerViewPay.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        vipPayAdapter = new VipPayAdapter(null);
+        vipPayAdapter = new VipPayAdapter(PaywayHelper.getmPaywayInfo());
         recyclerViewPay.setAdapter(vipPayAdapter);
 
         initListener();
@@ -109,13 +109,9 @@ public class VipActivity extends BaseActivity<GoodInfoPresenter> implements Good
 
 
     @Override
-    public void showGoodInfos(List<GoodInfo> goodInfos) {
+    public void showGoodInfos(List<GoodsInfo> goodInfos) {
         vipGoodAdapter.setNewData(goodInfos);
     }
 
-    @Override
-    public void showPayInfos(List<PayInfo> payInfos) {
-        vipPayAdapter.setNewData(payInfos);
-    }
 
 }

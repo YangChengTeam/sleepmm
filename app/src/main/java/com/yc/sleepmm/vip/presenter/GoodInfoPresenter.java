@@ -5,8 +5,7 @@ import android.content.Context;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.vip.bean.GoodInfo;
-import com.yc.sleepmm.vip.bean.PayInfo;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.contract.GoodInfoContract;
 import com.yc.sleepmm.vip.engine.GoodInfoEngine;
 
@@ -25,17 +24,18 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoEngine, GoodInfoCon
         mEngine = new GoodInfoEngine(context);
     }
 
+
     @Override
-    protected void loadData(boolean forceUpdate) {
+    public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
-        getGoodInfos();
-        getPayInfos();
+        getGoodInfos("1", 1, 10);
     }
 
 
     @Override
-    public void getGoodInfos() {
-        Subscription subscription = mEngine.getGoodInfoList().subscribe(new Subscriber<List<GoodInfo>>() {
+    public void getGoodInfos(String type_id, int page, final int limit) {
+
+        Subscription subscription = mEngine.getGoodInfoList(type_id, page, limit).subscribe(new Subscriber<ResultInfo<List<GoodsInfo>>>() {
             @Override
             public void onCompleted() {
 
@@ -47,34 +47,14 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoEngine, GoodInfoCon
             }
 
             @Override
-            public void onNext(List<GoodInfo> goodInfos) {
-                mView.showGoodInfos(goodInfos);
-            }
-        });
-        mSubscriptions.add(subscription);
-
-    }
-
-    @Override
-    public void getPayInfos() {
-        Subscription subscription = mEngine.getPayInfos().subscribe(new Subscriber<ResultInfo<List<PayInfo>>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(ResultInfo<List<PayInfo>> listResultInfo) {
+            public void onNext(ResultInfo<List<GoodsInfo>> listResultInfo) {
                 if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
-                    mView.showPayInfos(listResultInfo.data);
+                    mView.showGoodInfos(listResultInfo.data);
                 }
             }
         });
         mSubscriptions.add(subscription);
     }
+
+
 }

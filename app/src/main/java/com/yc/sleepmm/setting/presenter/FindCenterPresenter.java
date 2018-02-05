@@ -22,8 +22,9 @@ public class FindCenterPresenter extends BasePresenter<FindCenterEngine, FindCen
         mEngine = new FindCenterEngine(mContext);
     }
 
+
     @Override
-    protected void loadData(boolean forceUpdate) {
+    public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
         getFindcenterInfos();
     }

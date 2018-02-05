@@ -23,8 +23,10 @@ public class CreateOrderPresenter extends BasePresenter<CreateOrderEngine, Creat
     }
 
 
+
+
     @Override
-    protected void loadData(boolean forceUpdate) {
+    public void loadData(boolean forceUpdate, boolean showLoadingUI) {
 
     }
 

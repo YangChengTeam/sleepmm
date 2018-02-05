@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -17,8 +18,12 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.view.dialog.RxDialogEditSureCancel;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.base.view.BaseFragment;
+import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.constants.BusAction;
+import com.yc.sleepmm.setting.contract.SettingContract;
+import com.yc.sleepmm.setting.presenter.SettingPresenter;
 import com.yc.sleepmm.setting.ui.activity.FindCenterActivity;
 import com.yc.sleepmm.setting.ui.activity.OptionFeedbackActivity;
 import com.yc.sleepmm.setting.ui.activity.SkinActivity;
@@ -37,7 +42,7 @@ import rx.functions.Action1;
  * Created by wanglin  on 2018/1/10 17:18.
  */
 
-public class SettingFragment extends BaseFragment {
+public class SettingFragment extends BaseFragment<SettingPresenter> implements SettingContract.View {
     @BindView(R.id.iv_avatar)
     ImageView ivAvatar;
     @BindView(R.id.baseSettingView_vip)
@@ -69,7 +74,7 @@ public class SettingFragment extends BaseFragment {
 
     @Override
     public void init() {
-
+        mPresenter = new SettingPresenter(getActivity(), this);
         initListener();
     }
 
@@ -158,19 +163,22 @@ public class SettingFragment extends BaseFragment {
 
     }
 
-
     //从Uri中加载图片 并将其转化成File文件返回
-    public File roadImageView(Uri uri, ImageView imageView) {
-        Glide.with(this).
-                load(uri).
-                apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).circleCrop()
-                        .placeholder(R.mipmap.default_avatar)
-                        .error(R.mipmap.default_avatar)
-                        .fallback(R.mipmap.default_avatar)).
-                thumbnail(0.5f).
-                into(imageView);
+    public void roadImageView(String path, ImageView imageView) {
+        try {
 
-        return (new File(RxPhotoTool.getImageAbsolutePath(getActivity(), uri)));
+
+            Glide.with(this).
+                    load(path).
+                    apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).circleCrop()
+                            .placeholder(R.mipmap.default_avatar)
+                            .error(R.mipmap.default_avatar)
+                            .fallback(R.mipmap.default_avatar)).
+                    thumbnail(0.5f).
+                    into(imageView);
+        } catch (Exception e) {
+            LogUtils.e(e.getMessage());
+        }
     }
 
     @Subscribe(
@@ -180,8 +188,24 @@ public class SettingFragment extends BaseFragment {
             }
     )
     public void getPicture(Uri uri) {
-        roadImageView(uri, ivAvatar);
+        String path = RxPhotoTool.getImageAbsolutePath(getActivity(), uri);
+        File file = new File(path);
+        mPresenter.uploadFile(file, path.substring(path.lastIndexOf("/") + 1));
     }
 
 
+    @Override
+    public void showLoadingDialog(String mess) {
+        ((BaseActivity) getActivity()).showLoadingDialog(mess);
+    }
+
+    @Override
+    public void dismissDialog() {
+        ((BaseActivity) getActivity()).dismissDialog();
+    }
+
+    @Override
+    public void showUploadFile(UploadInfo data) {
+        roadImageView(data.url, ivAvatar);
+    }
 }

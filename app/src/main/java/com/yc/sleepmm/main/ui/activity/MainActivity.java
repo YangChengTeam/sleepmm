@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         long time = System.currentTimeMillis();
         String imageName = timeFormatter.format(new Date(time));
 
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), imageName + ".jpeg"));
+        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), imageName + ".png"));
 
         UCrop.Options options = new UCrop.Options();
         //设置裁剪图片可操作的手势
