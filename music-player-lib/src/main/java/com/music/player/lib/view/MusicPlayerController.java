@@ -169,7 +169,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param isCollect 是否收藏
      */
     public void setCollectIcon(int icon,boolean isCollect){
-        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
+        //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicID即可
         setCollectIcon(icon,isCollect,null);
     }
 
@@ -284,34 +284,33 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param tips 是否土司提示用户
      */
     private void changePlayerModel(int playModel,boolean tips) {
-
-        int btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
-        String msg="列表循环";
-        switch (playModel) {
-            //列表顺序播放
+        //根据当前设置的样式设置播放器对应的主题色
+        if(null!=mIcPlayMode){
+            int btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
+            String msg="列表循环";
+            switch (playModel) {
+                //列表顺序播放
 //            case PlayerModel.PLAY_MODEL_SEQUENCE:
 //                Logger.d(TAG,"列表顺序播放");
 //                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
 //                msg="列表顺序播放";
 //                break;
-            //列表循环播放
-            case PlayerModel.PLAY_MODEL_SEQUENCE_FOR:
-                msg="列表循环";
-                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
-                break;
-            //列表随机播放
+                //列表循环播放
+                case PlayerModel.PLAY_MODEL_SEQUENCE_FOR:
+                    msg="列表循环";
+                    btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
+                    break;
+                //列表随机播放
 //            case PlayerModel.PLAY_MODEL_RANDOM:
 //                msg="随机";
 //                btnPlayModelIcon=R.drawable.ic_player_mode_sequence_for;
 //                break;
-            //单曲循环
-            case PlayerModel.PLAY_MODEL_SINGER:
-                msg="单曲循环";
-                btnPlayModelIcon=R.drawable.ic_player_mode_singer;
-                break;
-        }
-        //根据当前设置的样式设置播放器对应的主题色
-        if(null!=mIcPlayMode){
+                //单曲循环
+                case PlayerModel.PLAY_MODEL_SINGER:
+                    msg="单曲循环";
+                    btnPlayModelIcon=R.drawable.ic_player_mode_singer;
+                    break;
+            }
             mIcPlayMode.setImageResource(btnPlayModelIcon);
             setImageColorFilter(mIcPlayMode,mPlayerStyle);
             if(tips) {
@@ -326,37 +325,38 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param tips 是否土司提示
      */
     private void changePlayerAlarmModel(int model,boolean tips) {
-        int btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
-        String msg="30分钟";
-        switch (model){
-            //10分钟
-            case PlayerAlarmModel.PLAYER_ALARM_10:
-                msg="10分钟";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_10;
-                break;
-            //20分钟
-            case PlayerAlarmModel.PLAYER_ALARM_20:
-                msg="20分钟";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_20;
-                break;
-            //0分钟
-            case PlayerAlarmModel.PLAYER_ALARM_30:
-                msg="30分钟";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
-                break;
-            //一个小时
-            case PlayerAlarmModel.PLAYER_ALARM_ONE_HOUR:
-                msg="一个小时";
-                btnAlarmModelIcon=R.drawable.ic_one_hour;
-                break;
-            //无限制分钟
-            case PlayerAlarmModel.PLAYER_ALARM_NORMAL:
-                msg="不限时长";
-                btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_0;
-                break;
-        }
+
         //根据当前设置的样式设置播放器对应的主题色
         if(null!=mIcAlarm){
+            int btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
+            String msg="30分钟";
+            switch (model){
+                //10分钟
+                case PlayerAlarmModel.PLAYER_ALARM_10:
+                    msg="10分钟";
+                    btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_10;
+                    break;
+                //20分钟
+                case PlayerAlarmModel.PLAYER_ALARM_20:
+                    msg="20分钟";
+                    btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_20;
+                    break;
+                //0分钟
+                case PlayerAlarmModel.PLAYER_ALARM_30:
+                    msg="30分钟";
+                    btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
+                    break;
+                //一个小时
+                case PlayerAlarmModel.PLAYER_ALARM_ONE_HOUR:
+                    msg="一个小时";
+                    btnAlarmModelIcon=R.drawable.ic_one_hour;
+                    break;
+                //无限制分钟
+                case PlayerAlarmModel.PLAYER_ALARM_NORMAL:
+                    msg="不限时长";
+                    btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_0;
+                    break;
+            }
             mIcAlarm.setImageResource(btnAlarmModelIcon);
             setImageColorFilter(mIcAlarm,mPlayerStyle);
             if(tips){
