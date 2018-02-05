@@ -296,7 +296,7 @@ public class HomeMusicListFragment  extends MusicBaseFragment implements OnUserP
     }
 
     @Override
-    public void changeCollectResult(int icon, boolean isCollect) {
+    public void changeCollectResult(int icon, boolean isCollect, String musicID) {
 
     }
 }

@@ -233,7 +233,7 @@ public class SleepDetailActivity extends AppCompatActivity implements OnUserPlay
     }
 
     @Override
-    public void changeCollectResult(int icon, boolean isCollect) {
+    public void changeCollectResult(int icon, boolean isCollect, String musicID) {
 
     }
 }

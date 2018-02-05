@@ -170,8 +170,19 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      */
     public void setCollectIcon(int icon,boolean isCollect){
         //这里的业务逻辑的播放歌曲所有的控制器列表都是同步的，不需要校验MusicID,如果需要，加入MusicInfo即可
-        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect);
+        setCollectIcon(icon,isCollect,null);
     }
+
+    /**
+     * 设置收藏ICON
+     * @param icon 收藏资源图标
+     * @param isCollect 是否收藏
+     * @param musicID 校验的Music
+     */
+    public void setCollectIcon(int icon,boolean isCollect,String musicID){
+        MusicPlayerManager.getInstance().changeCollectResult(icon,isCollect,musicID);
+    }
+
 
     /**
      * 是否显示返回按钮，默认不显示
@@ -315,7 +326,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * @param tips 是否土司提示
      */
     private void changePlayerAlarmModel(int model,boolean tips) {
-
         int btnAlarmModelIcon=R.drawable.ic_player_alarm_clock_30;
         String msg="30分钟";
         switch (model){
@@ -633,9 +643,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
      * 一处点赞，所有实例化的播放控制器都需要同步
      * @param icon
      * @param isCollect
+     * @param musicID 如果musicID不为空，则表示改变收藏图标状态的发起者需要所有播放器实例双向校验，来确定需不需要改变收藏图标
      */
     @Override
-    public void changeCollectResult(int icon, boolean isCollect) {
+    public void changeCollectResult(int icon, boolean isCollect,String musicID) {
         if(null!=mIcCollect){
             mIcCollect.setImageResource(icon);
             if(isCollect){

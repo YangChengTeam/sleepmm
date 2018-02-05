@@ -136,7 +136,7 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     private void getCode(String country, String account) {
         if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
             showProgressDialog("获取验证码中，请稍后...",true);
-            mLoginGroupActivity.getCode(country,account);
+
         }
     }
 
@@ -421,6 +421,11 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 
     @Override
     public void showMakePasswordResult(String data) {
+
+    }
+
+    @Override
+    public void showGetCodeResult(String data) {
 
     }
 
