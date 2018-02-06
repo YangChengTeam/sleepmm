@@ -104,8 +104,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //用户登录成功
-        if(Constant.INTENT_LOGIN_REQUESTCODE==requestCode&&Constant.INTENT_LOGIN_RESULTCODE==resultCode){
-            Logger.d("onActivityResult","登录成功");
+        if (Constant.INTENT_LOGIN_REQUESTCODE == requestCode && Constant.INTENT_LOGIN_RESULTCODE == resultCode) {
+            Logger.d("onActivityResult", "登录成功");
         }
     }
 }

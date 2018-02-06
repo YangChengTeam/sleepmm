@@ -50,6 +50,7 @@
                     android:layout_marginTop="@dimen/dp_10">
 
                     <Button
+                        android:id="@+id/btn_vip"
                         android:layout_width="60dp"
                         android:layout_height="@dimen/dp_20"
                         android:background="@drawable/vip_state_bg"
@@ -59,6 +60,7 @@
                         android:textSize="@dimen/text_12" />
 
                     <TextView
+                        android:id="@+id/tv_expired_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
@@ -71,6 +73,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_login_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

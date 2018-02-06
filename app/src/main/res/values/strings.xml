@@ -26,6 +26,9 @@
     <string name="logout">退出登录</string>
     <string name="from_album">从相册选择</string>
     <string name="take_photo">拍照</string>
+    <string name="opened">已开通</string>
+    <string name="not_opened">未开通</string>
+    <string name="soon_open">快来开通吧</string>
 
     <string-array name="items">
         <item>10分钟后关闭</item>
