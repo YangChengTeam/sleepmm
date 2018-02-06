@@ -2,6 +2,8 @@ package com.yc.sleepmm.index.ui.fragment;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.yc.sleepmm.R;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -13,6 +15,7 @@ import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.index.adapter.AppFragmentPagerAdapter;
 import com.yc.sleepmm.base.view.BaseFragment;
+import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.main.ui.activity.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,10 +83,8 @@ public class IndexFragment extends BaseFragment {
     }
 
     private void login() {
-        MainActivity activity = (MainActivity) getActivity();
-        if(null!=activity&&!activity.isFinishing()){
-            activity.login();
-        }
+        startActivity(new Intent(getActivity(), LoginGroupActivity.class));
+        getActivity().overridePendingTransition(R.anim.menu_enter, 0);//进场动画
     }
 
 

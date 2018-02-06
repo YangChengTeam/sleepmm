@@ -2,10 +2,6 @@ package com.yc.sleepmm.base;
 
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
-
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
@@ -19,7 +15,6 @@ import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.manager.ApplicationManager;
 import com.yc.sleepmm.index.util.ACache;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +50,6 @@ public class APP extends MultiDexApplication {
                 init();
             }
         });
-        //友盟统计、分享
-        PlatformConfig.setWeixin("wx2d62a0f011b43f32", "c43aeb050a3eab9f723c04cfc0525800");//设置微信SDK账号
-        PlatformConfig.setSinaWeibo("994868311", "908f16503b8ebe004cdf9395cebe1b14","http://sns.whalecloud.com/sina2/callback");
-        PlatformConfig.setQQZone("1106176094","Pkas3I3J2OpaZzsH");//设置QQ/空间SDK账号
-        UMShareAPI.get(INSTANCE);
 
         MusicPlayerManager.getInstance().init(this);
         MusicPlayerManager.getInstance().setDebug(true);
@@ -102,6 +92,13 @@ public class APP extends MultiDexApplication {
         UMGameAgent.setDebugMode(false);
         UMGameAgent.init(this);
         UMGameAgent.setPlayerLevel(1);
+
+        //友盟统计、分享
+        PlatformConfig.setWeixin("wx2d62a0f011b43f32", "c43aeb050a3eab9f723c04cfc0525800");//设置微信SDK账号
+        PlatformConfig.setSinaWeibo("1876980393", "ff3475ade59f779e4089f6f938d62d88","http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setQQZone("1106615317","CBG35m8ISSJN1R3F");//设置QQ/空间SDK账号
+        UMShareAPI.get(this);
+
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
         GoagalInfo.get().publicKey = "-----BEGIN PUBLIC KEY-----\n" +

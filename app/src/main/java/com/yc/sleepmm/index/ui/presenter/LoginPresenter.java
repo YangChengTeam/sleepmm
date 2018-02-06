@@ -55,9 +55,30 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
      */
     @Override
     public void loginOther(UserDataInfo userDataInfo) {
-        Logger.d(TAG,"getOpenid="+userDataInfo.getOpenid());
-        Logger.d(TAG,"getGender="+userDataInfo.getGender());
-        Logger.d(TAG,"getNickname="+userDataInfo.getNickname());
+        if(isLogin) return;
+        isLogin=true;
+//        Map<String,String> params=new HashMap<>();
+//        params.put("nickname",userDataInfo.getNickname());
+//        params.put("icon_url",userDataInfo.getIconUrl());
+//        params.put("open_id",userDataInfo.getOpenid());
+//        params.put("login_type",userDataInfo.getLoginType());
+//        Subscription subscribe = HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_OTHER_LOGIN, new TypeReference<ResultInfo<UserInfo>>() {
+//        }.getType(), params, true, true, true).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<UserInfo>>() {
+//            @Override
+//            public void call(ResultInfo<UserInfo> data) {
+//                isLogin=false;
+//                if(null!=data){
+//                    if(1==data.code&&null!=data.data){
+//                        if(null!=mView)mView.showLoginOtherResult(data.data);
+//                    }else{
+//                        if(null!=mView)mView.showRequstError(data.message);
+//                    }
+//                }else{
+//                    if(null!=mView)mView.showErrorView();
+//                }
+//            }
+//        });
+//        addSubscrebe(subscribe);
     }
 
     /**

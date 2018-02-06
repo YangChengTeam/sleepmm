@@ -45,7 +45,6 @@
                 android:orientation="horizontal"
                 android:layout_marginLeft="75.6dp"
                 android:layout_marginRight="75.6dp">
-
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
@@ -53,7 +52,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="16.6dp"
                     android:background="@color/gray_line"></View>
-
                 <TextView
                     android:id="@+id/tv_other_login_tips"
                     android:layout_width="wrap_content"
@@ -77,14 +75,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="27dp"
-                android:layout_marginBottom="27dp"
                 android:layout_gravity="center_horizontal">
                 <RelativeLayout
                     android:id="@+id/re_weibo"
                     android:layout_width="88dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="88dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -94,8 +91,9 @@
                 <RelativeLayout
                     android:id="@+id/re_weichat"
                     android:layout_width="88dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="88dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -105,8 +103,9 @@
                 <RelativeLayout
                     android:id="@+id/re_qq"
                     android:layout_width="88dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="88dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -124,7 +123,7 @@
         android:orientation="vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
-        <View
+        <Space
             android:id="@+id/view_state_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/statusbar_view_height"/>

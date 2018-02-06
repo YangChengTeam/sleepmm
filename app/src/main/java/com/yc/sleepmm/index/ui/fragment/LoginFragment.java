@@ -253,7 +253,7 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
 
 
     @Override
-    public void showLoginOtherResult(String data) {
+    public void showLoginOtherResult(UserInfo data) {
 
     }
 

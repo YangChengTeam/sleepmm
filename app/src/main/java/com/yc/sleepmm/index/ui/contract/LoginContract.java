@@ -14,7 +14,7 @@ import com.yc.sleepmm.index.rxnet.BaseContract;
 public interface LoginContract {
 
     interface View extends BaseContract.BaseView {
-        void showLoginOtherResult(String data);
+        void showLoginOtherResult(UserInfo data);
         void showLoginAccountResult(UserInfo data);
         void showRegisterAccountResult(UserInfo data);
         void showFindPasswordResult(UserInfo data);

@@ -21,4 +21,5 @@ public interface Constant {
     String INTENT_LOGIN_STATE = "login_state";
 
     String SP_USER_USERINFO = "sp_user_userinfo";
+    String RX_LOGIN_SUCCESS = "rx_login_success";
 }

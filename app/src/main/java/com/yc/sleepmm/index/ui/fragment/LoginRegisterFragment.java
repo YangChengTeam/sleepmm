@@ -337,7 +337,7 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 
 
     @Override
-    public void showLoginOtherResult(String data) {
+    public void showLoginOtherResult(UserInfo data) {
 
     }
 
