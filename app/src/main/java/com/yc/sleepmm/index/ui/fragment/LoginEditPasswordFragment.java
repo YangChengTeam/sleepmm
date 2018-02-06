@@ -318,7 +318,7 @@ public class LoginEditPasswordFragment extends MusicBaseFragment implements Logi
 
 
     @Override
-    public void showLoginOtherResult(String data) {
+    public void showLoginOtherResult(UserInfo data) {
 
     }
 

@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-              android:background="@color/login_bg">
+              android:background="@color/login_bg"
+              android:clickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,6 +15,16 @@
         android:background="@drawable/bg_login_register"
         android:layout_margin="10dp">
         <!--手机号-->
+        <!--<com.yc.sleepmm.index.view.EditInputView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--app:inputIcon="@drawable/ic_phone"-->
+            <!--app:cleanIcon="@drawable/ic_login_calen"-->
+            <!--app:textColor="@color/input_text_color"-->
+            <!--app:hintTextColor="@color/input_hint_color"-->
+            <!--app:hintText="请输入手机号">-->
+        <!--</com.yc.sleepmm.index.view.EditInputView>-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -98,7 +110,7 @@
         android:textColor="@color/white"
         android:text="登 录"
         android:gravity="center"
-        android:background="@drawable/bg_btn_login_submit"
+        android:background="@drawable/bg_btn_login_selector"
         android:textSize="16sp"
         android:layout_margin="10dp" />
 </LinearLayout>

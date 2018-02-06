@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <View
+        <Space
             android:layout_width="match_parent"
             android:layout_height="@dimen/statusbar_view_height">
-        </View>
+        </Space>
         <com.music.player.lib.view.MusicPlayerController
             android:id="@+id/music_player_controller"
             android:layout_width="match_parent"

@@ -15,7 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.kk.securityhttp.domain.GoagalInfo;
+
+import com.hwangjr.rxbus.RxBus;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.ToastUtils;
 import com.umeng.socialize.UMAuthListener;
@@ -184,9 +185,8 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
         UserInfo userData = APP.getInstance().getUserData();
         if(null!=userData&&TextUtils.isEmpty(userData.getMobile())){
             //如果第三方用户登录成功，可以在这里判断是否需要补全手机号码等信息
-            Logger.d("loginResultFinlish","用户使用的第三方账号登录");
         }
-        setResult(Constant.INTENT_LOGIN_RESULTCODE);
+        RxBus.get().post(Constant.RX_LOGIN_SUCCESS,"login_success");
         onBackPressed();
     }
 
@@ -240,28 +240,24 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
                 if(null!=data&&data.size()>0){
                     Logger.d(TAG,"data="+data.toString());
                     UserDataInfo userDataInfo=new UserDataInfo();
-                    userDataInfo.setIemil(GoagalInfo.get().uuid);
                     userDataInfo.setLoginType(loginType+"");
                     //新浪微博
                     if(platform== SHARE_MEDIA.SINA){
                         userDataInfo.setNickname(data.get("name"));
                         userDataInfo.setCity(data.get("location"));
-                        userDataInfo.setFigureurl_qq_2(data.get("iconurl"));
+                        userDataInfo.setIconUrl(data.get("iconurl"));
                         userDataInfo.setGender(data.get("gender"));
-                        userDataInfo.setProvince(data.get("location"));
                         userDataInfo.setOpenid(data.get("id"));
-                        userDataInfo.setImageBG(data.get("cover_image_phone"));
                     //微信、QQ
                     }else{
                         userDataInfo.setNickname(data.get("screen_name"));
                         userDataInfo.setCity(data.get("city"));
-                        userDataInfo.setFigureurl_qq_2(data.get("iconurl"));
+                        userDataInfo.setIconUrl(data.get("iconurl"));
                         userDataInfo.setGender(data.get("gender"));
-                        userDataInfo.setProvince(data.get("province"));
                         userDataInfo.setOpenid(data.get("openid"));
                     }
                     //授权成功
-                    if(TextUtils.isEmpty(userDataInfo.getNickname())&&TextUtils.isEmpty(userDataInfo.getFigureurl_qq_2())){
+                    if(TextUtils.isEmpty(userDataInfo.getNickname())&&TextUtils.isEmpty(userDataInfo.getIconUrl())){
                         login(platform);
                     }else{
                         //登录App成功,防止微博获取不到用户信息
@@ -309,11 +305,16 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
         closeProgressDialog();
     }
 
+
     @Override
-    public void showLoginOtherResult(String data) {
+    public void showLoginOtherResult(UserInfo data) {
         closeProgressDialog();
-        APP.getInstance().setUserData(null,true);
-        loginResultFinlish();
+        if(null!=data&&!TextUtils.isEmpty(data.getId())){
+            APP.getInstance().setUserData(data,true);
+            loginResultFinlish();
+        }else{
+            ToastUtils.showCenterToast("登录异常，请重试！");
+        }
     }
 
     @Override
