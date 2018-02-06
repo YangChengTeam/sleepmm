@@ -7,6 +7,6 @@ package com.yc.sleepmm.base.view;
 public interface IPresenter {
     void subscribe();
 
-    void unSubscribe();
+    void unsubscribe();
 
 }

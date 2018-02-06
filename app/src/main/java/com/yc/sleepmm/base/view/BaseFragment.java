@@ -11,6 +11,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.kk.utils.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.sleepmm.base.presenter.BasePresenter;
+import com.yc.sleepmm.base.util.EmptyUtils;
 
 import butterknife.ButterKnife;
 
@@ -43,7 +44,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        if (mPresenter != null) {
+        if (EmptyUtils.isNotEmpty(mPresenter)) {
             mPresenter.subscribe();
         }
     }
@@ -57,8 +58,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unSubscribe();
+        if (EmptyUtils.isNotEmpty(mPresenter)) {
+            mPresenter.unsubscribe();
         }
         RxBus.get().unregister(this);
     }

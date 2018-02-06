@@ -1,4 +1,4 @@
-package com.yc.sleepmm.setting.bean;
+package com.yc.sleepmm.vip.bean;
 
 /**
  * Created by wanglin  on 2018/2/4 09;//31.

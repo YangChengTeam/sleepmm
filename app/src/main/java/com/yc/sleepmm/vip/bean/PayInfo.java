@@ -7,9 +7,9 @@ import com.alibaba.fastjson.annotation.JSONField;
  */
 
 public class PayInfo {
-    @JSONField(name = "pay_way_name")
-    private String title;
     @JSONField(name = "pay_way_title")
+    private String title;
+    @JSONField(name = "pay_way_name")
     private String payway;
 
     public PayInfo() {

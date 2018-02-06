@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.kk.utils.ScreenUtil;
 import com.yc.sleepmm.R;
-import com.yc.sleepmm.vip.bean.GoodInfo;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 
 import java.util.List;
 
@@ -16,18 +16,18 @@ import java.util.List;
  * Created by wanglin  on 2018/1/25 11:59.
  */
 
-public class VipGoodAdapter extends BaseQuickAdapter<GoodInfo, BaseViewHolder> {
+public class VipGoodAdapter extends BaseQuickAdapter<GoodsInfo, BaseViewHolder> {
 
     private SparseArray<View> sparseArray;
 
-    public VipGoodAdapter(List<GoodInfo> data) {
+    public VipGoodAdapter(List<GoodsInfo> data) {
         super(R.layout.vip_good_item, data);
         sparseArray = new SparseArray<>();
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, GoodInfo item) {
-        helper.setText(R.id.tv_vip_price, item.getPrice()).setText(R.id.tv_vip_title, item.getName());
+    protected void convert(BaseViewHolder helper, GoodsInfo item) {
+        helper.setText(R.id.tv_vip_price, item.vip_price).setText(R.id.tv_vip_title, item.name);
         int position = helper.getAdapterPosition();
         if (position == 0) {
             helper.setVisible(R.id.iv_experience, true);

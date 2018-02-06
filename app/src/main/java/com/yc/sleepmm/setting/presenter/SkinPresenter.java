@@ -1,7 +1,6 @@
 package com.yc.sleepmm.setting.presenter;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.setting.bean.SkinInfo;
@@ -24,7 +23,7 @@ public class SkinPresenter extends BasePresenter<SkinEngine, SkinContract.View> 
     }
 
     @Override
-    protected void loadData(boolean forceUpdate) {
+    public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
         getSkinInfos();
     }

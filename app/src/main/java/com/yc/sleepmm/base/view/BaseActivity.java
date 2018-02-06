@@ -15,7 +15,12 @@ import com.music.player.lib.util.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.RxLogTool;
 import com.yc.sleepmm.base.presenter.BasePresenter;
+
+import com.yc.sleepmm.base.util.EmptyUtils;
+import com.yc.sleepmm.base.util.UIUtils;
+
 import com.yc.sleepmm.index.constants.Constant;
+
 
 import butterknife.ButterKnife;
 
@@ -23,19 +28,22 @@ import butterknife.ButterKnife;
  * Created by wanglin  on 2018/1/10 14:33.
  */
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements IView {
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements IView, IDialog {
 
     protected P mPresenter;
+    protected LoadingDialog loadingDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RxBus.get().register(this);
         setContentView(getLayoutId());
         try {
             ButterKnife.bind(this);
         } catch (Exception e) {
             RxLogTool.e("--> 初始化失败  " + e.getMessage());
         }
+        loadingDialog = new LoadingDialog(this);
         //顶部透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -45,19 +53,35 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
-        RxBus.get().register(this);
 
         init();
     }
 
+    @Override
+    public void showLoadingDialog(String message) {
+        loadingDialog.setLoadingMessage(message);
+        if (!isDestroyed())
+            loadingDialog.show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        UIUtils.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+            }
+        });
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mPresenter != null) {
+        MobclickAgent.onResume(this);
+        if (EmptyUtils.isNotEmpty(mPresenter)) {
             mPresenter.subscribe();
         }
-        MobclickAgent.onResume(this);
+
     }
 
     @Override
@@ -69,8 +93,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unSubscribe();
+        if (EmptyUtils.isNotEmpty(mPresenter)) {
+            mPresenter.unsubscribe();
         }
         RxBus.get().unregister(this);
 
