@@ -52,10 +52,12 @@
                     <Button
                         android:id="@+id/btn_vip"
                         android:layout_width="60dp"
-                        android:layout_height="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_25"
                         android:background="@drawable/vip_state_bg"
                         android:gravity="center"
                         android:text="已开通"
+                        android:paddingTop="@dimen/dp_2"
+                        android:paddingBottom="@dimen/dp_2"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_12" />
 

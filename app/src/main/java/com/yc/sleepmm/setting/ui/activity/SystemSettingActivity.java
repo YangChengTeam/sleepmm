@@ -1,13 +1,17 @@
 package com.yc.sleepmm.setting.ui.activity;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
+import com.yc.sleepmm.index.constants.Constant;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +29,14 @@ public class SystemSettingActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_vip_protocol)
     TextView tvVipProtocol;
+    @BindView(R.id.switch_timing)
+    Switch switchTiming;
+    @BindView(R.id.switch_open2g)
+    Switch switchOpen2g;
+    @BindView(R.id.iv_arrow)
+    ImageView ivArrow;
+    @BindView(R.id.btn_logout)
+    Button btnLogout;
 
 
     @Override
@@ -43,6 +55,15 @@ public class SystemSettingActivity extends BaseActivity {
             @Override
             public void call(Void aVoid) {
                 finish();
+            }
+        });
+
+        RxView.clicks(btnLogout).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                APP.getInstance().setUserData(null, true);
+                RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "logout");
+                btnLogout.setVisibility(View.GONE);
             }
         });
     }

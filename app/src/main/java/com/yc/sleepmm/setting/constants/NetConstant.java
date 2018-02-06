@@ -31,4 +31,9 @@ public interface NetConstant {
      * 创建订单
      */
     String orders_init_url = (Config.IS_DEBUG ? debug_url : base_url) + "orders/init";
+
+    /**
+     * 更新资料
+     */
+    String user_update_url =(Config.IS_DEBUG ? debug_url : base_url)+"user/update";
 }

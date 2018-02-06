@@ -25,8 +25,8 @@ import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
-import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.presenter.SettingPresenter;
@@ -78,6 +78,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     Button btnVip;
     @BindView(R.id.tv_expired_time)
     TextView tvExpiredTime;
+    private UserInfo userInfo;
 
 
     @Override
@@ -88,7 +89,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     @Override
     public void init() {
         mPresenter = new SettingPresenter(getActivity(), this);
-        setUserInfo();
+        setUserInfo("");
         initListener();
     }
 
@@ -96,27 +97,34 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     @Subscribe(
             thread = EventThread.MAIN_THREAD,
             tags = {
-                    @Tag(BusAction.LOGIN_COMPER)
+                    @Tag(Constant.RX_LOGIN_SUCCESS)
             }
     )
-    private void setUserInfo() {
-        UserInfo userInfo = APP.getInstance().getUserData();
+    public void setUserInfo(String login) {
+        userInfo = APP.getInstance().getUserData();
         if (userInfo == null) {
             llLogin.setVisibility(View.GONE);
             mTvLoginRegister.setVisibility(View.VISIBLE);
+            roadImageView(R.mipmap.default_avatar, ivAvatar);
         } else {
             llLogin.setVisibility(View.VISIBLE);
             mTvLoginRegister.setVisibility(View.GONE);
             roadImageView(userInfo.getFace(), ivAvatar);
-            tvName.setText(userInfo.getNick_name());
+            tvName.setText(TextUtils.isEmpty(userInfo.getNick_name()) ? userInfo.getMobile() : userInfo.getNick_name());
 
             int vip = userInfo.getVip();
 
             btnVip.setText(vip == 0 ? getString(R.string.not_opened) : getString(R.string.opened));
-
-            if (!TextUtils.isEmpty(userInfo.getVip_end_time())) {
-                String str = TimeUtils.date2String(new Date(Long.parseLong(userInfo.getVip_end_time()) * 1000), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()));
+            String vip_end_time = null;
+            if (vip != 0 && !TextUtils.isEmpty(userInfo.getVip_end_time())) {
+                try {
+                    String str = TimeUtils.date2String(new Date(Long.parseLong(userInfo.getVip_end_time()) * 1000), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()));
+                    vip_end_time = String.format(getString(R.string.expired_time), str);
+                } catch (Exception e) {
+                }
             }
+            tvExpiredTime.setText(TextUtils.isEmpty(vip_end_time) ? getString(R.string.soon_open) : vip_end_time);
+
         }
     }
 
@@ -187,6 +195,16 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             }
         });
 
+        RxView.clicks(btnVip).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (userInfo.getVip() == 0) {
+                    Intent intent = new Intent(getActivity(), VipActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
 
         RxView.clicks(tvName).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
@@ -228,6 +246,16 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         }
     }
 
+    //从Uri中加载图片 并将其转化成File文件返回
+    public void roadImageView(int resId, ImageView imageView) {
+        try {
+            Glide.with(this).load(resId).
+                    apply(new RequestOptions().circleCrop()).into(imageView);
+        } catch (Exception e) {
+            LogUtils.e(e.getMessage());
+        }
+    }
+
     @Subscribe(
             thread = EventThread.MAIN_THREAD,
             tags = {
@@ -251,9 +279,5 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         ((BaseActivity) getActivity()).dismissDialog();
     }
 
-    @Override
-    public void showUploadFile(UploadInfo data) {
-        roadImageView(data.url, ivAvatar);
-    }
 
 }

@@ -2,10 +2,13 @@ package com.yc.sleepmm.setting.presenter;
 
 import android.content.Context;
 
+import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
+import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.base.util.UIUtils;
+import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.engine.SettingEngine;
@@ -74,13 +77,37 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
             @Override
             public void onNext(final ResultInfo<UploadInfo> uploadInfoResultInfo) {
                 if (uploadInfoResultInfo != null && uploadInfoResultInfo.code == HttpConfig.STATUS_OK && uploadInfoResultInfo.data != null) {
-                    UIUtils.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mView.showUploadFile(uploadInfoResultInfo.data);
-                        }
-                    });
+                    UserInfo userInfo = APP.getInstance().getUserData();
+                    if (userInfo != null) {
+                        updateInfo(userInfo.getId(), "", uploadInfoResultInfo.data.url, "");
+                    }
 
+
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+
+    }
+
+
+    public void updateInfo(String user_id, String nick_name, String face, String password) {
+        Subscription subscription = mEngine.updateInfo(user_id, nick_name, face, password).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(final ResultInfo<UserInfo> userInfoResultInfo) {
+                if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
+                    APP.getInstance().setUserData(userInfoResultInfo.data, true);
+                    RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "from update");
                 }
             }
         });

@@ -3,7 +3,6 @@ package com.yc.sleepmm.setting.contract;
 import com.yc.sleepmm.base.view.IDialog;
 import com.yc.sleepmm.base.view.IPresenter;
 import com.yc.sleepmm.base.view.IView;
-import com.yc.sleepmm.setting.bean.UploadInfo;
 
 import java.io.File;
 
@@ -13,7 +12,6 @@ import java.io.File;
 
 public interface SettingContract {
     interface View extends IView, IDialog {
-        void showUploadFile(UploadInfo data);
     }
 
     interface Presenter extends IPresenter {
