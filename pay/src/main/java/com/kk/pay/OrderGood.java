@@ -1,4 +1,4 @@
-package com.yc.sleepmm.vip.bean;
+package com.kk.pay;
 
 /**
  * Created by wanglin  on 2018/2/6 14:06.

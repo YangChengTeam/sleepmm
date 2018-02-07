@@ -11,6 +11,7 @@ import com.kk.utils.ToastUtil;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -30,7 +31,7 @@ public class I1PayAbs extends IPayAbs {
 
     @Override
     public void pay(final OrderParamsInfo orderParamsInfo, final IPayCallback callback) {
-        iPayImpl = PayImplFactory.createPayImpl(mContext, orderParamsInfo.getPayway_name());
+        iPayImpl = PayImplFactory.createPayImpl(mContext, orderParamsInfo.getPay_way_name());
 
         if (iPayImpl == null) {
             ToastUtil.toast2(mContext, "通道已关闭");
@@ -38,10 +39,10 @@ public class I1PayAbs extends IPayAbs {
         }
 
         loadingDialog.show("请稍后...");
-        String md5signstr = iPayImpl.befor(debug(orderParamsInfo.getPrice()) + "", orderParamsInfo.getName()) + "";
+        String md5signstr = iPayImpl.befor(debug(Float.parseFloat(orderParamsInfo.getMoney())) + "", orderParamsInfo.getTitle()) + "";
         orderParamsInfo.setMd5signstr(md5signstr);
 
-        payEngin.pay(mContext, orderParamsInfo).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<OrderInfo>>() {
+        payEngin.pay(mContext, orderParamsInfo).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ResultInfo<OrderInfo>>() {
             @Override
             public void call(ResultInfo<OrderInfo> resultInfo) {
                 loadingDialog.dismiss();
@@ -57,12 +58,13 @@ public class I1PayAbs extends IPayAbs {
                     }
                 }
                 if (orderInfo == null) {
-                    orderInfo = new OrderInfo(Integer.parseInt(orderParamsInfo.getGoods_id()), orderParamsInfo.getPrice(),
-                            orderParamsInfo.getName(), order_sn, orderParamsInfo.getPayway_name(), null);
+                    orderInfo = new OrderInfo(Integer.parseInt(orderParamsInfo.getGoods_list().get(0).good_id), Float.parseFloat(orderParamsInfo.getMoney()),
+                            orderParamsInfo.getTitle(), order_sn, orderParamsInfo.getPay_way_name(), null);
                 } else {
-                    orderInfo.setPayway(orderParamsInfo.getPayway_name());
-                    orderInfo.setViptype(Integer.parseInt(orderParamsInfo.getGoods_id()));
-                    orderInfo.setName(orderParamsInfo.getName());
+                    orderInfo.setPayway(orderParamsInfo.getPay_way_name());
+                    orderInfo.setMoney(Float.parseFloat(orderParamsInfo.getMoney()));
+                    orderInfo.setViptype(Integer.parseInt(orderParamsInfo.getGoods_list().get(0).good_id));
+                    orderInfo.setName(orderParamsInfo.getTitle());
                 }
 
                 if (resultInfo != null) {

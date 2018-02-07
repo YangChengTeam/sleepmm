@@ -15,7 +15,7 @@ public class OrderInfo {
     private float money; //价格 单位元
 
     private String name; //会员类型名 也即商品名
-
+    @JSONField(name = "charge_order_sn")
     private String order_sn; //订单号
 
     private String message;  //订单回调消息
@@ -27,13 +27,13 @@ public class OrderInfo {
     private Context context; //支付上下文 用于异步回调
 
 
-
     @JSONField(name = "params")
     private PayInfo payInfo; //集合微信和支付宝多渠道 多sdk的 支付方式信息
 
-    public OrderInfo(){}
+    public OrderInfo() {
+    }
 
-    public OrderInfo( int viptype,  float money,  String
+    public OrderInfo(int viptype, float money, String
             name, String order_sn, String payway, PayInfo payInfo) {
         this.viptype = viptype;
         this.money = money;
@@ -103,7 +103,6 @@ public class OrderInfo {
     public PayInfo getPayInfo() {
         return payInfo;
     }
-
 
 
     public void setPayInfo(PayInfo payInfo) {
