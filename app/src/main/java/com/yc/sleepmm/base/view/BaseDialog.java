@@ -16,9 +16,11 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseDialog extends Dialog implements IView {
+    protected Context mContext;
+
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.LoadingDialogStyle);
-
+        this.mContext = context;
         View view = LayoutInflater.from(context).inflate(getLayoutId(), null);
         try {
             ButterKnife.bind(this, view);

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.jakewharton.rxbinding.view.RxView;
+import com.kk.utils.ToastUtil;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.view.dialog.RxDialogEditSureCancel;
 import com.yc.sleepmm.R;
@@ -89,6 +91,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     @Override
     public void init() {
         mPresenter = new SettingPresenter(getActivity(), this);
+        mPresenter.getPayInfos();
         setUserInfo("");
         initListener();
     }
@@ -132,8 +135,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         RxView.clicks(baseSettingViewVip).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(getActivity(), VipActivity.class);
-                startActivity(intent);
+                if (!APP.getInstance().isGotoLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), VipActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         RxView.clicks(baseSettingViewFind).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -210,11 +215,20 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             @Override
             public void call(Void aVoid) {
                 final RxDialogEditSureCancel rxDialogEditSureCancel = new RxDialogEditSureCancel(getActivity());//提示弹窗
+
                 rxDialogEditSureCancel.getTitleView().setText("请输入你的昵称");
+                final EditText editText = rxDialogEditSureCancel.getEditText();
+                editText.setHint(tvName.getText());
                 rxDialogEditSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        tvName.setText(rxDialogEditSureCancel.getEditText().getText().toString());
+                        String text = editText.getText().toString().trim();
+                        if (TextUtils.isEmpty(text)) {
+                            ToastUtil.toast(getActivity(), "昵称不能为空");
+                            return;
+                        }
+                        mPresenter.updateInfo(userInfo.getId(), text, "", "");
                         rxDialogEditSureCancel.cancel();
                     }
                 });
@@ -250,7 +264,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     public void roadImageView(int resId, ImageView imageView) {
         try {
             Glide.with(this).load(resId).
-                    apply(new RequestOptions().circleCrop()).into(imageView);
+                    apply(new RequestOptions().circleCrop().error(R.mipmap.default_avatar)).into(imageView);
         } catch (Exception e) {
             LogUtils.e(e.getMessage());
         }
@@ -278,6 +292,5 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     public void dismissDialog() {
         ((BaseActivity) getActivity()).dismissDialog();
     }
-
 
 }

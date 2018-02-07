@@ -17,6 +17,8 @@ public interface SettingContract {
     interface Presenter extends IPresenter {
         void getPayInfos();
 
+        void getGoodInfos(String type_id, int page, int limit);
+
         void uploadFile(File file, String fileName);
     }
 

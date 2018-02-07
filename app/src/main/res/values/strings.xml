@@ -30,6 +30,7 @@
     <string name="not_opened">未开通</string>
     <string name="soon_open">快来开通会员吧!</string>
     <string name="expired_time">%1$s到期</string>
+    <string name="tint">提示</string>
 
     <string-array name="items">
         <item>10分钟后关闭</item>

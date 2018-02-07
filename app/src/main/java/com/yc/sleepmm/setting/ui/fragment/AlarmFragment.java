@@ -19,11 +19,9 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.ScreenUtil;
+import com.music.player.lib.manager.MusicPlayerManager;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.setting.ui.adapter.AlarmAdapter;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,7 +112,8 @@ public class AlarmFragment extends BottomSheetDialogFragment {
         alarmAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                MusicPlayerManager.getInstance().setAralmFiexdTimer(position + 1);
+                dismiss();
             }
         });
 

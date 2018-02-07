@@ -1,6 +1,7 @@
 package com.yc.sleepmm.setting.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.ResultInfo;
@@ -12,7 +13,9 @@ import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.engine.SettingEngine;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
+import com.yc.sleepmm.vip.utils.GoodsInfoHelper;
 import com.yc.sleepmm.vip.utils.PaywayHelper;
 
 import java.io.File;
@@ -34,7 +37,8 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
     @Override
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
-        getPayInfos();
+
+        getGoodInfos("1", 1, 10);
     }
 
     @Override
@@ -54,6 +58,31 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
             public void onNext(ResultInfo<List<PayInfo>> listResultInfo) {
                 if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
                     PaywayHelper.setmPaywayInfo(listResultInfo.data);
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
+
+    @Override
+    public void getGoodInfos(String type_id, int page, final int limit) {
+
+        Subscription subscription = mEngine.getGoodInfoList(type_id, page, limit).subscribe(new Subscriber<ResultInfo<List<GoodsInfo>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<List<GoodsInfo>> listResultInfo) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
+                    GoodsInfoHelper.setGoodsInfoList(listResultInfo.data);
                 }
             }
         });
@@ -92,15 +121,19 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
 
 
     public void updateInfo(String user_id, String nick_name, String face, String password) {
+        if (TextUtils.isEmpty(face)) {
+            mView.showLoadingDialog("正在修改信息，请稍候...");
+        }
+
         Subscription subscription = mEngine.updateInfo(user_id, nick_name, face, password).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
-
+                mView.dismissDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mView.dismissDialog();
             }
 
             @Override

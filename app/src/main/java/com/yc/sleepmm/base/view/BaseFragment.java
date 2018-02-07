@@ -29,7 +29,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         RxBus.get().register(this);
         if (rootView == null) {
-            rootView = inflater.inflate(getLayoutId(), container, false);
+            rootView = View.inflate(getActivity(), getLayoutId(), null);
             try {
                 ButterKnife.bind(this, rootView);
             } catch (Exception e) {
@@ -44,9 +44,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (EmptyUtils.isNotEmpty(mPresenter)) {
             mPresenter.subscribe();
         }
+
     }
 
     @Override

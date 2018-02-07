@@ -7,10 +7,12 @@ import com.alibaba.fastjson.TypeReference;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.kk.securityhttp.net.entry.UpFileInfo;
+import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.model.BaseEngine;
 import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.constants.NetConstant;
+import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
 
 import java.io.File;
@@ -30,8 +32,12 @@ public class SettingEngine extends BaseEngine {
     }
 
     public Observable<ResultInfo<List<PayInfo>>> getPayInfos() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", APP.getInstance().getUserData() != null ? APP.getInstance().getUserData().getId() : "0");
+
         return HttpCoreEngin.get(mContext).rxpost(NetConstant.orders_payWay_url, new TypeReference<ResultInfo<List<PayInfo>>>() {
-        }.getType(), null, true, true, true);
+        }.getType(), params, true, true, true);
     }
 
     public Observable<ResultInfo<UploadInfo>> uploadInfo(File file, String fileName) {
@@ -58,6 +64,17 @@ public class SettingEngine extends BaseEngine {
         return HttpCoreEngin.get(mContext).rxpost(NetConstant.user_update_url, new TypeReference<ResultInfo<UserInfo>>() {
         }.getType(), params, true, true, true);
 
+
+    }
+
+    public Observable<ResultInfo<List<GoodsInfo>>> getGoodInfoList(String type_id, int page, int limit) {
+        Map<String, String> params = new HashMap<>();
+        params.put("type_id", type_id);
+        params.put("page", page + "");
+        params.put("limit", limit + "");
+
+        return HttpCoreEngin.get(mContext).rxpost(NetConstant.goods_index_url, new TypeReference<ResultInfo<List<GoodsInfo>>>() {
+        }.getType(), params, true, true, true);
 
     }
 }

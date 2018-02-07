@@ -7,7 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
+
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.hwangjr.rxbus.RxBus;
@@ -18,17 +18,20 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
+import com.yc.sleepmm.base.view.ExitDialog;
 import com.yc.sleepmm.index.ui.fragment.IndexFragment;
 import com.yc.sleepmm.main.ui.adapter.MainAdapter;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
 import com.yc.sleepmm.sleep.ui.fragment.SleepFragment;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener, ViewPager.OnPageChangeListener {
@@ -103,17 +106,34 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     }
 
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            Intent home = new Intent(Intent.ACTION_MAIN);
+//            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            home.addCategory(Intent.CATEGORY_HOME);
+//            startActivity(home);
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent home = new Intent(Intent.ACTION_MAIN);
-            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            home.addCategory(Intent.CATEGORY_HOME);
-            startActivity(home);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+        final ExitDialog exitDialog = new ExitDialog(this);
+        exitDialog.setTvTintContent("确认退出" + getString(R.string.app_name) + "?");
+        exitDialog.setOnConfirmListener(new ExitDialog.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                exitDialog.dismiss();
+                finish();
+                System.exit(0);
+            }
+        });
+        exitDialog.show();
     }
+
 
     @Override
     protected void onDestroy() {

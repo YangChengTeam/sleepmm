@@ -14,6 +14,7 @@ import com.yc.sleepmm.index.constants.Constant;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -44,16 +45,17 @@ public class ACache {
     private static Map<String, ACache> mInstanceMap = new HashMap<>();
     private ACacheManager mCache;
     private static String path;
+
     public static ACache get(Context ctx) {
         return get(ctx, "data");
     }
 
     public static ACache get(Context ctx, String cacheName) {
         String cacheDir = FileUtils.getCacheDir(ctx);
-        if(null==cacheDir){
-            cacheDir=FileUtils.createRootPath(ctx);
+        if (null == cacheDir) {
+            cacheDir = FileUtils.createRootPath(ctx);
         }
-        File cachePath=new File(cacheDir);
+        File cachePath = new File(cacheDir);
         return get(cachePath, MAX_SIZE, MAX_COUNT);
     }
 
@@ -77,10 +79,11 @@ public class ACache {
 
     /**
      * 返惠存储路径
+     *
      * @return
      */
     public String getCachePathAbsolutePath() {
-        if(TextUtils.isEmpty(path)){
+        if (TextUtils.isEmpty(path)) {
             return Constant.PATH_DATA;
         }
         return path;
@@ -126,7 +129,7 @@ public class ACache {
     public static String getFormatSize(double size) {
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
-            return "0K";
+            return "0KB";
         }
 
         double megaByte = kiloByte / 1024;
@@ -211,6 +214,13 @@ public class ACache {
         put(key, Utils.newStringWithDateInfo(saveTime, value));
     }
 
+
+
+
+    public void clearCache() {
+        mCache.clear();
+        deleteDir(new File(getCachePathAbsolutePath()));
+    }
 
     /**
      * 读取 String数据
@@ -609,7 +619,6 @@ public class ACache {
     public void clear() {
         mCache.clear();
     }
-
 
 
     /**

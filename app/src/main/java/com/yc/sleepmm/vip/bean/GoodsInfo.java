@@ -20,4 +20,7 @@ public class GoodsInfo {
     public int use_time_limit;// 有效时长
     public int sort;// 排序
     public int status;// 状态
+    public String pay_price;//支付价格
+
+
 }

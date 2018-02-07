@@ -27,21 +27,22 @@ public class VipPayAdapter extends BaseQuickAdapter<PayInfo, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, PayInfo item) {
         ImageView ib = helper.getView(R.id.ib_pay);
-        if (item.getPayway().equals("alipay")) {
-            ib.setImageResource(R.drawable.alipay_selector);
-        } else {
-            ib.setImageResource(R.drawable.wxpay_selector);
+        if (item != null) {
+            if (item.getPayway().equals("alipay")) {
+                ib.setImageResource(R.drawable.alipay_selector);
+            } else {
+                ib.setImageResource(R.drawable.wxpay_selector);
+            }
+
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
+            layoutParams.width = (int) (ScreenUtil.getWidth(mContext) * 0.45);
+            helper.itemView.setLayoutParams(layoutParams);
+            int position = helper.getAdapterPosition();
+
+            sparseArray.put(position, ib);
+
+            getView(0).setSelected(true);
         }
-
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
-        layoutParams.width = (int) (ScreenUtil.getWidth(mContext) * 0.45);
-        helper.itemView.setLayoutParams(layoutParams);
-        int position = helper.getAdapterPosition();
-
-        sparseArray.put(position, ib);
-
-        getView(0).setSelected(true);
-
     }
 
 

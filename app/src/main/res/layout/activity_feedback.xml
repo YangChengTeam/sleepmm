@@ -18,6 +18,7 @@
             android:padding="@dimen/dp_10">
 
             <EditText
+                android:id="@+id/et_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/opinion_input_bg"
@@ -30,6 +31,7 @@
                 android:textSize="@dimen/text_16" />
 
             <Button
+                android:id="@+id/btn_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="@dimen/dp_15"

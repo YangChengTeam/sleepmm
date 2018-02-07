@@ -1,7 +1,10 @@
 package com.yc.sleepmm.base;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
+
 import com.blankj.utilcode.util.Utils;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
@@ -14,10 +17,13 @@ import com.vondear.rxtools.RxTool;
 import com.yc.sleepmm.index.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.manager.ApplicationManager;
+import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.util.ACache;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -56,10 +62,8 @@ public class APP extends MultiDexApplication {
         ACache cache = ACache.get(INSTANCE);
         ApplicationManager.getInstance().setCacheExample(cache);//初始化后需要设置给通用管理者
         UserInfo userInfo = (UserInfo) ApplicationManager.getInstance().getCacheExample().getAsObject(Constant.SP_USER_USERINFO);
-        setUserData(userInfo,false);
+        setUserData(userInfo, false);
     }
-
-
 
 
     public static APP getInstance() {
@@ -71,12 +75,22 @@ public class APP extends MultiDexApplication {
     }
 
     public void setUserData(UserInfo userInfo, boolean isPlant) {
-        this.mUserInfo=userInfo;
-        if(isPlant){
+        this.mUserInfo = userInfo;
+        if (isPlant) {
             ApplicationManager.getInstance().getCacheExample().remove(Constant.SP_USER_USERINFO);
             ApplicationManager.getInstance().getCacheExample().put(Constant.SP_USER_USERINFO, (Serializable) userInfo);
         }
     }
+
+    public boolean isGotoLogin(Activity activity) {
+        if (mUserInfo == null) {
+            Intent intent = new Intent(activity, LoginGroupActivity.class);
+            activity.startActivity(intent);
+            return true;
+        }
+        return false;
+    }
+
 
     public String getUid() {
         return "";
@@ -84,7 +98,6 @@ public class APP extends MultiDexApplication {
 
 
     private void init() {
-//        Utils.init(this);
 //        Bugly.init(getApplicationContext(), "7e2f7f339a", false);
         Utils.init(this);
 
@@ -95,8 +108,8 @@ public class APP extends MultiDexApplication {
 
         //友盟统计、分享
         PlatformConfig.setWeixin("wx2d62a0f011b43f32", "c43aeb050a3eab9f723c04cfc0525800");//设置微信SDK账号
-        PlatformConfig.setSinaWeibo("1876980393", "ff3475ade59f779e4089f6f938d62d88","http://sns.whalecloud.com/sina2/callback");
-        PlatformConfig.setQQZone("1106615317","CBG35m8ISSJN1R3F");//设置QQ/空间SDK账号
+        PlatformConfig.setSinaWeibo("1876980393", "ff3475ade59f779e4089f6f938d62d88", "http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setQQZone("1106615317", "CBG35m8ISSJN1R3F");//设置QQ/空间SDK账号
         UMShareAPI.get(this);
 
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
