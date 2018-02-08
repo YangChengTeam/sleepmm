@@ -2,47 +2,38 @@ package com.yc.sleepmm.setting.engine;
 
 import android.content.Context;
 
-import com.kk.securityhttp.engin.BaseEngin;
-import com.yc.sleepmm.R;
+import com.alibaba.fastjson.TypeReference;
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.engin.HttpCoreEngin;
+import com.yc.sleepmm.base.model.BaseEngine;
 import com.yc.sleepmm.setting.bean.FindCenterInfo;
+import com.yc.sleepmm.setting.constants.NetConstant;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wanglin  on 2018/1/26 09:09.
  */
 
-public class FindCenterEngine extends BaseEngin<List<FindCenterInfo>> {
+public class FindCenterEngine extends BaseEngine {
     public FindCenterEngine(Context context) {
         super(context);
     }
 
-    @Override
-    public String getUrl() {
-        return null;
-    }
 
-    public Observable<List<FindCenterInfo>> getFindCenterInfo() {
+    public Observable<ResultInfo<List<FindCenterInfo>>> getFindCenterInfo(int page, int limit) {
 
-        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<FindCenterInfo>>() {
-            @Override
-            public List<FindCenterInfo> call(String s) {
-                List<FindCenterInfo> findCenterInfos = new ArrayList<>();
-                findCenterInfos.add(new FindCenterInfo(R.mipmap.download_app_icon, "说说英语", "说说英语是一款中小学英语智能点读学习软件，英语老师教学的好助手"));
-                findCenterInfos.add(new FindCenterInfo(R.mipmap.download_app_icon, "小学英语音标课堂", "小学英语音标课堂是一款中小学英语智能点读学习软件，英语老师教学的好助手"));
-                findCenterInfos.add(new FindCenterInfo(R.mipmap.download_app_icon, "初中英语考试", "初中英语考试是一款中小学英语智能点读学习软件，英语老师教学的好助手"));
-                findCenterInfos.add(new FindCenterInfo(R.mipmap.download_app_icon, "小学拼音点读", "小学拼音点读是一款中小学英语智能点读学习软件，英语老师教学的好助手"));
+        Map<String, String> params = new HashMap<>();
+        params.put("page", page + "");
+        params.put("limit", limit + "");
 
+        return HttpCoreEngin.get(mContext).rxpost(NetConstant.app_index_url, new TypeReference<ResultInfo<List<FindCenterInfo>>>() {
+        }.getType(), params, true, true, true);
 
-                return findCenterInfos;
-            }
-        });
 
     }
 }

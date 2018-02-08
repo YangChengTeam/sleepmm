@@ -35,10 +35,15 @@ public interface NetConstant {
     /**
      * 更新资料
      */
-    String user_update_url =(Config.IS_DEBUG ? debug_url : base_url)+"user/update";
+    String user_update_url = (Config.IS_DEBUG ? debug_url : base_url) + "user/update";
 
     /**
      * 意见反馈
      */
-    String user_suggest_url=(Config.IS_DEBUG ? debug_url : base_url)+"user/suggest";
+    String user_suggest_url = (Config.IS_DEBUG ? debug_url : base_url) + "user/suggest";
+
+    /**
+     * 应用列表
+     */
+    String app_index_url = (Config.IS_DEBUG ? debug_url : base_url) + "app/index";
 }

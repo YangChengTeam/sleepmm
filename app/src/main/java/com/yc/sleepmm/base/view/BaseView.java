@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.kk.utils.LogUtil;
@@ -17,8 +16,11 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseView extends FrameLayout implements IView {
+    protected Context mContext;
+
     public BaseView(@NonNull Context context) {
         super(context);
+        this.mContext = context;
         LayoutInflater.from(context).inflate(getLayoutId(), this);
         try {
             ButterKnife.bind(this);
@@ -31,9 +33,10 @@ public abstract class BaseView extends FrameLayout implements IView {
 
     public BaseView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        View view = LayoutInflater.from(context).inflate(getLayoutId(), this);
+        this.mContext = context;
+       LayoutInflater.from(context).inflate(getLayoutId(), this);
         try {
-            ButterKnife.bind(this, view);
+            ButterKnife.bind(this);
         } catch (Exception e) {
             LogUtil.msg("--> 初始化失败  " + e.getMessage());
         }

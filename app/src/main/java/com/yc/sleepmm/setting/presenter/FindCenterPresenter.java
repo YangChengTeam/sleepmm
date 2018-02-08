@@ -2,6 +2,8 @@ package com.yc.sleepmm.setting.presenter;
 
 import android.content.Context;
 
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.setting.bean.FindCenterInfo;
 import com.yc.sleepmm.setting.contract.FindCenterContract;
@@ -25,13 +27,14 @@ public class FindCenterPresenter extends BasePresenter<FindCenterEngine, FindCen
 
     @Override
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
-        if (!forceUpdate) return;
-        getFindcenterInfos();
     }
 
     @Override
-    public void getFindcenterInfos() {
-        Subscription subscription = mEngine.getFindCenterInfo().subscribe(new Subscriber<List<FindCenterInfo>>() {
+    public void getFindcenterInfos(final int page, int limit) {
+        if (page == 1) {
+            mView.showLoading();
+        }
+        Subscription subscription = mEngine.getFindCenterInfo(page, limit).subscribe(new Subscriber<ResultInfo<List<FindCenterInfo>>>() {
             @Override
             public void onCompleted() {
 
@@ -39,12 +42,25 @@ public class FindCenterPresenter extends BasePresenter<FindCenterEngine, FindCen
 
             @Override
             public void onError(Throwable e) {
-
+                if (page == 1) {
+                    mView.showNoNet();
+                }
             }
 
             @Override
-            public void onNext(List<FindCenterInfo> findCenterInfos) {
-                mView.showFindCenterInfos(findCenterInfos);
+            public void onNext(ResultInfo<List<FindCenterInfo>> listResultInfo) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (listResultInfo.data != null) {
+                        mView.showFindCenterInfos(listResultInfo.data);
+                        mView.hide();
+                    } else {
+                        if (page == 1)
+                            mView.showNoData();
+                    }
+                } else {
+                    if (page == 1)
+                        mView.showNoNet();
+                }
             }
         });
         mSubscriptions.add(subscription);
