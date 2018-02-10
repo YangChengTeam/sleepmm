@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
@@ -31,7 +32,7 @@ import butterknife.BindView;
  * 用户注册
  */
 
-public class LoginRegisterFragment extends MusicBaseFragment implements LoginContract.View {
+public class LoginRegisterFragment extends MusicBaseFragment<LoginPresenter> implements LoginContract.View {
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -51,7 +52,6 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 
     private Animation mInputAnimation;
     private Handler mHandler;
-    private LoginPresenter mLoginPresenter;
     private LoginGroupActivity mLoginGroupActivity;
 
     @Override
@@ -64,8 +64,7 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
     protected void initViews() {
 
         mHandler = new Handler();
-        mLoginPresenter = new LoginPresenter(getActivity());
-        mLoginPresenter.attachView(this);
+        mPresenter = new LoginPresenter(getActivity(), this);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -132,10 +131,9 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
      * @param account 手机号码
      */
     private void getCode(String country, String account) {
-        if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing() && null != mLoginPresenter) {
+        if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing() && null != mPresenter) {
             showGetCodeDisplay();
-            showProgressDialog("获取验证码中...", true);
-            mLoginPresenter.getCode(account);
+            mPresenter.getCode(account);
         }
     }
 
@@ -223,11 +221,9 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
             return;
         }
 
-        if (null != mLoginPresenter && !mLoginPresenter.isRegister()) {
-
-            showProgressDialog("提交注册中...", true);
+        if (null != mPresenter && !mPresenter.isRegister()) {
             // TODO: 2017/6/20 用户注册
-            mLoginPresenter.registerAccount(account, password, code);
+            mPresenter.registerAccount(account, password, code);
         }
     }
 
@@ -307,17 +303,8 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 
 
     @Override
-    public void onDestroy() {
-        if (null != mLoginPresenter) {
-            mLoginPresenter.detachView();
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        closeProgressDialog();
         initGetCodeBtn();
         if (null != mInputAnimation) {
             mInputAnimation.cancel();
@@ -333,54 +320,46 @@ public class LoginRegisterFragment extends MusicBaseFragment implements LoginCon
 
     //==========================================注册结果回调=========================================
 
-
     @Override
-    public void showLoginOtherResult(UserInfo data) {
-
-    }
-
-    @Override
-    public void showLoginAccountResult(UserInfo data) {
-
-    }
-
-
-    @Override
-    public void showRegisterAccountResult(UserInfo data) {
-        closeProgressDialog();
+    public void showAccountResult(UserInfo data, String tint) {
         if (null != data && !TextUtils.isEmpty(data.getId())) {
-            ToastUtils.showCenterToast("注册成功");
-            APP.getInstance().setUserData(data, true);
+            ToastUtils.showCenterToast(tint + "成功");
+            if (TextUtils.equals(getString(R.string.login), tint)) {
+                APP.getInstance().setUserData(data, true);
+            }
             if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing()) {
                 mLoginGroupActivity.registerResultFinlish();//登录完成
             }
+        }else {
+            ToastUtils.showCenterToast(tint + "异常，请重试！");
         }
     }
 
-    @Override
-    public void showFindPasswordResult(UserInfo data) {
 
-    }
-
-    @Override
-    public void showGetCodeResult(String data) {
-        closeProgressDialog();
-        ToastUtils.showCenterToast(data);
-    }
 
     @Override
     public void showRequstError(String data) {
-        closeProgressDialog();
+
         ToastUtils.showCenterToast(data);
     }
 
     @Override
-    public void showErrorView() {
-        closeProgressDialog();
+    public void showLoadingDialog(String mess) {
+
     }
 
     @Override
-    public void complete() {
-        closeProgressDialog();
+    public void showLoadingProgressDialog(String mess, boolean isProgress) {
+        ((BaseActivity) getActivity()).showLoadingProgressDialog(mess, isProgress);
+    }
+
+    @Override
+    public void dismissDialog() {
+
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        ((BaseActivity) getActivity()).dismissProgressDialog();
     }
 }

@@ -18,6 +18,7 @@ import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.base.util.EmptyUtils;
 import com.yc.sleepmm.base.util.UIUtils;
 import com.yc.sleepmm.index.constants.Constant;
+import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 
 import butterknife.ButterKnife;
 
@@ -30,6 +31,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected P mPresenter;
     protected LoadingDialog loadingDialog;
 
+    protected LoadingProgressView loadingProgressedView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             RxLogTool.e("--> 初始化失败  " + e.getMessage());
         }
         loadingDialog = new LoadingDialog(this);
+        loadingProgressedView = new LoadingProgressView(this, true);
         //顶部透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -76,6 +79,30 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
                 loadingDialog.dismiss();
             }
         });
+    }
+
+
+    @Override
+    public void showLoadingProgressDialog(String mess, boolean isProgress) {
+        if (!this.isFinishing()) {
+            if (null != loadingProgressedView) {
+                loadingProgressedView.setMessage(mess);
+                loadingProgressedView.show();
+            }
+        }
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        try {
+            if (!this.isFinishing()) {
+                if (null != loadingProgressedView && loadingProgressedView.isShowing()) {
+                    loadingProgressedView.dismiss();
+                }
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @Override

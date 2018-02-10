@@ -7,5 +7,9 @@ package com.yc.sleepmm.base.view;
 public interface IDialog {
     void showLoadingDialog(String mess);
 
+    void showLoadingProgressDialog(String mess,boolean isProgress);
+
     void dismissDialog();
+
+    void dismissProgressDialog();
 }

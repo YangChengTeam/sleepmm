@@ -69,5 +69,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             mPresenter.unsubscribe();
         }
         RxBus.get().unregister(this);
+        Runtime.getRuntime().gc();
     }
 }

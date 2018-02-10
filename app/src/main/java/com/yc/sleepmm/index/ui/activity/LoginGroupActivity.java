@@ -1,16 +1,9 @@
 package com.yc.sleepmm.index.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,11 +17,11 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.model.bean.UserDataInfo;
 import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
-import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 import com.yc.sleepmm.index.ui.fragment.LoginFragment;
 import com.yc.sleepmm.index.ui.fragment.LoginRegisterFragment;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
@@ -36,7 +29,6 @@ import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * TinyHung@Outlook.com
@@ -44,7 +36,7 @@ import butterknife.ButterKnife;
  * 用户登录、注册、修改密码
  */
 
-public class LoginGroupActivity extends AppCompatActivity implements LoginContract.View {
+public class LoginGroupActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
     private static final String TAG = "LoginGroupActivity";
 
@@ -65,30 +57,20 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
     @BindView(R.id.ll_other_login_view)
     LinearLayout llOtherLoginView;
 
-    private LoginPresenter mLoginPresenter;
-    private LoadingProgressView mLoadingProgressedView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mLoginPresenter = new LoginPresenter(this);
-        mLoginPresenter.attachView(this);
-        //顶部透明
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
+    public int getLayoutId() {
+        return R.layout.activity_login_group;
+    }
 
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
-        setContentView(R.layout.activity_login_group);
-        ButterKnife.bind(this);
+    @Override
+    public void init() {
+        mPresenter = new LoginPresenter(this, this);
         initViews();
     }
 
     private void initViews() {
-        View.OnClickListener onClickListener=new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -118,7 +100,7 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
         reWeichat.setOnClickListener(onClickListener);
         reQq.setOnClickListener(onClickListener);
         reWeibo.setOnClickListener(onClickListener);
-        addReplaceFragment(new LoginFragment(),"登录","注册");//初始化默认登录界面
+        addReplaceFragment(new LoginFragment(), "登录", "注册");//初始化默认登录界面
         tvOtherLoginTips.setText("快捷登录");
         showOthreLoginView(true);
     }
@@ -127,19 +109,20 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
      * 打开意图
      */
     public void openBtnAction() {
-        if(TextUtils.equals("注册",btnRegister.getText().toString())){
-            addReplaceFragment(new LoginRegisterFragment(),"注册","登录");
+        if (TextUtils.equals("注册", btnRegister.getText().toString())) {
+            addReplaceFragment(new LoginRegisterFragment(), "注册", "登录");
             tvOtherLoginTips.setText("快速注册");
-        }else if(TextUtils.equals("登录",btnRegister.getText().toString())){
+        } else if (TextUtils.equals("登录", btnRegister.getText().toString())) {
             onBackPressed();
         }
     }
 
     /**
      * 叠加界面
-     * @param fragment 片段目标
+     *
+     * @param fragment    片段目标
      * @param centerTitle 中间标题
-     * @param rightTitle 右边小标题
+     * @param rightTitle  右边小标题
      */
     public void addReplaceFragment(Fragment fragment, String centerTitle, String rightTitle) {
         tvTitle.setText(centerTitle);
@@ -153,21 +136,24 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
 
     /**
      * 显示和占位第三方登录
+     *
      * @param flag
      */
     public void showOthreLoginView(boolean flag) {
-        llOtherLoginView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
+        llOtherLoginView.setVisibility(flag ? View.VISIBLE : View.INVISIBLE);
     }
 
 
     //=====================================QQ、微信、微博登录========================================
+
     /**
      * 拿到用户信息后登录到应用服务器
+     *
      * @param userDataInfo
      */
     private void login(UserDataInfo userDataInfo) {
-        if(null!=mLoginPresenter&&!mLoginPresenter.isLogin()){
-            mLoginPresenter.loginOther(userDataInfo);
+        if (!mPresenter.isLogin()) {
+            mPresenter.loginOther(userDataInfo);
         }
     }
 
@@ -185,24 +171,24 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
      */
     public void loginResultFinlish() {
         UserInfo userData = APP.getInstance().getUserData();
-        if(null!=userData&&TextUtils.isEmpty(userData.getMobile())){
+        if (null != userData && TextUtils.isEmpty(userData.getMobile())) {
             //如果第三方用户登录成功，可以在这里判断是否需要补全手机号码等信息
         }
-        RxBus.get().post(Constant.RX_LOGIN_SUCCESS,"login_success");
+        RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "login_success");
         onBackPressed();
     }
-
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
 
     /**
      * QQ、微信、微博 登录
+     *
      * @param media
      */
     public void login(SHARE_MEDIA media) {
@@ -221,124 +207,99 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
     UMAuthListener LoginAuthListener = new UMAuthListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-            showProgressDialog("登录中，请稍后...",true);
+            showLoadingProgressDialog("登录中，请稍后...", true);
         }
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            int loginType=0;
+            int loginType = 0;
             switch (platform) {
                 case QQ:
-                    loginType=1;
+                    loginType = 1;
                     break;
                 case WEIXIN:
-                    loginType=2;
+                    loginType = 2;
                     break;
                 case SINA:
-                    loginType=3;
+                    loginType = 4;
                     break;
             }
-            try{
-                if(null!=data&&data.size()>0){
-                    Logger.d(TAG,"data="+data.toString());
-                    UserDataInfo userDataInfo=new UserDataInfo();
-                    userDataInfo.setLoginType(loginType+"");
+            try {
+                if (null != data && data.size() > 0) {
+                    Logger.d(TAG, "data=" + data.toString());
+                    UserDataInfo userDataInfo = new UserDataInfo();
+                    userDataInfo.setLoginType(loginType + "");
                     //新浪微博
-                    if(platform== SHARE_MEDIA.SINA){
+                    if (platform == SHARE_MEDIA.SINA) {
                         userDataInfo.setNickname(data.get("name"));
                         userDataInfo.setCity(data.get("location"));
                         userDataInfo.setIconUrl(data.get("iconurl"));
                         userDataInfo.setGender(data.get("gender"));
-                        userDataInfo.setOpenid(data.get("id"));
-                    //微信、QQ
-                    }else{
-                        userDataInfo.setNickname(data.get("screen_name"));
+                        userDataInfo.setOpenid(data.get("uid"));
+                        userDataInfo.setAccessToken(data.get("accessToken"));
+                        //微信、QQ
+                    } else {
+                        userDataInfo.setNickname(data.get("name"));
                         userDataInfo.setCity(data.get("city"));
                         userDataInfo.setIconUrl(data.get("iconurl"));
                         userDataInfo.setGender(data.get("gender"));
                         userDataInfo.setOpenid(data.get("openid"));
+                        userDataInfo.setAccessToken(data.get("accessToken"));
                     }
                     //授权成功
-                    if(TextUtils.isEmpty(userDataInfo.getNickname())&&TextUtils.isEmpty(userDataInfo.getIconUrl())){
+                    if (TextUtils.isEmpty(userDataInfo.getNickname()) && TextUtils.isEmpty(userDataInfo.getIconUrl())) {
                         login(platform);
-                    }else{
+                    } else {
                         //登录App成功,防止微博获取不到用户信息
-                        if(!TextUtils.isEmpty(userDataInfo.getOpenid())){
+                        if (!TextUtils.isEmpty(userDataInfo.getOpenid())) {
                             login(userDataInfo);
-                        }else{
+                        } else {
                             login(platform);
                         }
                     }
-                }else{
-                    closeProgressDialog();
+                } else {
                     ToastUtils.showCenterToast("登录失败，请重试!");
                 }
-            }catch (Exception e){
-                closeProgressDialog();
+            } catch (Exception e) {
+
                 ToastUtils.showCenterToast("登录失败，请重试!");
             }
+            dismissProgressDialog();
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            closeProgressDialog();
+            dismissProgressDialog();
             ToastUtils.showCenterToast("登录失败，请重试!");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            closeProgressDialog();
+            dismissProgressDialog();
             ToastUtils.showCenterToast("登录取消");
         }
     };
 
 
-
-
     //======================================登录到服务器回调=========================================
 
-    @Override
-    public void showErrorView() {
-        closeProgressDialog();
-    }
 
     @Override
-    public void complete() {
-        closeProgressDialog();
-    }
+    public void showAccountResult(UserInfo data, String tint) {
 
-
-    @Override
-    public void showLoginOtherResult(UserInfo data) {
-        closeProgressDialog();
-        if(null!=data&&!TextUtils.isEmpty(data.getId())){
-            APP.getInstance().setUserData(data,true);
-            loginResultFinlish();
-        }else{
-            ToastUtils.showCenterToast("登录异常，请重试！");
+        if (null != data && !TextUtils.isEmpty(data.getId())) {
+            if (TextUtils.equals(getString(R.string.login), tint)) {
+                APP.getInstance().setUserData(data, true);
+            }
+            if (!isFinishing()) {
+                loginResultFinlish();
+            }
+        } else {
+            ToastUtils.showCenterToast(tint + "异常，请重试！");
         }
     }
 
-    @Override
-    public void showLoginAccountResult(UserInfo data) {
 
-    }
-
-
-    @Override
-    public void showRegisterAccountResult(UserInfo data) {
-
-    }
-
-    @Override
-    public void showFindPasswordResult(UserInfo data) {
-
-    }
-
-    @Override
-    public void showGetCodeResult(String data) {
-
-    }
 
     @Override
     public void showRequstError(String data) {
@@ -348,12 +309,12 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
     @Override
     public void onBackPressed() {
         //只剩登录一个界面了
-        if(getSupportFragmentManager().getBackStackEntryCount()==1&&!LoginGroupActivity.this.isFinishing()){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 && !LoginGroupActivity.this.isFinishing()) {
             finish();
             return;
         }
         //栈顶存在两个
-        if(getSupportFragmentManager().getBackStackEntryCount()==2&&!LoginGroupActivity.this.isFinishing()){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 2 && !LoginGroupActivity.this.isFinishing()) {
             tvTitle.setText("登录");
             btnRegister.setText("注册");
             tvOtherLoginTips.setText("快捷登录");
@@ -368,42 +329,5 @@ public class LoginGroupActivity extends AppCompatActivity implements LoginContra
         overridePendingTransition(0, R.anim.menu_exit);//出场动画
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        closeProgressDialog();
-        if(null!=mLoginPresenter) mLoginPresenter.detachView();
-        Runtime.getRuntime().gc();
-    }
 
-    /**
-     * 显示进度框
-     * @param message
-     * @param isProgress
-     */
-    public void showProgressDialog(String message,boolean isProgress){
-        if(!this.isFinishing()){
-            if(null==mLoadingProgressedView){
-                mLoadingProgressedView = new LoadingProgressView(this,isProgress);
-            }
-            mLoadingProgressedView.setMessage(message);
-            mLoadingProgressedView.show();
-        }
-    }
-
-    /**
-     * 关闭进度框
-     */
-    public void closeProgressDialog(){
-        try {
-            if(!this.isFinishing()){
-                if(null!=mLoadingProgressedView&&mLoadingProgressedView.isShowing()){
-                    mLoadingProgressedView.dismiss();
-                    mLoadingProgressedView=null;
-                }
-            }
-        }catch (Exception e){
-
-        }
-    }
 }

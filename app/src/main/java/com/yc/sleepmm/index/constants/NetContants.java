@@ -15,6 +15,11 @@ public interface NetContants {
     String HOST_USER_REGISTER = "user/reg";
     String HOST_USER_LOGIN = "user/login";
     String HOST_USER_OTHER_LOGIN = "user/login";
+    /**
+     * 第三方登录
+     */
+
+    String HOST_USER__SNS = DEBUG_HOST + "user/sns";
 
     /**
      * 音乐分类

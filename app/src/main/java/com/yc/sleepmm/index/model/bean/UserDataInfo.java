@@ -12,6 +12,8 @@ public class UserDataInfo {
     private String openid;
     private String loginType;
 
+    private String accessToken;
+
     public UserDataInfo(){
         super();
     }
@@ -70,5 +72,13 @@ public class UserDataInfo {
 
     public void setLoginType(String loginType) {
         this.loginType = loginType;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

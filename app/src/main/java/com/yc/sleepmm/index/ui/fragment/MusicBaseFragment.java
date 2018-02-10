@@ -4,7 +4,6 @@ import android.view.View;
 
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.base.view.BaseFragment;
-import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
 
 /**
  * TinyHung@Outlook.com
@@ -13,10 +12,6 @@ import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
  */
 
 public abstract class MusicBaseFragment<P extends BasePresenter> extends BaseFragment<P> {
-
-
-    //加载中动画
-    private LoadingProgressView mLoadingProgressedView;
 
 
     @Override
@@ -63,41 +58,9 @@ public abstract class MusicBaseFragment<P extends BasePresenter> extends BaseFra
 
     }
 
-    /**
-     * 显示进度框
-     *
-     * @param message
-     * @param isProgress
-     */
-    protected void showProgressDialog(String message, boolean isProgress) {
-        if (null == mLoadingProgressedView) {
-            mLoadingProgressedView = new LoadingProgressView(getActivity(), isProgress);
-        }
-        if (!getActivity().isFinishing()) {
-            mLoadingProgressedView.setMessage(message);
-            mLoadingProgressedView.show();
-        }
-    }
-
-    /**
-     * 关闭进度框
-     */
-    protected void closeProgressDialog() {
-        if (null != mLoadingProgressedView && mLoadingProgressedView.isShowing() && !getActivity().isFinishing()) {
-            mLoadingProgressedView.dismiss();
-            mLoadingProgressedView = null;
-        }
-    }
-
 
     protected boolean isVisible(View view) {
         return view.getVisibility() == View.VISIBLE;
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Runtime.getRuntime().gc();
-    }
 }

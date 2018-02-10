@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
@@ -30,7 +31,7 @@ import butterknife.BindView;
  * 账号密码登录
  */
 
-public class LoginFragment extends MusicBaseFragment implements LoginContract.View {
+public class LoginFragment extends MusicBaseFragment<LoginPresenter> implements LoginContract.View {
 
     private static final String TAG = "LoginFragment";
     @BindView(R.id.tv_retrieve_password)
@@ -46,7 +47,6 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     @BindView(R.id.et_password)
     EditText etPassword;
     private Animation mInputAnimation;
-    private LoginPresenter mLoginPresenter;
     private LoginGroupActivity mLoginGroupActivity;
 
     @Override
@@ -64,20 +64,19 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     @Override
     protected void initViews() {
 
-        mLoginPresenter = new LoginPresenter(getActivity());
-        mLoginPresenter.attachView(this);
-        View.OnClickListener onClickListener=new View.OnClickListener() {
+        mPresenter = new LoginPresenter(getActivity(), this);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     //登录
                     case R.id.btn_login:
                         createAccountLogin();
                         break;
                     //忘记密码
                     case R.id.tv_retrieve_password:
-                        if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
-                            mLoginGroupActivity.addReplaceFragment(new LoginEditPasswordFragment(),"修改密码","登录");//打开修改密码界面
+                        if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing()) {
+                            mLoginGroupActivity.addReplaceFragment(new LoginEditPasswordFragment(), "修改密码", "登录");//打开修改密码界面
                             mLoginGroupActivity.showOthreLoginView(false);
                         }
                         break;
@@ -107,7 +106,6 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     }
 
 
-
 //    @Subscribe(
 //       thread = EventThread.MAIN_THREAD,
 //       tags = {@Tag(BusAction.LOGIN_COMPER)}
@@ -127,26 +125,25 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
      * 用户使用账号登录
      */
     private void createAccountLogin() {
-        if(null!=etAccount&&null!=etPassword){
+        if (null != etAccount && null != etPassword) {
             String account = etAccount.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-            if(TextUtils.isEmpty(account)){
+            if (TextUtils.isEmpty(account)) {
                 ToastUtils.showCenterToast("手机号码不能为空");
                 etAccount.startAnimation(mInputAnimation);
                 return;
             }
-            if(TextUtils.isEmpty(password)){
+            if (TextUtils.isEmpty(password)) {
                 ToastUtils.showCenterToast("密码不能为空");
                 etPassword.startAnimation(mInputAnimation);
                 return;
             }
-            if(!Utils.isPhoneNumber(account)){
+            if (!Utils.isPhoneNumber(account)) {
                 ToastUtils.showCenterToast("手机号码格式不正确");
                 return;
             }
-            if(null!= mLoginPresenter &&!mLoginPresenter.isLogin()){
-                showProgressDialog("登录中,请稍后...",true);
-                mLoginPresenter.loginAccount(account,password);
+            if (null != mPresenter && !mPresenter.isLogin()) {
+                mPresenter.loginAccount(account, password);
             }
         }
     }
@@ -154,7 +151,7 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     /**
      * 账号输入框监听
      */
-    private TextWatcher accountChangeListener=new TextWatcher() {
+    private TextWatcher accountChangeListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -162,7 +159,8 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(null!=ivAccountCancel) ivAccountCancel.setVisibility(!TextUtils.isEmpty(s)&&s.length()>0?View.VISIBLE:View.INVISIBLE);
+            if (null != ivAccountCancel)
+                ivAccountCancel.setVisibility(!TextUtils.isEmpty(s) && s.length() > 0 ? View.VISIBLE : View.INVISIBLE);
         }
 
         @Override
@@ -174,7 +172,7 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     /**
      * 密码输入框监听
      */
-    private TextWatcher passwordChangeListener=new TextWatcher() {
+    private TextWatcher passwordChangeListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -182,7 +180,8 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(null!=ivPasswordCancel) ivPasswordCancel.setVisibility(!TextUtils.isEmpty(s)&&s.length()>0?View.VISIBLE:View.INVISIBLE);
+            if (null != ivPasswordCancel)
+                ivPasswordCancel.setVisibility(!TextUtils.isEmpty(s) && s.length() > 0 ? View.VISIBLE : View.INVISIBLE);
         }
 
         @Override
@@ -192,30 +191,30 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
     };
 
 
-
     /**
      * 对个输入框焦点进行监听
      */
-    private View.OnFocusChangeListener onFocusChangeListener=new View.OnFocusChangeListener() {
+    private View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             switch (v.getId()) {
                 case R.id.et_account:
-                    if(hasFocus){
-                        if(etAccount.getText().toString().length()>0){
+                    if (hasFocus) {
+                        if (etAccount.getText().toString().length() > 0) {
                             ivAccountCancel.setVisibility(View.VISIBLE);
                         }
-                    }else{
-                        if(null!=ivAccountCancel) ivAccountCancel.setVisibility(View.INVISIBLE);
+                    } else {
+                        if (null != ivAccountCancel) ivAccountCancel.setVisibility(View.INVISIBLE);
                     }
                     break;
                 case R.id.et_password:
-                    if(hasFocus){
-                        if(etPassword.getText().toString().length()>0){
+                    if (hasFocus) {
+                        if (etPassword.getText().toString().length() > 0) {
                             ivPasswordCancel.setVisibility(View.VISIBLE);
                         }
-                    }else{
-                        if(null!=ivPasswordCancel) ivPasswordCancel.setVisibility(View.INVISIBLE);
+                    } else {
+                        if (null != ivPasswordCancel)
+                            ivPasswordCancel.setVisibility(View.INVISIBLE);
                     }
                     break;
             }
@@ -224,73 +223,55 @@ public class LoginFragment extends MusicBaseFragment implements LoginContract.Vi
 
 
     @Override
-    public void onDestroy() {
-        if(null!= mLoginPresenter){
-            mLoginPresenter.detachView();
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        closeProgressDialog();
         etAccount.setText("");
         etPassword.setText("");
-        if(null!=mInputAnimation){
+        if (null != mInputAnimation) {
             mInputAnimation.cancel();
-            mInputAnimation=null;
+            mInputAnimation = null;
         }
-        mLoginPresenter =null;
-        mLoginGroupActivity=null;
     }
 
 
     @Override
-    public void showLoginOtherResult(UserInfo data) {
-
-    }
-
-    @Override
-    public void showLoginAccountResult(UserInfo data) {
-        closeProgressDialog();
-        if(null!=data&&!TextUtils.isEmpty(data.getId())){
-            APP.getInstance().setUserData(data,true);
-            if(null!=mLoginGroupActivity&&!mLoginGroupActivity.isFinishing()){
+    public void showAccountResult(UserInfo data, String tint) {
+        if (null != data && !TextUtils.isEmpty(data.getId())) {
+            if (TextUtils.equals(getString(R.string.login), tint)) {
+                APP.getInstance().setUserData(data, true);
+            }
+            if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing()) {
                 mLoginGroupActivity.loginResultFinlish();
             }
+        } else {
+            ToastUtils.showCenterToast(tint + "异常，请重试！");
         }
     }
 
-    @Override
-    public void showRegisterAccountResult(UserInfo data) {
-
-    }
-
-    @Override
-    public void showFindPasswordResult(UserInfo data) {
-
-    }
-
-
-    @Override
-    public void showGetCodeResult(String data) {
-
-    }
 
     @Override
     public void showRequstError(String data) {
-        closeProgressDialog();
+
         ToastUtils.showCenterToast(data);
     }
 
     @Override
-    public void showErrorView() {
-        closeProgressDialog();
+    public void showLoadingDialog(String mess) {
+
     }
 
     @Override
-    public void complete() {
-        closeProgressDialog();
+    public void showLoadingProgressDialog(String mess, boolean isProgress) {
+        ((BaseActivity) getActivity()).showLoadingProgressDialog(mess, isProgress);
+    }
+
+    @Override
+    public void dismissDialog() {
+
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        ((BaseActivity) getActivity()).dismissProgressDialog();
     }
 }

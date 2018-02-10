@@ -289,8 +289,18 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     }
 
     @Override
+    public void showLoadingProgressDialog(String mess, boolean isProgress) {
+
+    }
+
+    @Override
     public void dismissDialog() {
         ((BaseActivity) getActivity()).dismissDialog();
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+
     }
 
 }
