@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.service.MusicPlayerService;
 
@@ -54,11 +55,11 @@ public class MediaSessionManager {
             return;
         }
         MediaMetadataCompat.Builder metaData = new MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, music.getMusicTitle())
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, music.getMusicAuthor())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, music.getMusicCover())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, music.getMusicAlbumTitle())
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, Long.parseLong(music.getMusicDurtion()))
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, music.getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "")
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "")
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, "")
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,Long.parseLong( music.getTime()))
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             metaData.putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, mPlayService.getMusicList().size());

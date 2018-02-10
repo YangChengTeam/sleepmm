@@ -22,4 +22,6 @@ public interface Constant {
 
     String SP_USER_USERINFO = "sp_user_userinfo";
     String RX_LOGIN_SUCCESS = "rx_login_success";
+
+
 }

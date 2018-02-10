@@ -3,8 +3,7 @@ package com.music.player.lib.manager;
 import android.media.AudioManager;
 import android.support.annotation.NonNull;
 
-
-import com.music.player.lib.service.MusicPlayerService;
+import com.music.player.lib.service.BaseService;
 
 import static android.content.Context.AUDIO_SERVICE;
 
@@ -17,13 +16,13 @@ import static android.content.Context.AUDIO_SERVICE;
 
 public class AudioFocusManager implements AudioManager.OnAudioFocusChangeListener {
 
-    private MusicPlayerService mPlayService;
+    private BaseService mPlayService;
     private AudioManager mAudioManager;
     private boolean isPausedByFocusLossTransient;
     private int mVolumeWhenFocusLossTransientCanDuck;
 
 
-    public AudioFocusManager(@NonNull MusicPlayerService playService) {
+    public AudioFocusManager(@NonNull BaseService playService) {
         mPlayService = playService;
         mAudioManager = (AudioManager) playService.getSystemService(AUDIO_SERVICE);
     }

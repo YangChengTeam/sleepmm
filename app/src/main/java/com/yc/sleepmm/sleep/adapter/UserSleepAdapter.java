@@ -24,13 +24,13 @@ import java.util.Observer;
  * Created by admin on 2018/1/26.
  */
 
-public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder> implements Observer{
+public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder> implements Observer {
 
     private List<MusicInfo> mData;
 
     private Context mContext;
 
-    public UserSleepAdapter(Context context,List<MusicInfo> datas) {
+    public UserSleepAdapter(Context context, List<MusicInfo> datas) {
         super(R.layout.item_re_simple_music_list, datas);
         this.mContext = context;
         this.mData = datas;
@@ -39,7 +39,7 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, MusicInfo musicInfo) {
         if (null != musicInfo) {
-            String seconds = musicInfo.getMusicDurtion();
+            String seconds = musicInfo.getTime();
             if (TextUtils.isEmpty(seconds)) {
                 seconds = "1.0";
             }
@@ -52,8 +52,8 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
 
 
             float second = Float.parseFloat(seconds);
-            tv_item_name.setText(musicInfo.getMusicTitle());
-            tv_item_author.setText(musicInfo.getMusicAuthor());
+            tv_item_name.setText(musicInfo.getTitle());
+            tv_item_author.setText("");
             tv_item_drutaion.setText(DateUtil.getTimeLengthString((int) (second)));
             tv_item_num.setText((helper.getAdapterPosition() + 1) + "");
 
@@ -108,24 +108,25 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
 
     /**
      * 刷新列表状态
+     *
      * @param o
      * @param arg
      */
     @Override
     public void update(Observable o, Object arg) {
-        if(null!=arg){
-            MusicInfo musicInfo= (MusicInfo) arg;
-            if(null!=musicInfo&&null!=mData&&mData.size()>0){
-                int position=0;
+        if (null != arg) {
+            MusicInfo musicInfo = (MusicInfo) arg;
+            if (null != musicInfo && null != mData && mData.size() > 0) {
+                int position = 0;
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
-                    if(musicInfo.getMusicID().equals(info.getMusicID())){
+                    if (musicInfo.getId().equals(info.getId())) {
                         info.setPlauStatus(musicInfo.getPlauStatus());
-                    }else{
+                    } else {
                         info.setPlauStatus(0);
                     }
                 }
-                Logger.d(TAG,"播放器示例界面列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"，位置："+position+",musicID："+musicInfo.getMusicID());
+                Logger.d(TAG, "播放器示例界面列表收到观察者刷新,类型：" + musicInfo.getPlauStatus() + "，位置：" + position + ",musicID：" + musicInfo.getId());
                 this.notifyDataSetChanged();
             }
         }

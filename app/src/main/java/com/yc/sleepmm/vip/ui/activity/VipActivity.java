@@ -20,7 +20,7 @@ import com.kk.pay.OrderParamsInfo;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
-import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;

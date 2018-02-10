@@ -29,6 +29,7 @@ public class BaseSettingView extends BaseView {
 
     public BaseSettingView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setClickable(true);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.base_setting);
 
         try {

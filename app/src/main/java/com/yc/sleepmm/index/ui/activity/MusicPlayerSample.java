@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
@@ -19,11 +20,13 @@ import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.index.adapter.MusicListAdapter;
-import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
+import com.yc.sleepmm.index.model.bean.MediaMusicCategoryList;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -36,7 +39,7 @@ import rx.functions.Action1;
 public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayerEventListener {
 
     private MusicPlayerController mMusicPlayerController;
-    private boolean isCollect=false;//是否收藏，需要调用者维护
+    private boolean isCollect = false;//是否收藏，需要调用者维护
     private MusicListAdapter mUsicListAdapter;
 
     @Override
@@ -72,16 +75,17 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         //设置闹钟初始的定时时间
 //        mMusicPlayerController.setAlarmSeekBarProgress(60);
         //是否点赞,默认false
-        mMusicPlayerController.setCollectIcon(R.drawable.ic_player_collect,isCollect);//相反，未收藏：R.drawable.ic_player_collect,false
+        mMusicPlayerController.setCollectIcon(R.drawable.ic_player_collect, isCollect);//相反，未收藏：R.drawable.ic_player_collect,false
         //注册事件回调
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {
             //收藏事件触发了
             @Override
-            public void onEventCollect() {
-                isCollect=!isCollect;
+            public void onEventCollect(MusicInfo musicInfo) {
+                isCollect = !isCollect;
                 //设置是否收藏示例, 传入MusicInfo可以确定所有实例化的播放器组件是否需要改变图片，仅当目标ID一致才会改变图标
-                mMusicPlayerController.setCollectIcon(isCollect?R.drawable.ic_player_collect_true:R.drawable.ic_player_collect,isCollect);
+                mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect);
             }
+
             //随机播放触发了
             @Override
             public void onEventRandomPlay() {
@@ -92,10 +96,16 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
 //                MusicPlayerManager.getInstance().playMusic("position");
 //                MusicPlayerManager.getInstance().playMusic("单个音乐对象");
             }
+
             //返回事件
             @Override
             public void onBack() {
                 MusicPlayerSample.this.onBackPressed();
+            }
+
+            @Override
+            public void onPlayState(MusicInfo info) {
+
             }
         });
         //注册到被观察者中
@@ -110,14 +120,14 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
      */
     private void initAdapter() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MusicPlayerSample.this, LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(MusicPlayerSample.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         //如列表需要实时更新播放动态的话，Adapter需要实现Observer接口
-        mUsicListAdapter = new MusicListAdapter(MusicPlayerSample.this,null);
+        mUsicListAdapter = new MusicListAdapter(MusicPlayerSample.this, null);
         mUsicListAdapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                MusicPlayerManager.getInstance().playPauseMusic( mUsicListAdapter.getData(),position);
+                MusicPlayerManager.getInstance().playPauseMusic(mUsicListAdapter.getData(), position);
             }
         });
         recyclerView.setAdapter(mUsicListAdapter);
@@ -126,27 +136,27 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
     }
 
     private void loadMusicList() {
-        Map<String,String> params=new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("user_id", "1065153");
         params.put("page", "1");
-        params.put("page_size","10");
-        HttpCoreEngin.get(MusicPlayerSample.this).rxpost("http://sc.wk2.com/Api/Appnq6/music_recommend", MediaMusicCategoryList.class, params,false,false,false).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<MediaMusicCategoryList>() {
+        params.put("page_size", "10");
+        HttpCoreEngin.get(MusicPlayerSample.this).rxpost("http://sc.wk2.com/Api/Appnq6/music_recommend", MediaMusicCategoryList.class, params, false, false, false).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<MediaMusicCategoryList>() {
             @Override
             public void call(MediaMusicCategoryList data) {
-                if(null!=data&&1==data.getCode()&&null!=data.getData()&&data.getData().size()>0){
-                    List<MusicInfo> musicInfos=new ArrayList<>();
+                if (null != data && 1 == data.getCode() && null != data.getData() && data.getData().size() > 0) {
+                    List<MusicInfo> musicInfos = new ArrayList<>();
                     for (MediaMusicCategoryList.DataBean dataBean : data.getData()) {
-                        MusicInfo musicInfo=new MusicInfo();
-                        musicInfo.setMusicID(dataBean.getId());
-                        musicInfo.setMusicTitle(dataBean.getTitle());
-                        musicInfo.setMusicDurtion(dataBean.getSeconds());
-                        musicInfo.setMusicCover(dataBean.getCover());
-                        musicInfo.setMusicAuthor(dataBean.getAuthor());
-                        musicInfo.setMusicAlbumTitle(dataBean.getTitle());
-                        musicInfo.setMusicPath(dataBean.getUrl());
+                        MusicInfo musicInfo = new MusicInfo();
+                        musicInfo.setId(dataBean.getId());
+                        musicInfo.setTitle(dataBean.getTitle());
+                        musicInfo.setTime(dataBean.getSeconds());
+//                        musicInfo.set(dataBean.getCover());
+//                        musicInfo.setMusicAuthor(dataBean.getAuthor());
+//                        musicInfo.setMusicAlbumTitle(dataBean.getTitle());
+                        musicInfo.setFile(dataBean.getUrl());
                         musicInfos.add(musicInfo);
                     }
-                    if(null!= mUsicListAdapter){
+                    if (null != mUsicListAdapter) {
                         mUsicListAdapter.setNewData(musicInfos);
                         MusicPlayerManager.getInstance().onResumeChecked();
                     }
@@ -161,11 +171,11 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
         super.onDestroy();
         //必须注销所有已注册的监听
         MusicPlayerManager.getInstance().detelePlayerStateListener(this);
-        if(null!=mMusicPlayerController){
+        if (null != mMusicPlayerController) {
             MusicPlayerManager.getInstance().deleteObserver(mMusicPlayerController);
             mMusicPlayerController.onDestroy();
         }
-        if(null!=mUsicListAdapter){
+        if (null != mUsicListAdapter) {
             MusicPlayerManager.getInstance().deleteObserver(mUsicListAdapter);
         }
     }
@@ -208,13 +218,14 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
 
     /**
      * 在这里响应当播放器列表为空 是否播放新的歌曲事件
+     *
      * @param viewTupe UI组件身份ID
      * @param position
      */
     @Override
     public void autoStartNewPlayTasks(int viewTupe, int position) {
-        if(Constants.UI_TYPE_DETAILS==viewTupe&&null!=mUsicListAdapter){
-            MusicPlayerManager.getInstance().playMusic(mUsicListAdapter.getData(),0);//这个position默认是0，油控制器传出
+        if (Constants.UI_TYPE_DETAILS == viewTupe && null != mUsicListAdapter) {
+            MusicPlayerManager.getInstance().playMusic(mUsicListAdapter.getData(), 0);//这个position默认是0，油控制器传出
         }
     }
 
@@ -224,7 +235,7 @@ public class MusicPlayerSample extends AppCompatActivity implements OnUserPlayer
     }
 
     @Override
-    public void changeCollectResult(int icon, boolean isCollect,String musicID) {
+    public void changeCollectResult(int icon, boolean isCollect, String musicID) {
 
     }
 }

@@ -7,13 +7,18 @@ package com.music.player.lib.bean;
 
 public class MusicInfo {
 
-    private String musicID;//音乐ID
-    private String musicTitle;//音乐标题
-    private String musicPath;//音乐路径
-    private String musicCover;//音乐封面
-    private String musicAuthor;//音乐作者
-    private String musicDurtion;//音乐时长
-    private String musicAlbumTitle;//专辑名称
+
+    private String id;// 音乐ID
+    private String type_id;// 分类ID
+    private String title;// 音乐名称
+    private String img;// 图片
+    private String file;// 音频文件
+    private String play_num;// 播放次数
+    private String time;// 时长（秒）
+    private long add_time;// 添加时间
+    private long add_date;// 添加日期
+    //
+    private int is_favorite;// 是否收藏 0 未收藏 1已收藏
 
     private int plauStatus;//0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
 
@@ -25,57 +30,84 @@ public class MusicInfo {
         this.plauStatus = plauStatus;
     }
 
-    public String getMusicID() {
-        return musicID;
+
+    public String getId() {
+        return id;
     }
 
-    public void setMusicID(String musicID) {
-        this.musicID = musicID;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getMusicTitle() {
-        return musicTitle;
+    public String getType_id() {
+        return type_id;
     }
 
-    public void setMusicTitle(String musicTitle) {
-        this.musicTitle = musicTitle;
+    public void setType_id(String type_id) {
+        this.type_id = type_id;
     }
 
-    public String getMusicPath() {
-        return musicPath;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMusicPath(String musicPath) {
-        this.musicPath = musicPath;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMusicCover() {
-        return musicCover;
+    public String getImg() {
+        return img;
     }
 
-    public void setMusicCover(String musicCover) {
-        this.musicCover = musicCover;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public String getMusicAuthor() {
-        return musicAuthor;
+    public String getFile() {
+        return file;
     }
 
-    public void setMusicAuthor(String musicAuthor) {
-        this.musicAuthor = musicAuthor;
+    public void setFile(String file) {
+        this.file = file;
     }
 
-    public String getMusicDurtion() {
-        return musicDurtion;
-    }
-    public void setMusicDurtion(String musicDurtion) {
-        this.musicDurtion = musicDurtion;
-    }
-    public String getMusicAlbumTitle() {
-        return musicAlbumTitle;
-    }
-    public void setMusicAlbumTitle(String musicAlbumTitle) {
-        this.musicAlbumTitle = musicAlbumTitle;
+    public String getPlay_num() {
+        return play_num;
     }
 
+    public void setPlay_num(String play_num) {
+        this.play_num = play_num;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public long getAdd_time() {
+        return add_time;
+    }
+
+    public void setAdd_time(long add_time) {
+        this.add_time = add_time;
+    }
+
+    public long getAdd_date() {
+        return add_date;
+    }
+
+    public void setAdd_date(long add_date) {
+        this.add_date = add_date;
+    }
+
+    public int getIs_favorite() {
+        return is_favorite;
+    }
+
+    public void setIs_favorite(int is_favorite) {
+        this.is_favorite = is_favorite;
+    }
 }

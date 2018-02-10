@@ -9,7 +9,7 @@ import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.kk.securityhttp.net.entry.UpFileInfo;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.model.BaseEngine;
-import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.vip.bean.GoodsInfo;

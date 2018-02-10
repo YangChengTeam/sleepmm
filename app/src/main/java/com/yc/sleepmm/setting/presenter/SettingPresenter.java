@@ -8,7 +8,7 @@ import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.contract.SettingContract;
@@ -37,7 +37,6 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
     @Override
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
-
         getGoodInfos("1", 1, 10);
     }
 

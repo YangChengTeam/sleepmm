@@ -13,4 +13,6 @@ public interface Constants {
     int UI_TYPE_HOME = 0x0;//首页
     int UI_TYPE_DETAILS = 0x1;//详情界面
 
+
+
 }

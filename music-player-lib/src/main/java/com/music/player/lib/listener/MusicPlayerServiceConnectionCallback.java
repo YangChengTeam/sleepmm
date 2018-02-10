@@ -9,5 +9,7 @@ import com.music.player.lib.service.MusicPlayerService;
 
 public interface MusicPlayerServiceConnectionCallback {
     void onServiceConnected(MusicPlayerService musicPlayService);
+
+
     void onServiceDisconnected();
 }

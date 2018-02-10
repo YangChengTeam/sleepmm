@@ -21,33 +21,33 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHolder> implements Observer{
+public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder> implements Observer {
 
     private static final String TAG = UserKeepListAdapter.class.getSimpleName();
 
     public UserKeepListAdapter(@Nullable List<MusicInfo> data) {
-        super(R.layout.fragment_user_keep_item,data);
+        super(R.layout.fragment_user_keep_item, data);
     }
 
 
     @Override
     protected void convert(final BaseViewHolder helper, final MusicInfo item) {
-        if(null!=item){
-            String seconds = item.getMusicDurtion();
-            if(TextUtils.isEmpty(seconds)){
-                seconds="1.0";
+        if (null != item) {
+            String seconds = String.valueOf(item.getTime());
+            if (TextUtils.isEmpty(seconds)) {
+                seconds = "1.0";
             }
             float second = Float.parseFloat(seconds);
-            helper.setText(R.id.tv_item_name,item.getMusicTitle())
-                    .setText(R.id.tv_item_play_count,(58465+helper.getPosition())+"")
-                    .setText(R.id.tv_item_num,(helper.getPosition()+1)+"")
-                    .setText(R.id.tv_item_durtion,(DateUtil.getTimeLengthString((int) (second))));
+            helper.setText(R.id.tv_item_name, item.getTitle())
+                    .setText(R.id.tv_item_play_count, item.getPlay_num())
+                    .setText(R.id.tv_item_num, (helper.getPosition() + 1) + "")
+                    .setText(R.id.tv_item_durtion, (DateUtil.getTimeLengthString((int) (second))));
             switch (item.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
-                    helper.setVisible(R.id.tv_item_num,true);
-                    helper.setVisible(R.id.ic_play_anim,false);
-                    helper.setImageResource(R.id.ic_item_play,R.drawable.ic_play_pause);
+                    helper.setVisible(R.id.tv_item_num, true);
+                    helper.setVisible(R.id.ic_play_anim, false);
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_play_pause);
                     helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //播放中
@@ -55,13 +55,13 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHold
                     ImageView ic_play_anim = (ImageView) helper.getView(R.id.ic_play_anim);
                     ic_play_anim.setImageResource(R.drawable.play_anim);
                     AnimationDrawable drawable = (AnimationDrawable) ic_play_anim.getDrawable();
-                    if(null!=drawable){
-                        if(drawable.isRunning()) drawable.stop();
+                    if (null != drawable) {
+                        if (drawable.isRunning()) drawable.stop();
                         drawable.start();
                     }
-                    helper.setVisible(R.id.tv_item_num,false);
-                    helper.setVisible(R.id.ic_play_anim,true);
-                    helper.setImageResource(R.id.ic_item_play,R.drawable.ic_play_pause);
+                    helper.setVisible(R.id.tv_item_num, false);
+                    helper.setVisible(R.id.ic_play_anim, true);
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_play_pause);
                     helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //暂停中
@@ -69,24 +69,24 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHold
                     ImageView icPlayAnim = (ImageView) helper.getView(R.id.ic_play_anim);
                     icPlayAnim.setImageResource(R.drawable.play_anim);
                     AnimationDrawable drawableAnimation = (AnimationDrawable) icPlayAnim.getDrawable();
-                    if(null!=drawableAnimation){
+                    if (null != drawableAnimation) {
                         drawableAnimation.stop();
                     }
-                    helper.setVisible(R.id.tv_item_num,false);
-                    helper.setVisible(R.id.ic_play_anim,true);
-                    helper.setImageResource(R.id.ic_item_play,R.drawable.ic_item_play_true);
+                    helper.setVisible(R.id.tv_item_num, false);
+                    helper.setVisible(R.id.ic_play_anim, true);
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play_true);
                     helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //播放完成或已停止
                 case PlayerStatus.PLAYER_STATUS_STOP:
-                //播放失败
+                    //播放失败
                 case PlayerStatus.PLAYER_STATUS_ERROR:
-                //为空
+                    //为空
                 case PlayerStatus.PLAYER_STATUS_EMPOTY:
-                    helper.setVisible(R.id.tv_item_num,true);
-                    helper.setVisible(R.id.ic_play_anim,false);
-                    helper.setImageResource(R.id.ic_play_anim,0);
-                    helper.setImageResource(R.id.ic_item_play,R.drawable.ic_item_play);
+                    helper.setVisible(R.id.tv_item_num, true);
+                    helper.setVisible(R.id.ic_play_anim, false);
+                    helper.setImageResource(R.id.ic_play_anim, 0);
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play);
                     helper.setTextColor(R.id.tv_item_name, Color.WHITE);
                     break;
 
@@ -95,8 +95,8 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHold
             helper.setOnClickListener(R.id.btn_play, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(null!=mOnItemClickListener){
-                        mOnItemClickListener.onPlayMusic(helper.getAdapterPosition(),v);
+                    if (null != mOnItemClickListener) {
+                        mOnItemClickListener.onPlayMusic(helper.getAdapterPosition(), v);
                     }
                 }
             });
@@ -104,8 +104,8 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHold
             helper.setOnClickListener(R.id.ll_item_view, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(null!=mOnItemClickListener){
-                        mOnItemClickListener.onDetails(item.getMusicID());
+                    if (null != mOnItemClickListener) {
+                        mOnItemClickListener.onDetails(item.getId());
                     }
                 }
             });
@@ -114,31 +114,33 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo,BaseViewHold
 
     /**
      * 刷新条目,这里刷新单个条目
+     *
      * @param o
      * @param arg
      */
     @Override
     public void update(Observable o, Object arg) {
-        if(null!=arg){
-            MusicInfo musicInfo= (MusicInfo) arg;
-            if(null!=musicInfo&&null!=mData&&mData.size()>0){
-                int position=0;
+        if (null != arg) {
+            MusicInfo musicInfo = (MusicInfo) arg;
+            if (null != musicInfo && null != mData && mData.size() > 0) {
+                int position = 0;
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
-                    if(musicInfo.getMusicID().equals(info.getMusicID())){
+                    if (musicInfo.getId().equals(info.getId())) {
                         info.setPlauStatus(musicInfo.getPlauStatus());
-                    }else{
+                    } else {
                         info.setPlauStatus(0);
                     }
                 }
-                Logger.d(TAG,"列表收到观察者刷新,类型："+musicInfo.getPlauStatus()+"位置："+position+",musicID："+musicInfo.getMusicID());
+                Logger.d(TAG, "列表收到观察者刷新,类型：" + musicInfo.getPlauStatus() + "位置：" + position + ",musicID：" + musicInfo.getId());
                 this.notifyDataSetChanged();
             }
         }
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onPlayMusic(int position, View view);
+
         void onDetails(String musicID);
     }
 

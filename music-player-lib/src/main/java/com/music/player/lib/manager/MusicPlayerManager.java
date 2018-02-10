@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.IBinder;
+
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
 import com.music.player.lib.bean.MusicInfo;
@@ -18,6 +20,7 @@ import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.service.MusicPlayerService;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.PreferencesUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
@@ -547,6 +550,11 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     }
 
     @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+
+    }
+
+    @Override
     public void onBufferingUpdate(int percent) {
         if(null!=mUserCallBackListenerList&&mUserCallBackListenerList.size()>0){
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
@@ -576,6 +584,11 @@ public class MusicPlayerManager implements OnPlayerEventListener {
                 onPlayerEventListener.checkedPlayTaskResult(musicInfo,mediaPlayer);
             }
         }
+    }
+
+    @Override
+    public void checkedPlayTaskResult(MusicInfo musicInfo, MediaPlayer mediaPlayer) {
+
     }
 
     @Override

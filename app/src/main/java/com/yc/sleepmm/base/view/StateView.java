@@ -88,7 +88,7 @@ public class StateView extends BaseView {
         tvMess.setText(message);
         mContentView.setVisibility(GONE);
 
-        Glide.with(this).load(R.mipmap.base_no_data).into(ivLoading);
+        Glide.with(this).load(R.drawable.ic_list_empty_icon).into(ivLoading);
     }
 
     public void showNoData(View contentView) {

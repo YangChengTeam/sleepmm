@@ -1,4 +1,4 @@
-package com.yc.sleepmm.index.bean;
+package com.yc.sleepmm.index.model.bean;
 
 /**
  * QQ/微信用户资料

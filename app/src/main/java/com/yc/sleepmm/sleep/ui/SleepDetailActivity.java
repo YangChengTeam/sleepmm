@@ -21,7 +21,7 @@ import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
-import com.yc.sleepmm.index.bean.MediaMusicCategoryList;
+import com.yc.sleepmm.index.model.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.sleep.adapter.UserSleepAdapter;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class SleepDetailActivity extends AppCompatActivity implements OnUserPlay
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {
             //收藏事件触发了
             @Override
-            public void onEventCollect() {
+            public void onEventCollect(MusicInfo musicInfo) {
                 isCollect = !isCollect;
                 //设置是否收藏示例
                 mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect);
@@ -99,6 +99,11 @@ public class SleepDetailActivity extends AppCompatActivity implements OnUserPlay
             @Override
             public void onBack() {
                 SleepDetailActivity.this.onBackPressed();
+            }
+
+            @Override
+            public void onPlayState(MusicInfo info) {
+
             }
         });
         //注册到被观察者中
@@ -143,15 +148,15 @@ public class SleepDetailActivity extends AppCompatActivity implements OnUserPlay
                     List<MusicInfo> musicInfos = new ArrayList<>();
                     for (MediaMusicCategoryList.DataBean dataBean : data.getData()) {
                         MusicInfo musicInfo = new MusicInfo();
-                        musicInfo.setMusicID(dataBean.getId());
-                        musicInfo.setMusicTitle(dataBean.getTitle());
-                        musicInfo.setMusicTitle(dataBean.getTitle());
-                        musicInfo.setMusicDurtion(dataBean.getSeconds());
-                        musicInfo.setMusicCover(dataBean.getCover());
-                        musicInfo.setMusicCover(dataBean.getCover());
-                        musicInfo.setMusicAuthor(dataBean.getAuthor());
-                        musicInfo.setMusicAlbumTitle(dataBean.getTitle());
-                        musicInfo.setMusicPath(dataBean.getUrl());
+                        musicInfo.setId(dataBean.getId());
+                        musicInfo.setTitle(dataBean.getTitle());
+
+                        musicInfo.setTime(dataBean.getSeconds());
+//                        musicInfo.setMusicCover(dataBean.getCover());
+//                        musicInfo.setMusicCover(dataBean.getCover());
+//                        musicInfo.setMusicAuthor(dataBean.getAuthor());
+//                        musicInfo.setMusicAlbumTitle(dataBean.getTitle());
+                        musicInfo.setFile(dataBean.getUrl());
                         musicInfos.add(musicInfo);
                     }
                     if (null != userSleepAdapter) {

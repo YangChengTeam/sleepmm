@@ -37,8 +37,8 @@ public class UserKeepFragment extends BaseFragment {
         List<MusicInfo> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             MusicInfo musicInfo = new MusicInfo();
-            musicInfo.setMusicTitle("test"+i);
-            musicInfo.setMusicDurtion(com.blankj.utilcode.util.TimeUtils.getNowString());
+            musicInfo.setTitle("test"+i);
+            musicInfo.setTime(com.blankj.utilcode.util.TimeUtils.getNowString());
             list.add(musicInfo);
         }
 

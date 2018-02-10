@@ -1,6 +1,7 @@
 package com.yc.sleepmm.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
@@ -14,7 +15,8 @@ import com.umeng.analytics.game.UMGameAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.vondear.rxtools.RxTool;
-import com.yc.sleepmm.index.bean.UserInfo;
+import com.yc.sleepmm.R;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.manager.ApplicationManager;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
@@ -82,10 +84,17 @@ public class APP extends MultiDexApplication {
         }
     }
 
-    public boolean isGotoLogin(Activity activity) {
+    public boolean isLogin() {
+        return mUserInfo != null;
+    }
+
+    public boolean isGotoLogin(Context context) {
         if (mUserInfo == null) {
-            Intent intent = new Intent(activity, LoginGroupActivity.class);
-            activity.startActivity(intent);
+            Intent intent =new Intent(context, LoginGroupActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            if (context instanceof Activity)
+                ((Activity) context).overridePendingTransition(R.anim.menu_enter, 0);//进场动画
             return true;
         }
         return false;
