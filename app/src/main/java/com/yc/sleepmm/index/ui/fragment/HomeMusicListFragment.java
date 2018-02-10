@@ -35,7 +35,7 @@ import butterknife.BindView;
  * 首页音乐列表
  */
 
-public class HomeMusicListFragment extends MusicBaseFragmentNew<IndexMusicTypeDetailPresenter> implements OnUserPlayerEventListener, BaseQuickAdapter.RequestLoadMoreListener, IndexMusicTypeDetailContract.View {
+public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetailPresenter> implements OnUserPlayerEventListener, BaseQuickAdapter.RequestLoadMoreListener, IndexMusicTypeDetailContract.View {
 
     private static final String TAG = "HomeMusicListFragment";
     @BindView(R.id.stateView)

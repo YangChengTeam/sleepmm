@@ -15,12 +15,9 @@ import com.music.player.lib.util.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.RxLogTool;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-
 import com.yc.sleepmm.base.util.EmptyUtils;
 import com.yc.sleepmm.base.util.UIUtils;
-
 import com.yc.sleepmm.index.constants.Constant;
-
 
 import butterknife.ButterKnife;
 
@@ -32,6 +29,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     protected P mPresenter;
     protected LoadingDialog loadingDialog;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

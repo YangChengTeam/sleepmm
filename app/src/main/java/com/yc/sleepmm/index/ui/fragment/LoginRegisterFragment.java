@@ -16,11 +16,10 @@ import android.widget.TextView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
-import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
-import com.yc.sleepmm.index.ui.presenter.LoginGroupPresenter;
+import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
 import com.yc.sleepmm.index.util.CommonUtils;
 import com.yc.sleepmm.setting.utils.Utils;
 
@@ -32,7 +31,7 @@ import butterknife.BindView;
  * 用户注册
  */
 
-public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresenter> implements LoginContract.View {
+public class LoginRegisterFragment extends MusicBaseFragment implements LoginContract.View {
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -52,7 +51,7 @@ public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresen
 
     private Animation mInputAnimation;
     private Handler mHandler;
-    private LoginGroupPresenter mLoginPresenter;
+    private LoginPresenter mLoginPresenter;
     private LoginGroupActivity mLoginGroupActivity;
 
     @Override
@@ -63,6 +62,11 @@ public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresen
 
     @Override
     protected void initViews() {
+
+        mHandler = new Handler();
+        mLoginPresenter = new LoginPresenter(getActivity());
+        mLoginPresenter.attachView(this);
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,12 +105,6 @@ public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresen
     @Override
     public int getLayoutId() {
         return R.layout.fragment_register;
-    }
-
-    @Override
-    public void init() {
-        mHandler = new Handler();
-        mLoginPresenter = new LoginGroupPresenter(getActivity(), this);
     }
 
 
@@ -309,6 +307,14 @@ public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresen
 
 
     @Override
+    public void onDestroy() {
+        if (null != mLoginPresenter) {
+            mLoginPresenter.detachView();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         closeProgressDialog();
@@ -368,14 +374,13 @@ public class LoginRegisterFragment extends MusicBaseFragmentNew<LoginGroupPresen
         ToastUtils.showCenterToast(data);
     }
 
-
     @Override
-    public void showLoadingDialog(String mess) {
-        ((BaseActivity) getActivity()).showLoadingDialog(mess);
+    public void showErrorView() {
+        closeProgressDialog();
     }
 
     @Override
-    public void dismissDialog() {
-        ((BaseActivity) getActivity()).dismissDialog();
+    public void complete() {
+        closeProgressDialog();
     }
 }
