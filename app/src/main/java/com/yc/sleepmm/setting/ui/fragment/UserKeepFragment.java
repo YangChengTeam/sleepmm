@@ -72,7 +72,14 @@ public class UserKeepFragment extends BaseFragment<CollectPresenter> implements 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                if (type == 1) {
+                    intent.putExtra("position", 0);
+
+                } else if (type == 2) {
+                    intent.putExtra("position", 1);
+                }
                 startActivity(intent);
             }
 

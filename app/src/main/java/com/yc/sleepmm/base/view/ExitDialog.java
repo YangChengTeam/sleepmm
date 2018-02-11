@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -20,12 +21,14 @@ import rx.functions.Action1;
  */
 
 public class ExitDialog extends BaseDialog {
+
+
     @BindView(R.id.tv_tint_content)
     TextView tvTintContent;
     @BindView(R.id.tv_cancel)
-    TextView tvCancel;
-    @BindView(R.id.tv_confirm)
-    TextView tvConfirm;
+    ImageView tvCancel;
+    @BindView(R.id.tv_exit)
+    ImageView tvExit;
 
     public ExitDialog(@NonNull Context context) {
         super(context);
@@ -41,7 +44,7 @@ public class ExitDialog extends BaseDialog {
         Window window = getWindow();
         WindowManager.LayoutParams layoutParams = window.getAttributes();
 
-        layoutParams.width = ScreenUtil.getWidth(mContext) * 3 / 5;
+        layoutParams.width = ScreenUtil.getWidth(mContext) * 4 / 5;
         window.setAttributes(layoutParams);
 
         RxView.clicks(tvCancel).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -50,7 +53,7 @@ public class ExitDialog extends BaseDialog {
                 dismiss();
             }
         });
-        RxView.clicks(tvConfirm).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+        RxView.clicks(tvExit).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (listener != null) {
@@ -64,13 +67,6 @@ public class ExitDialog extends BaseDialog {
         tvTintContent.setText(content);
     }
 
-    public void setTvCancel(String cancelContent) {
-        tvCancel.setText(cancelContent);
-    }
-
-    public void setTvConfirm(String confirmContent) {
-        tvConfirm.setText(confirmContent);
-    }
 
     private onConfirmListener listener;
 

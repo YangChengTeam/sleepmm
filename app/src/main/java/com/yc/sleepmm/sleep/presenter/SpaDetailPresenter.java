@@ -1,10 +1,14 @@
 package com.yc.sleepmm.sleep.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
+import com.kk.utils.ToastUtil;
 import com.music.player.lib.bean.MusicInfo;
+import com.music.player.lib.util.PreferencesUtil;
+import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.sleep.contract.SpaDetailContract;
 import com.yc.sleepmm.sleep.model.engine.SpaDetailEngine;
@@ -45,7 +49,7 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
             @Override
             public void onNext(ResultInfo<MusicInfo> spaDetailInfoResultInfo) {
                 if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK && spaDetailInfoResultInfo.data != null) {
-                    mView.showSpaDetailInfo(spaDetailInfoResultInfo.data);
+                    mView.showSpaDetailInfo(spaDetailInfoResultInfo.data, false);
                     mView.hide();
                 } else {
                     mView.showNoData();
@@ -53,5 +57,87 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
             }
         });
         mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void randomSpaInfo() {
+        Subscription subscription = mEngine.randomSpaInfo().subscribe(new Subscriber<ResultInfo<MusicInfo>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<MusicInfo> musicInfoResultInfo) {
+                if (musicInfoResultInfo != null && musicInfoResultInfo.code == HttpConfig.STATUS_OK && musicInfoResultInfo.data != null) {
+                    mView.showSpaDetailInfo(musicInfoResultInfo.data, true);
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void spaPlay(String music_id) {
+        Subscription subscription = mEngine.spaPlay(music_id).subscribe(new Subscriber<ResultInfo<String>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<String> musicInfoResultInfo) {
+                if (musicInfoResultInfo != null && musicInfoResultInfo.code == HttpConfig.STATUS_OK && musicInfoResultInfo.data != null) {
+
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void collectSpa(final String spa_id) {
+        if (!APP.getInstance().isGotoLogin(mContext)) {
+
+            if (TextUtils.isEmpty(spa_id)) {
+                ToastUtil.toast(mContext, "请先选择一首歌曲收藏");
+                return;
+            }
+
+            Subscription subscription = mEngine.collectSpa(APP.getInstance().getUserData().getId(), spa_id).subscribe(new Subscriber<ResultInfo<String>>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(ResultInfo<String> stringResultInfo) {
+                    boolean isCollect = PreferencesUtil.getInstance().getBoolean(spa_id);
+                    if (stringResultInfo != null && stringResultInfo.code == HttpConfig.STATUS_OK) {
+
+                        isCollect = !isCollect;
+                        PreferencesUtil.getInstance().putBoolean(spa_id, isCollect);
+
+                        mView.showCollectSucess(isCollect);
+                    }
+                }
+            });
+            mSubscriptions.add(subscription);
+        }
     }
 }

@@ -15,10 +15,18 @@ import com.yc.sleepmm.base.view.IView;
 public interface SpaDetailContract {
 
     interface View extends IView, ILoading, INoData, INoNet, IHide {
-        void showSpaDetailInfo(MusicInfo data);
+        void showSpaDetailInfo(MusicInfo data, boolean b);
+
+        void showCollectSucess(boolean isCollect);
     }
 
     interface Presenter extends IPresenter {
         void getSpaDetailInfo(String spa_id);
+
+        void randomSpaInfo();
+
+        void spaPlay(String music_id);
+
+        void collectSpa(String spa_id);
     }
 }

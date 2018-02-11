@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @BindView(R.id.main_bottom_navigation_bar)
     BottomNavigationBar mainBottomNavigationBar;
     private List<Fragment> mList; //ViewPager的数据源
+    private static MainActivity instance;
 
 
     @Override
@@ -48,8 +49,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         return R.layout.activity_main;
     }
 
+    public static MainActivity getInstance() {
+        return instance;
+    }
+
     @Override
     public void init() {
+        instance = this;
         //初始化MusicService
         MusicPlayerManager.getInstance().bindService(this);
         mList = new ArrayList<>();
@@ -60,6 +66,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mMainViewPager.setAdapter(mainAdapter); //视图加载适配器
         mMainViewPager.addOnPageChangeListener(this);
         mMainViewPager.setOffscreenPageLimit(2);
+        mMainViewPager.setCurrentItem(0);
 
 
         mainBottomNavigationBar.setMode(BottomNavigationBar.MODE_DEFAULT);
@@ -73,6 +80,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .initialise();
 
         mainBottomNavigationBar.setTabSelectedListener(this);
+
         applyPermission();
     }
 
@@ -108,9 +116,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
+
         final ExitDialog exitDialog = new ExitDialog(this);
-        exitDialog.setTvTintContent("确认退出" + getString(R.string.app_name) + "?");
+        exitDialog.setTvTintContent("你确定要退出么?");
         exitDialog.setOnConfirmListener(new ExitDialog.onConfirmListener() {
             @Override
             public void onConfirm() {
@@ -122,6 +130,19 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         exitDialog.show();
     }
 
+    private void goItem(int position) {
+        mainBottomNavigationBar.selectTab(position, true);
+//        mMainViewPager.setCurrentItem(position, true);
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int position = intent.getIntExtra("position", -1);
+        if (position >= 0)
+            goItem(position);
+    }
 
     @Override
     protected void onDestroy() {
