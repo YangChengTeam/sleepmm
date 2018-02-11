@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.kk.securityhttp.engin.HttpCoreEngin;
@@ -19,6 +20,7 @@ import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
+import com.yc.sleepmm.base.view.StateView;
 import com.yc.sleepmm.index.model.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.sleep.adapter.UserSleepAdapter;
 import com.yc.sleepmm.sleep.contract.SpaDetailContract;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -36,16 +39,36 @@ import rx.functions.Action1;
  * Created by admin on 2018/1/26.
  */
 
-public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implements OnUserPlayerEventListener,SpaDetailContract.View {
+public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implements OnUserPlayerEventListener, SpaDetailContract.View {
 
+    @BindView(R.id.stateView)
+    StateView stateView;
+    @BindView(R.id.music_player_controller)
+    MusicPlayerController musicPlayerController;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.ll_container)
+    LinearLayout llContainer;
     private MusicPlayerController mMusicPlayerController;
     private boolean isCollect = false;//是否收藏，需要调用者维护
     private UserSleepAdapter userSleepAdapter;
+    private String spaId;
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public int getLayoutId() {
+        return R.layout.activity_sleep_detail;
+    }
+
+    @Override
+    public void init() {
+        mPresenter = new SpaDetailPresenter(this, this);
+
+        spaId = getIntent().getStringExtra("spa_id");
+        getData();
+        initViews();
+        initAdapter();
+        loadMusicList();//加载音乐列表
     }
 
     /**
@@ -234,15 +257,40 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
     }
 
+
+    public void getData() {
+        mPresenter.getSpaDetailInfo(spaId);
+    }
+
+
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_sleep_detail;
+    public void hide() {
+        stateView.hide();
     }
 
     @Override
-    public void init() {
-        initViews();
-        initAdapter();
-        loadMusicList();//加载音乐列表
+    public void showNoNet() {
+        stateView.showNoNet(llContainer, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getData();
+            }
+        });
     }
+
+    @Override
+    public void showLoading() {
+        stateView.showLoading(llContainer);
+    }
+
+    @Override
+    public void showNoData() {
+        stateView.showNoData(llContainer);
+    }
+
+    @Override
+    public void showSpaDetailInfo(MusicInfo data) {
+
+    }
+
 }

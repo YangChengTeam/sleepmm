@@ -1,6 +1,7 @@
 package com.yc.sleepmm.sleep.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,11 +13,13 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
 import com.yc.sleepmm.sleep.bean.SpaItemInfoWrapper;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
+import com.yc.sleepmm.sleep.ui.activity.SleepDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +80,7 @@ public class SleepFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(), "onItemClickListener--" + position, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -193,6 +197,13 @@ public class SleepFragment extends BaseFragment {
             adapter = new SpaListAdapter(dataset.get(parentPos).getList());
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    Intent intent = new Intent(getActivity(), SleepDetailActivity.class);
+                    startActivity(intent);
+                }
+            });
 
             return childView;
         }

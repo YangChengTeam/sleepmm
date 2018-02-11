@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -41,7 +40,8 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHol
             helper.setText(R.id.tv_item_name, item.getTitle())
                     .setText(R.id.tv_item_play_count, item.getPlay_num())
                     .setText(R.id.tv_item_num, (helper.getPosition() + 1) + "")
-                    .setText(R.id.tv_item_durtion, (DateUtil.getTimeLengthString((int) (second))));
+                    .setText(R.id.tv_item_durtion, (DateUtil.getTimeLengthString((int) (second))))
+                    .addOnClickListener(R.id.btn_play);
             switch (item.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
@@ -91,24 +91,6 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHol
                     break;
 
             }
-            //播放\暂停
-            helper.setOnClickListener(R.id.btn_play, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mOnItemClickListener) {
-                        mOnItemClickListener.onPlayMusic(helper.getAdapterPosition(), v);
-                    }
-                }
-            });
-            //条目
-            helper.setOnClickListener(R.id.ll_item_view, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mOnItemClickListener) {
-                        mOnItemClickListener.onDetails(item.getId());
-                    }
-                }
-            });
         }
     }
 
@@ -138,15 +120,5 @@ public class UserKeepListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHol
         }
     }
 
-    public interface OnItemClickListener {
-        void onPlayMusic(int position, View view);
 
-        void onDetails(String musicID);
-    }
-
-    private OnItemClickListener mOnItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
-    }
 }

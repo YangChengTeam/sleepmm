@@ -37,7 +37,7 @@ public class LoginGroupEngine extends BaseEngine {
         params.put("mobile", account);
         params.put("code", code);
         params.put("password", password);
-        return HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_REGISTER, new TypeReference<ResultInfo<UserInfo>>() {
+        return HttpCoreEngin.get(mContext).rxpost(NetContants.HOST_USER_REGISTER, new TypeReference<ResultInfo<UserInfo>>() {
         }.getType(), params, true, true, true);
     }
 
@@ -54,7 +54,7 @@ public class LoginGroupEngine extends BaseEngine {
         params.put("mobile", account);
         params.put("password", password);
 
-        return HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_LOGIN, new TypeReference<ResultInfo<UserInfo>>() {
+        return HttpCoreEngin.get(mContext).rxpost( NetContants.HOST_USER_LOGIN, new TypeReference<ResultInfo<UserInfo>>() {
                 }.getType(), params, true,
                 true, true);
     }
@@ -66,7 +66,7 @@ public class LoginGroupEngine extends BaseEngine {
         params.put("mobile", phoneNumber);
         params.put("code", code);
         params.put("new_password", newPassword);
-        return HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_FIND_PASSWORD, new TypeReference<ResultInfo<UserInfo>>() {
+        return HttpCoreEngin.get(mContext).rxpost(NetContants.HOST_USER_FIND_PASSWORD, new TypeReference<ResultInfo<UserInfo>>() {
         }.getType(), params, true, true, true);
 
     }
@@ -77,7 +77,7 @@ public class LoginGroupEngine extends BaseEngine {
         params.put("mobile", phoneNumber);
         params.put("user_id", "0");
 
-        return HttpCoreEngin.get(mContext).rxpost(NetContants.DEBUG_HOST + NetContants.HOST_USER_GET_CODE, new TypeReference<ResultInfo<String>>() {
+        return HttpCoreEngin.get(mContext).rxpost( NetContants.HOST_USER_GET_CODE, new TypeReference<ResultInfo<String>>() {
         }.getType(), params, true, true, true);
     }
 

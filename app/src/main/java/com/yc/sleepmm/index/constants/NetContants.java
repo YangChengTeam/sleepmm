@@ -1,5 +1,7 @@
 package com.yc.sleepmm.index.constants;
 
+import static com.yc.sleepmm.base.constant.BaseNetConstant.DEBUG_HOST;
+
 /**
  * TinyHung@Outlook.com
  * 2018/1/22.
@@ -7,13 +9,11 @@ package com.yc.sleepmm.index.constants;
 
 public interface NetContants {
 
-    String BASE_HOST = "http://app.nq6.com/api/index/";
 
-    String DEBUG_HOST = "http://api.sleep.slpi1.com/v1/";
-    String HOST_USER_GET_CODE = "user/code";
-    String HOST_USER_FIND_PASSWORD = "user/reset";
-    String HOST_USER_REGISTER = "user/reg";
-    String HOST_USER_LOGIN = "user/login";
+    String HOST_USER_GET_CODE = DEBUG_HOST + "user/code";
+    String HOST_USER_FIND_PASSWORD = DEBUG_HOST + "user/reset";
+    String HOST_USER_REGISTER = DEBUG_HOST + "user/reg";
+    String HOST_USER_LOGIN = DEBUG_HOST + "user/login";
 
     /**
      * 第三方登录

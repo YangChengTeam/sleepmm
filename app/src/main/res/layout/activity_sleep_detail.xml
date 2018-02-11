@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_details_bg">
 
+    <com.yc.sleepmm.base.view.StateView
+        android:id="@+id/stateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/statusbar_view_height">
-        </View>
+            android:layout_height="@dimen/statusbar_view_height"></View>
 
         <com.music.player.lib.view.MusicPlayerController
             android:id="@+id/music_player_controller"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.music.player.lib.view.MusicPlayerController>
+            android:layout_height="wrap_content"></com.music.player.lib.view.MusicPlayerController>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#E7E7E7"/>
+            android:background="#E7E7E7" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
