@@ -6,7 +6,6 @@ import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.bean.MusicInfo;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.index.model.engine.IndexMusicTypeDetailEngine;
 import com.yc.sleepmm.index.rxnet.IndexMusicTypeDetailContract;
 
@@ -51,21 +50,24 @@ public class IndexMusicTypeDetailPresenter extends BasePresenter<IndexMusicTypeD
 
             @Override
             public void onNext(ResultInfo<List<MusicInfo>> listResultInfo) {
-                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
-                    mView.hide();
-                    mView.showMusicInfos(listResultInfo.data);
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (listResultInfo.data != null) {
+                        mView.hide();
+                        mView.showMusicInfos(listResultInfo.data);
+                    } else {
+                        if (page == 1) {
+                            mView.showNoData();
+                        }
+                    }
                 } else {
                     if (page == 1) {
-                        mView.showNoData();
+                        mView.showNoNet();
                     }
                 }
             }
         });
         mSubscriptions.add(subscription);
     }
-
-
-
 
 
 }

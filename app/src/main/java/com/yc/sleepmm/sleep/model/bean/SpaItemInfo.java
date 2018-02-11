@@ -1,4 +1,4 @@
-package com.yc.sleepmm.sleep.bean;
+package com.yc.sleepmm.sleep.model.bean;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;

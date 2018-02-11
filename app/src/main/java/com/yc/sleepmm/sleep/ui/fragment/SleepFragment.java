@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
-import com.yc.sleepmm.sleep.bean.SpaDataInfo;
-import com.yc.sleepmm.sleep.bean.SpaItemInfo;
+import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
+import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
 import com.yc.sleepmm.sleep.ui.SleepDetailActivity;
 
 import java.util.ArrayList;

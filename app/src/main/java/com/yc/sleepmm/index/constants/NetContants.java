@@ -14,7 +14,7 @@ public interface NetContants {
     String HOST_USER_FIND_PASSWORD = "user/reset";
     String HOST_USER_REGISTER = "user/reg";
     String HOST_USER_LOGIN = "user/login";
-    String HOST_USER_OTHER_LOGIN = "user/login";
+
     /**
      * 第三方登录
      */
