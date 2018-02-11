@@ -12,7 +12,7 @@ import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
 import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
-import com.yc.sleepmm.sleep.ui.SleepDetailActivity;
+import com.yc.sleepmm.sleep.ui.activity.SleepDetailActivity;
 
 import java.util.ArrayList;
 

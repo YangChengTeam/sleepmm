@@ -1,8 +1,5 @@
-package com.yc.sleepmm.sleep.ui;
+package com.yc.sleepmm.sleep.ui.activity;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,8 +18,11 @@ import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.util.ToastUtils;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.MediaMusicCategoryList;
 import com.yc.sleepmm.sleep.adapter.UserSleepAdapter;
+import com.yc.sleepmm.sleep.contract.SpaDetailContract;
+import com.yc.sleepmm.sleep.presenter.SpaDetailPresenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,20 +36,12 @@ import rx.functions.Action1;
  * Created by admin on 2018/1/26.
  */
 
-public class SleepDetailActivity extends AppCompatActivity implements OnUserPlayerEventListener {
+public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implements OnUserPlayerEventListener,SpaDetailContract.View {
 
     private MusicPlayerController mMusicPlayerController;
     private boolean isCollect = false;//是否收藏，需要调用者维护
     private UserSleepAdapter userSleepAdapter;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sleep_detail);
-        initViews();
-        initAdapter();
-        loadMusicList();//加载音乐列表
-    }
 
     @Override
     protected void onResume() {
@@ -240,5 +232,17 @@ public class SleepDetailActivity extends AppCompatActivity implements OnUserPlay
     @Override
     public void changeCollectResult(int icon, boolean isCollect, String musicID) {
 
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_sleep_detail;
+    }
+
+    @Override
+    public void init() {
+        initViews();
+        initAdapter();
+        loadMusicList();//加载音乐列表
     }
 }

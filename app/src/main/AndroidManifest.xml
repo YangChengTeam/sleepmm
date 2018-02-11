@@ -46,7 +46,7 @@
             android:name=".index.ui.activity.MusicPlayerSample"
             android:theme="@style/FullScreenTransparentStyle"></activity>
         <activity
-            android:name=".sleep.ui.SleepDetailActivity"
+            android:name=".sleep.ui.activity.SleepDetailActivity"
             android:theme="@style/FullScreenTransparentStyle"></activity>
         <activity
             android:name=".setting.ui.activity.UserKeepActivity"
