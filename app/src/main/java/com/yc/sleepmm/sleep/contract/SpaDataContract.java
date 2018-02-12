@@ -1,5 +1,9 @@
 package com.yc.sleepmm.sleep.contract;
 
+import com.yc.sleepmm.base.view.IHide;
+import com.yc.sleepmm.base.view.ILoading;
+import com.yc.sleepmm.base.view.INoData;
+import com.yc.sleepmm.base.view.INoNet;
 import com.yc.sleepmm.base.view.IPresenter;
 import com.yc.sleepmm.base.view.IView;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
@@ -13,7 +17,7 @@ import java.util.List;
 
 public interface SpaDataContract {
 
-    interface View extends IView {
+    interface View extends IView,ILoading, IHide, INoNet, INoData {
         void showSpaData(List<SpaDataInfo> datas);
         void showSpaItemList(List<SpaItemInfo> itemInfos);
     }

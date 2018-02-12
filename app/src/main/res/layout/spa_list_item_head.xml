@@ -63,7 +63,7 @@
                     android:drawableLeft="@mipmap/spa_user_icon"
                     android:drawablePadding="6dp"
                     android:gravity="center"
-                    android:text="演唱者"
+                    android:text="SuperStar"
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -81,7 +81,7 @@
                     android:drawableLeft="@mipmap/spa_time_icon"
                     android:drawablePadding="6dp"
                     android:gravity="center"
-                    android:text="08:26"
+                    android:text="00:00"
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
             </LinearLayout>

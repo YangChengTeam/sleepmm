@@ -3,6 +3,7 @@ package com.yc.sleepmm.sleep.presenter;
 import android.content.Context;
 
 import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.sleep.contract.SpaDataContract;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
@@ -29,6 +30,7 @@ public class SpaDataPresenter extends BasePresenter<SpaDataInfoEngine, SpaDataCo
 
     @Override
     public void getSpaDataList() {
+        mView.showLoading();
         Subscription subscription = mEngine.getSpaDataInfo().subscribe(new Subscriber<ResultInfo<List<SpaDataInfo>>>() {
             @Override
             public void onCompleted() {
@@ -37,12 +39,21 @@ public class SpaDataPresenter extends BasePresenter<SpaDataInfoEngine, SpaDataCo
 
             @Override
             public void onError(Throwable e) {
-
+                mView.showNoNet();
             }
 
             @Override
             public void onNext(ResultInfo<List<SpaDataInfo>> spaDetailInfoResultInfo) {
-                mView.showSpaData(spaDetailInfoResultInfo.data);
+                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (spaDetailInfoResultInfo.data != null && spaDetailInfoResultInfo.data.size() > 0) {
+                        mView.hide();
+                    } else {
+                        mView.showNoData();
+                    }
+                    mView.showSpaData(spaDetailInfoResultInfo.data);
+                } else {
+                    mView.showNoData();
+                }
             }
         });
         mSubscriptions.add(subscription);
@@ -63,7 +74,7 @@ public class SpaDataPresenter extends BasePresenter<SpaDataInfoEngine, SpaDataCo
 
             @Override
             public void onNext(ResultInfo<List<SpaItemInfo>> spaDetailInfoResultInfo) {
-                 mView.showSpaItemList(spaDetailInfoResultInfo.data);
+                mView.showSpaItemList(spaDetailInfoResultInfo.data);
             }
         });
         mSubscriptions.add(subscription);

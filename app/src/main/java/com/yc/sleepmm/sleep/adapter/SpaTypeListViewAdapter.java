@@ -139,7 +139,7 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
             if (spaDataInfos.get(parentPos).getFirst() != null) {
                 mTitleTv.setText(spaDataInfos.get(parentPos).getFirst().getTitle());
                 mSingUserTv.setText(spaDataInfos.get(parentPos).getFirst().getAuthor_title());
-                mListenCountTv.setText(spaDataInfos.get(parentPos).getFirst().getPlay_num()+"");
+                mListenCountTv.setText(StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getPlay_num()) ? "0" : spaDataInfos.get(parentPos).getFirst().getPlay_num() + "");
                 if (!StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getTime())) {
                     mSingTimeTv.setText(DateUtils.getFormatDateInSecond(spaDataInfos.get(parentPos).getFirst().getTime()));
                 }
@@ -157,7 +157,7 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
         mHeadPlayIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (spaDataInfos.get(parentPos).getFirst() != null) {
+                if (spaDataInfos.get(parentPos).getFirst() != null && !StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getId())) {
                     Intent intent = new Intent(mContext, SleepDetailActivity.class);
                     intent.putExtra("spa_id", spaDataInfos.get(parentPos).getFirst().getId());
                     mContext.startActivity(intent);
