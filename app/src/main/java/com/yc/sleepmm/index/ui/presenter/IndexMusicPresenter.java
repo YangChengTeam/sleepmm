@@ -37,7 +37,7 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
     @Override
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
-        getMusicTypes();
+
     }
 
     @Override

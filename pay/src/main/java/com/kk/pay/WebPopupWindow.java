@@ -198,7 +198,7 @@ public class WebPopupWindow extends PopupWindow {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (DialogAction.POSITIVE == which) {
                             if (IPayImpl.uiPayCallback != null && IPayImpl.uOrderInfo != null && IPayImpl.isGen()) {
-                                IPayImpl.checkOrder(IPayImpl.uOrderInfo, IPayImpl.uiPayCallback, "http://u.wk990.com/api/index/orders_query?app_id=4");
+//                                IPayImpl.checkOrder(IPayImpl.uOrderInfo, IPayImpl.uiPayCallback, "http://u.wk990.com/api/index/orders_query?app_id=4");
                             }
                         }
                     }

@@ -49,6 +49,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     @Override
     public void init() {
         mPresenter = new IndexMusicPresenter(getActivity(), this);
+        mPresenter.getMusicTypes();
         initViews();
     }
 
@@ -141,7 +142,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
             mView_pager.setOffscreenPageLimit(data.size());
             mView_pager.setAdapter(fragmentPagerAdapter);
             mView_pager.setCurrentItem(0);
-            tab_layout.setTabMode(TabLayout.MODE_FIXED);
+            tab_layout.setTabMode(TabLayout.MODE_SCROLLABLE);
             tab_layout.setupWithViewPager(mView_pager);
         }
     }
