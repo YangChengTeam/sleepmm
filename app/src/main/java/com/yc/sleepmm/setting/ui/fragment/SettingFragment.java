@@ -174,8 +174,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         RxView.clicks(baseSettingViewFeedback).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(getActivity(), OptionFeedbackActivity.class);
-                startActivity(intent);
+                if (!APP.getInstance().isGotoLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), OptionFeedbackActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         RxView.clicks(baseSettingViewSystem).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -189,8 +191,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         RxView.clicks(ivAvatar).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                SelectPicFragment selectPicFragment = new SelectPicFragment();
-                selectPicFragment.show(getFragmentManager(), null);
+                if (!APP.getInstance().isGotoLogin(getActivity())) {
+                    SelectPicFragment selectPicFragment = new SelectPicFragment();
+                    selectPicFragment.show(getFragmentManager(), null);
+                }
             }
         });
 

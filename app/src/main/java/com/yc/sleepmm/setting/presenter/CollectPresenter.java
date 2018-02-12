@@ -48,15 +48,18 @@ public class CollectPresenter extends BasePresenter<CollectEngine, CollectContra
 
             @Override
             public void onNext(ResultInfo<List<MusicInfo>> listResultInfo) {
-                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
-
-                    mView.showSpaCollectList(listResultInfo.data);
-                    if (page == 1) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (listResultInfo.data != null && listResultInfo.data.size() > 0) {
                         mView.hide();
+                    } else {
+                        if (page == 1) {
+                            mView.showNoData();
+                        }
                     }
+                    mView.showSpaCollectList(listResultInfo.data);
                 } else {
                     if (page == 1) {
-                        mView.showNoData();
+                        mView.showNoNet();
                     }
                 }
 
@@ -86,11 +89,15 @@ public class CollectPresenter extends BasePresenter<CollectEngine, CollectContra
 
             @Override
             public void onNext(ResultInfo<List<MusicInfo>> listResultInfo) {
-                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
-                    mView.showMusicCollectList(listResultInfo.data);
-                    if (page == 1) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (listResultInfo.data != null && listResultInfo.data.size() > 0) {
                         mView.hide();
+                    } else {
+                        if (page == 1) {
+                            mView.showNoData();
+                        }
                     }
+                    mView.showMusicCollectList(listResultInfo.data);
                 } else {
                     if (page == 1) {
                         mView.showNoData();

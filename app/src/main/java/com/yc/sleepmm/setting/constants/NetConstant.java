@@ -51,5 +51,11 @@ public interface NetConstant {
      * 我的收藏
      */
     String music_myfavorite_url=(BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST)+"music/myfavorite";
+    /**
+     * 用户资料
+     */
+    String user_info_url=(BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST)+"user/info";
+
+
 
 }

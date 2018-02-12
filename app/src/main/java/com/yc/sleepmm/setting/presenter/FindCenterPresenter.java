@@ -30,7 +30,7 @@ public class FindCenterPresenter extends BasePresenter<FindCenterEngine, FindCen
     }
 
     @Override
-    public void getFindcenterInfos(final int page, int limit) {
+    public void getFindcenterInfos(final int page, final int limit) {
         if (page == 1) {
             mView.showLoading();
         }
@@ -50,7 +50,7 @@ public class FindCenterPresenter extends BasePresenter<FindCenterEngine, FindCen
             @Override
             public void onNext(ResultInfo<List<FindCenterInfo>> listResultInfo) {
                 if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
-                    if (listResultInfo.data != null) {
+                    if (listResultInfo.data != null && listResultInfo.data.size() > 0) {
                         mView.showFindCenterInfos(listResultInfo.data);
                         mView.hide();
                     } else {

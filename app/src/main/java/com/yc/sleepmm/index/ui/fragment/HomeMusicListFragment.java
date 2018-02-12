@@ -32,7 +32,7 @@ import butterknife.BindView;
  * 首页音乐列表
  */
 
-public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetailPresenter> implements OnUserPlayerEventListener, BaseQuickAdapter.RequestLoadMoreListener, IndexMusicTypeDetailContract.View {
+public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetailPresenter> implements OnUserPlayerEventListener, IndexMusicTypeDetailContract.View {
 
     private static final String TAG = "HomeMusicListFragment";
     @BindView(R.id.stateView)
@@ -54,7 +54,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
     @Override
     protected void initViews() {
         mPresenter = new IndexMusicTypeDetailPresenter(getActivity(), this);
-        if (position == 0)
+//        if (position == 0)
             getData(false);
         initAdapter();
 
@@ -89,7 +89,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
         mRecyclerView.setHasFixedSize(true);
         mHomeMusicListAdapter = new HomeMusicListAdapter(null);
 
-        mHomeMusicListAdapter.setOnLoadMoreListener(this, mRecyclerView);
+
         mRecyclerView.setAdapter(mHomeMusicListAdapter);
         initListener();
         //注册观察者以刷新列表
@@ -115,15 +115,21 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
                 MusicPlayerManager.getInstance().playPauseMusic(mHomeMusicListAdapter.getData(), position);
             }
         });
+        mHomeMusicListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getData(false);
+            }
+        }, mRecyclerView);
     }
 
-    @Override
-    protected void onVisible() {
-        super.onVisible();
-        if (null != mHomeMusicListAdapter && (null == mHomeMusicListAdapter.getData() || mHomeMusicListAdapter.getData().size() <= 0)) {
-            getData(false);
-        }
-    }
+//    @Override
+//    protected void onVisible() {
+//        super.onVisible();
+//        if (null != mHomeMusicListAdapter && (null == mHomeMusicListAdapter.getData() || mHomeMusicListAdapter.getData().size() <= 0)) {
+//            getData(false);
+//        }
+//    }
 
 
     @Override
@@ -134,14 +140,6 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
         }
     }
 
-
-    @Override
-    public void onLoadMoreRequested() {
-        if (null != mHomeMusicListAdapter) {
-            mHomeMusicListAdapter.setEnableLoadMore(true);
-            getData(false);
-        }
-    }
 
     @Override
     protected void onRefresh() {
@@ -275,6 +273,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
             mHomeMusicListAdapter.addData(data);
         }
         if (data.size() > 0 && data.size() == pageSize) {
+            page++;
             mHomeMusicListAdapter.loadMoreComplete();
         } else {
             mHomeMusicListAdapter.loadMoreEnd();

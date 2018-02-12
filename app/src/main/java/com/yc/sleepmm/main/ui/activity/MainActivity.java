@@ -147,6 +147,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MusicPlayerManager.getInstance().clearNotifycation();
         MusicPlayerManager.getInstance().unBindService(this);
         MusicPlayerManager.getInstance().deleteObservers();
         MusicPlayerManager.getInstance().deteleAllPlayerStateListener();

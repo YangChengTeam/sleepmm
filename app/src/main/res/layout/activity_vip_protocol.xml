@@ -10,70 +10,75 @@
 
         <include layout="@layout/common_top_view" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white_f0f0f0"
-            android:orientation="vertical"
-            android:padding="@dimen/dp_10">
+            android:layout_height="match_parent">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:gravity="center"
-                android:text="VIP会员服务协议"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_18" />
+                android:layout_height="match_parent"
+                android:background="@color/white_f0f0f0"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_10">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="1、服务条款的接受与修改"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center"
+                    android:text="VIP会员服务协议"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_18" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:lineSpacingExtra="@dimen/dp_5"
-                android:text="      1.1 在VIP会员有效期内，VIP会员可优先参加由咩咩睡眠组织的活动并享有由咩咩睡眠提供的各项优惠及增值服务。"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:text="1、服务条款的接受与修改"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:text="      1.1 在VIP会员有效期内，VIP会员可优先参加由咩咩睡眠组织的活动并享有由咩咩睡眠提供的各项优惠及增值服务。"
+                    android:textColor="@color/black" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:lineSpacingExtra="@dimen/dp_5"
-                android:text="      1.2 VIP会员服务仅限于申请账号自行使用；VIP会员服务期内不能在咩咩睡眠帐号之间转移，禁止赠与、借用、租用、转让或售卖。否则咩咩睡眠有权在未经通知的情况下取消转让账户、受让账户的VIP会员服务资格，由此带来的损失由VIP会员自行承担。"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:text="      1.2 VIP会员服务仅限于申请账号自行使用；VIP会员服务期内不能在咩咩睡眠帐号之间转移，禁止赠与、借用、租用、转让或售卖。否则咩咩睡眠有权在未经通知的情况下取消转让账户、受让账户的VIP会员服务资格，由此带来的损失由VIP会员自行承担。"
+                    android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:lineSpacingExtra="@dimen/dp_5"
-                android:text="      1.3 若VIP会员的行为持续违反本协议或违反国家相关法律法规，或咩咩睡眠认为VIP会员行为有损咩咩睡眠或他人的声誉及利益，咩咩睡眠公司有权取消该VIP会员的VIP会员资格而无须给与任何补偿。"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:text="      1.3 若VIP会员的行为持续违反本协议或违反国家相关法律法规，或咩咩睡眠认为VIP会员行为有损咩咩睡眠或他人的声誉及利益，咩咩睡眠公司有权取消该VIP会员的VIP会员资格而无须给与任何补偿。"
+                    android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:lineSpacingExtra="@dimen/dp_5"
-                android:text="      1.4 VIP会员不得以盗窃、利用系统漏洞等非法途径以及在未获咩咩睡眠授权的非法销售咩咩睡眠VIP会员的网站上获取或购买VIP会员服务，否则咩咩睡眠有权取消VIP会员的服务资格。有此引发的问题由VIP会员自行承担，咩咩睡眠不负任何责任。"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:text="      1.4 VIP会员不得以盗窃、利用系统漏洞等非法途径以及在未获咩咩睡眠授权的非法销售咩咩睡眠VIP会员的网站上获取或购买VIP会员服务，否则咩咩睡眠有权取消VIP会员的服务资格。有此引发的问题由VIP会员自行承担，咩咩睡眠不负任何责任。"
+                    android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:lineSpacingExtra="@dimen/dp_5"
-                android:text="      1.5 任何VIP会员不得使用带有非法、淫秽、污辱或人身攻击的含义污辱或人身攻击的呢称和头像，一经发现，咩咩睡眠有权取消其VIP会员资格而无需给与任何补偿和退费。"
-                android:textColor="@color/black" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:text="      1.5 任何VIP会员不得使用带有非法、淫秽、污辱或人身攻击的含义污辱或人身攻击的呢称和头像，一经发现，咩咩睡眠有权取消其VIP会员资格而无需给与任何补偿和退费。"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

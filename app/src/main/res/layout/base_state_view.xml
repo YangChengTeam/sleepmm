@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_20"
             android:text="@string/no_data"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_14" />
 
 

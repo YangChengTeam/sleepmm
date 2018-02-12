@@ -26,6 +26,8 @@ import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.constants.Config;
 import com.yc.sleepmm.setting.constants.NetConstant;
+import com.yc.sleepmm.setting.contract.VipContract;
+import com.yc.sleepmm.setting.presenter.VipPresenter;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
 import com.yc.sleepmm.vip.ui.adapter.VipGoodAdapter;
@@ -45,7 +47,7 @@ import rx.functions.Action1;
  * Created by wanglin  on 2018/1/25 11:37.
  */
 
-public class VipActivity extends BaseActivity {
+public class VipActivity extends BaseActivity<VipPresenter> implements VipContract.View {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.tv_title)
@@ -76,7 +78,7 @@ public class VipActivity extends BaseActivity {
 
     @Override
     public void init() {
-
+        mPresenter = new VipPresenter(this, this);
         tvTitle.setText(getString(R.string.vip_miemie));
 
         iPayAbs = new I1PayAbs(this);
@@ -135,7 +137,7 @@ public class VipActivity extends BaseActivity {
                 iPayAbs.pay(orderParams, new IPayCallback() {
                     @Override
                     public void onSuccess(OrderInfo orderInfo) {
-                        updateSuccessData();
+                        mPresenter.getUserInfo(APP.getInstance().getUserData().getId());
                     }
 
                     @Override

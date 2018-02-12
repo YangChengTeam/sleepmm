@@ -89,6 +89,7 @@ public class StateView extends BaseView {
         setVisibility(VISIBLE);
         tvMess.setText(message);
         mContentView.setVisibility(GONE);
+        ivLoading.setVisibility(GONE);
         if (animationDrawable != null)
             animationDrawable.stop();
         ivLoading.setBackgroundResource(R.drawable.ic_list_empty_icon);
@@ -110,7 +111,7 @@ public class StateView extends BaseView {
         setVisibility(View.VISIBLE);
         mContentView.setVisibility(View.GONE);
         tvMess.setText(message);
-
+        ivLoading.setVisibility(GONE);
         if (animationDrawable != null)
             animationDrawable.stop();
         ivLoading.setBackgroundResource(R.mipmap.base_no_wifi);
