@@ -25,7 +25,7 @@ public class SpaListAdapter extends BaseQuickAdapter<SpaItemInfo, BaseViewHolder
             helper.setText(R.id.tv_spa_level_two, item.getTitle());
             helper.setText(R.id.tv_spa_number, (helper.getAdapterPosition() + 2) + "");
             helper.setText(R.id.tv_spa_sing_user, item.getAuthor_title());
-            helper.setText(R.id.tv_spa_listen_count, item.getPlay_num() + "");
+            helper.setText(R.id.tv_spa_listen_count, StringUtils.isEmpty(item.getPlay_num()) ? "0" : item.getPlay_num() + "");
             if (!StringUtils.isEmpty(item.getTime())) {
                 helper.setText(R.id.tv_spa_sing_time, DateUtils.getFormatDateInSecond(item.getTime()));
             }

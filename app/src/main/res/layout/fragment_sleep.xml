@@ -4,6 +4,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <com.yc.sleepmm.base.view.SpaStateView
+        android:id="@+id/stateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ExpandableListView
         android:id="@+id/expandablelistview"
         android:layout_width="match_parent"

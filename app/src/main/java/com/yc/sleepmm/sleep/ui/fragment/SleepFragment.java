@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.LogUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
+import com.yc.sleepmm.base.view.SpaStateView;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
 import com.yc.sleepmm.sleep.adapter.SpaTypeListViewAdapter;
 import com.yc.sleepmm.sleep.bean.SpaItemInfoWrapper;
@@ -31,6 +32,9 @@ import butterknife.BindView;
  */
 
 public class SleepFragment extends BaseFragment<SpaDataPresenter> implements SpaDataContract.View, SpaTypeListViewAdapter.OnMoreListener {
+
+    @BindView(R.id.stateView)
+    SpaStateView stateView;
 
     @BindView(R.id.expandablelistview)
     ExpandableListView expandablelistview;
@@ -140,8 +144,33 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     }
 
     @Override
+    public void hide() {
+        stateView.hide();
+    }
+
+    @Override
+    public void showNoNet() {
+        stateView.showNoNet(expandablelistview, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.getSpaDataList();
+            }
+        });
+    }
+
+    @Override
+    public void showLoading() {
+        stateView.showLoading(expandablelistview);
+    }
+
+    @Override
+    public void showNoData() {
+        stateView.showNoData(expandablelistview);
+    }
+
+    @Override
     public void showSpaData(List<SpaDataInfo> datas) {
-        if (datas != null) {
+       if (datas != null) {
             dataTypes = datas;
             for (int i = 0; i < datas.size(); i++) {
                 dataSet.put(i, null);

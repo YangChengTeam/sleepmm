@@ -11,12 +11,12 @@ public interface NetConstant {
     /**
      * spa分类
      */
-    String SPA_DATA_LIST_URL = BaseNetConstant.DEBUG_HOST + "spa/type";
+    String SPA_DATA_LIST_URL = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "spa/type";
 
     /**
      * spa列表
      */
-    String SPA_ITEM_LIST_URL = BaseNetConstant.DEBUG_HOST + "spa/index";
+    String SPA_ITEM_LIST_URL = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "spa/index";
 
     /**
      * spa详情
