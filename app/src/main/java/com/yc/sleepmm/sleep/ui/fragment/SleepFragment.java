@@ -124,21 +124,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             }
         });
 
-        expandablelistview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = "";
-                if ((int) view.getTag(R.layout.spa_list_item_head) == -1) {
-                    content = "父类第" + view.getTag(R.layout.spa_list_item_content) + "项" + "被长按了";
-                } else {
-                    content = "父类第" + view.getTag(R.layout.spa_list_item_head) + "项" + "中的"
-                            + "子类第" + view.getTag(R.layout.spa_list_item_content) + "项" + "被长按了";
-                }
-                Toast.makeText(getActivity(), content, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
         mPresenter.getSpaDataList();
         spaTypeListViewAdapter.setOnMoreListener(SleepFragment.this);
     }
@@ -197,8 +182,8 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                     }
                 }
 
-                int tempPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
-                if (tempPage == 1) {
+                int tempCurrentPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
+                if (tempCurrentPage == 1) {
                     SpaItemInfoWrapper spaItemInfoWrapper;
                     if (dataSet.get(currentGroupPosition) != null) {
                         spaItemInfoWrapper = dataSet.get(currentGroupPosition);
