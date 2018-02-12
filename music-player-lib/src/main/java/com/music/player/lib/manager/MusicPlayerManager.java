@@ -271,8 +271,16 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void stop() {
         if (serviceIsNoEmpty()) {
             mMusicPlayerServiceBunder.stop();
+
         } else {
             throw new IllegalStateException("MusicPlayerManager：你确定已经在此之前调用了bindService()方法？");
+        }
+    }
+
+
+    public void clearNotifycation() {
+        if (serviceIsNoEmpty()) {
+            mMusicPlayerServiceBunder.cancelNotification();
         }
     }
 

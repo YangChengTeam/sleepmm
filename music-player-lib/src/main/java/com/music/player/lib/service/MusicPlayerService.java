@@ -120,6 +120,7 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
         if (null != mOnPlayerEventListener) {
             mOnPlayerEventListener.taskRemmainTime(TIMER_DURTION - currentDurtion);
         }
+
     }
 
     /**
@@ -1128,5 +1129,13 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
             MusicPlayerService.this.next();
         }
 
+        public void cancelNotification() {
+            MusicPlayerService.this.cancelNotification();
+        }
+
+    }
+
+    private void cancelNotification() {
+        mManager.cancel(NOTIFACTION_ID);
     }
 }
