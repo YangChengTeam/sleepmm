@@ -1,5 +1,6 @@
 package com.yc.sleepmm.sleep.ui.fragment;
 
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -82,6 +83,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         expandablelistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
 
             }
         });
@@ -186,6 +188,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         }
     }
 
+
     @Override
     public void loadMore(SpaListAdapter spaListAdapter) {
         currentSpaListAdapter = spaListAdapter;
@@ -196,7 +199,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
         //RecyclerView recyclerView = currentView.findViewById(R.id.spa_child_list);
         //LogUtils.i("current item adapter --->" + recyclerView.getAdapter());
-
 
         mPresenter.getSpaItemList(currentTypeId, nextPage, pageSize);
     }

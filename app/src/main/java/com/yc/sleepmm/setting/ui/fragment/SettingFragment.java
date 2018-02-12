@@ -151,8 +151,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         RxView.clicks(baseSettingViewPerson).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(getActivity(), UserKeepActivity.class);
-                startActivity(intent);
+                if (!APP.getInstance().isGotoLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), UserKeepActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         RxView.clicks(baseSettingViewAlarm).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
