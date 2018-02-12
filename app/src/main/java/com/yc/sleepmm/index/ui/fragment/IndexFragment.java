@@ -1,11 +1,12 @@
 package com.yc.sleepmm.index.ui.fragment;
 
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
@@ -18,8 +19,8 @@ import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.index.adapter.AppFragmentPagerAdapter;
 import com.yc.sleepmm.index.model.bean.MusicTypeInfo;
 import com.yc.sleepmm.index.rxnet.IndexMusicContract;
-import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.presenter.IndexMusicPresenter;
+import com.yc.sleepmm.setting.constants.BusAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +73,8 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
             @Override
             public void onEventRandomPlay() {
                 //其他界面使用播放控制器示例
-                if (APP.getInstance().isLogin()) {
+                if (!APP.getInstance().isGotoLogin(getActivity())) {
                     mPresenter.randomPlay();
-                } else {
-                    login();
                 }
             }
 
@@ -102,10 +101,6 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         MusicPlayerManager.getInstance().addObservable(mPlayerController);
     }
 
-    private void login() {
-        startActivity(new Intent(getActivity(), LoginGroupActivity.class));
-        getActivity().overridePendingTransition(R.anim.menu_enter, 0);//进场动画
-    }
 
     @Override
     public void onDestroy() {
@@ -129,14 +124,17 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     }
 
     private List<MusicTypeInfo> musicTypeInfos;
+    private List<HomeMusicListFragment> fragments = new ArrayList<>();
 
     @Override
     public void showMusicTypeInfo(List<MusicTypeInfo> data) {
-        List<Fragment> fragments = new ArrayList<>();
+
         if (data.size() > 0) {
             musicTypeInfos = data;
             for (int i = 0; i < data.size(); i++) {
-                fragments.add(HomeMusicListFragment.newInstance(data.get(i).id + "", i));
+                HomeMusicListFragment homeMusicListFragment = HomeMusicListFragment.newInstance(data.get(i).id + "", i);
+                if (!fragments.contains(homeMusicListFragment))
+                    fragments.add(homeMusicListFragment);
             }
             AppFragmentPagerAdapter fragmentPagerAdapter = new AppFragmentPagerAdapter(getChildFragmentManager(), fragments, data);
             mView_pager.setOffscreenPageLimit(data.size());
@@ -147,6 +145,18 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         }
     }
 
+    private HomeMusicListFragment getFragment(int i) {
+        if (fragments.size() > 0) {
+            return fragments.get(i);
+        }
+
+        return null;
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {
+                    @Tag(BusAction.MUSIC_INFO)
+            })
     @Override
     public void showRandomMusicInfo(MusicInfo data) {
         int position = -1;
@@ -161,6 +171,9 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         }
         if (position >= 0) {
             mView_pager.setCurrentItem(position);
+            if (position < musicTypeInfos.size() && getFragment(position) != null) {
+                getFragment(position).scrollToposition(data);
+            }
         }
 
     }

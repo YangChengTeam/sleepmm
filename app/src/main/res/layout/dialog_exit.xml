@@ -2,61 +2,66 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@mipmap/exit_bg"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/tv_tint_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_16"
-        tools:text="你确定要退出么?" />
-
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_tint_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center">
+        android:layout_marginTop="130dp"
+        android:background="@mipmap/exit_bg">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_tint_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="130dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_16"
+            tools:text="你确定要退出么?" />
 
-            <ImageView
-                android:id="@+id/tv_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
 
-                android:src="@mipmap/leave" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_below="@id/tv_tint_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center">
 
-            <ImageView
-                android:id="@+id/tv_exit"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_weight="1">
 
-                android:src="@mipmap/exit" />
+                <ImageView
+                    android:id="@+id/tv_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
 
-        </RelativeLayout>
-    </LinearLayout>
+                    android:src="@mipmap/leave" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/tv_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+
+                    android:src="@mipmap/exit" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

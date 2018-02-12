@@ -2,9 +2,7 @@ package com.yc.sleepmm.index.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -29,7 +27,7 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
 
     private static final String TAG = HomeMusicListAdapter.class.getSimpleName();
 
-    public HomeMusicListAdapter(@Nullable List<MusicInfo> data) {
+    public HomeMusicListAdapter( List<MusicInfo> data) {
         super(R.layout.item_re_home_music_list, data);
     }
 
@@ -37,7 +35,7 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
     @Override
     protected void convert(final BaseViewHolder helper, final MusicInfo item) {
         if (null != item) {
-            String seconds = String.valueOf(item.getTime());
+            String seconds = item.getTime();
             if (TextUtils.isEmpty(seconds)) {
                 seconds = "1.0";
             }
@@ -56,7 +54,7 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
                     break;
                 //播放中
                 case PlayerStatus.PLAYER_STATUS_PLAYING:
-                    ImageView ic_play_anim = (ImageView) helper.getView(R.id.ic_play_anim);
+                    ImageView ic_play_anim =  helper.getView(R.id.ic_play_anim);
                     ic_play_anim.setImageResource(R.drawable.play_anim);
                     AnimationDrawable drawable = (AnimationDrawable) ic_play_anim.getDrawable();
                     if (null != drawable) {
@@ -110,7 +108,6 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
             MusicInfo musicInfo = (MusicInfo) arg;
             if (null != musicInfo && null != mData && mData.size() > 0) {
 
-//                int pos = mData.indexOf(musicInfo);
                 int position = 0;
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
@@ -128,15 +125,4 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
         }
     }
 
-    public interface OnItemClickListener {
-        void onPlayMusic(int position, View view);
-
-        void onDetails(String musicID);
-    }
-
-    private OnItemClickListener mOnItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
-    }
 }

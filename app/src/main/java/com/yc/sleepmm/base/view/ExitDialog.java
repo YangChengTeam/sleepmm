@@ -2,6 +2,7 @@ package com.yc.sleepmm.base.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -45,7 +46,10 @@ public class ExitDialog extends BaseDialog {
         WindowManager.LayoutParams layoutParams = window.getAttributes();
 
         layoutParams.width = ScreenUtil.getWidth(mContext) * 4 / 5;
+
         window.setAttributes(layoutParams);
+        window.setGravity(Gravity.TOP);
+
 
         RxView.clicks(tvCancel).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
