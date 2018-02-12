@@ -1,5 +1,7 @@
 package com.music.player.lib.bean;
 
+import java.util.List;
+
 /**
  * TinyHung@Outlook.com
  * 2018/1/18.
@@ -21,6 +23,19 @@ public class MusicInfo {
     private int is_favorite;// 是否收藏 0 未收藏 1已收藏
 
     private int plauStatus;//0：未播放 1：准备中 2：正在播放 3：暂停播放, 4：停止播放
+
+
+    private String author;// 作者ID
+    private String desp;// 简介
+
+    private String author_title;// 作者名称
+
+    // extend
+    private String author_desp;// 作者简介
+    private String author_img;// 作者图片
+
+    private List<MusicInfo> lists;
+
 
     public int getPlauStatus() {
         return plauStatus;
@@ -109,5 +124,53 @@ public class MusicInfo {
 
     public void setIs_favorite(int is_favorite) {
         this.is_favorite = is_favorite;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getDesp() {
+        return desp;
+    }
+
+    public void setDesp(String desp) {
+        this.desp = desp;
+    }
+
+    public String getAuthor_title() {
+        return author_title;
+    }
+
+    public void setAuthor_title(String author_title) {
+        this.author_title = author_title;
+    }
+
+    public String getAuthor_desp() {
+        return author_desp;
+    }
+
+    public void setAuthor_desp(String author_desp) {
+        this.author_desp = author_desp;
+    }
+
+    public String getAuthor_img() {
+        return author_img;
+    }
+
+    public void setAuthor_img(String author_img) {
+        this.author_img = author_img;
+    }
+
+    public List<MusicInfo> getLists() {
+        return lists;
+    }
+
+    public void setLists(List<MusicInfo> lists) {
+        this.lists = lists;
     }
 }
