@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.ViewGroup;
 
 import com.yc.sleepmm.index.model.bean.MusicTypeInfo;
+import com.yc.sleepmm.index.ui.fragment.HomeMusicListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,13 @@ import java.util.List;
 
 public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
-    private List<Fragment> mFragment;
+    private List<HomeMusicListFragment> mFragment;
     private List<MusicTypeInfo> mTitleList;
 
     /**
      * 普通，主页使用
      */
-    public AppFragmentPagerAdapter(FragmentManager fm, List<Fragment> mFragment) {
+    public AppFragmentPagerAdapter(FragmentManager fm, List<HomeMusicListFragment> mFragment) {
         super(fm);
         this.mFragment = mFragment;
     }
@@ -32,7 +33,7 @@ public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPage
     /**
      * 接收首页传递的标题
      */
-    public AppFragmentPagerAdapter(FragmentManager fm, List<Fragment> mFragment, List<MusicTypeInfo> mTitleList) {
+    public AppFragmentPagerAdapter(FragmentManager fm, List<HomeMusicListFragment> mFragment, List<MusicTypeInfo> mTitleList) {
         super(fm);
         this.mFragment = mFragment;
         this.mTitleList = mTitleList;
@@ -72,7 +73,7 @@ public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPage
      * @param fragment
      * @param title
      */
-    public void addFragment(Fragment fragment, String title) {
+    public void addFragment(HomeMusicListFragment fragment, String title) {
         if (null == mFragment) {
             mFragment = new ArrayList<>();
         }
@@ -84,7 +85,7 @@ public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPage
      *
      * @param fragment
      */
-    public void setNewFragments(List<Fragment> fragment, List<MusicTypeInfo> titleList) {
+    public void setNewFragments(List<HomeMusicListFragment> fragment, List<MusicTypeInfo> titleList) {
         if (null != mFragment) mFragment.clear();
         this.mFragment = fragment;
         if (null != mTitleList) mTitleList.clear();
@@ -95,8 +96,8 @@ public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPage
     /**
      * 追加多个Fragmnet
      */
-    public void addFragments(List<Fragment> fragments, List<MusicTypeInfo> titles) {
-        for (Fragment fragment : fragments) {
+    public void addFragments(List<HomeMusicListFragment> fragments, List<MusicTypeInfo> titles) {
+        for (HomeMusicListFragment fragment : fragments) {
             mFragment.add(fragment);
         }
         for (MusicTypeInfo title : titles) {

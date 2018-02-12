@@ -2,7 +2,6 @@ package com.yc.sleepmm.index.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,14 +47,13 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private int position = -1;
 
 
     @Override
     protected void initViews() {
         mPresenter = new IndexMusicTypeDetailPresenter(getActivity(), this);
-//        if (position == 0)
-            getData(false);
+
+        getData(false);
         initAdapter();
 
     }
@@ -66,7 +64,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
     }
 
 
-    public static Fragment newInstance(String title, int i) {
+    public static HomeMusicListFragment newInstance(String title, int i) {
         HomeMusicListFragment fragment = new HomeMusicListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("music_id", title);
@@ -80,7 +78,6 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         mMusic_id = arguments.getString("music_id");
-        position = arguments.getInt("position");
     }
 
 
@@ -282,6 +279,25 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
             mSwipeRefreshLayout.setRefreshing(false);
         }
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
+    }
+
+
+    public void scrollToposition(MusicInfo musicInfo) {
+        if (null != mHomeMusicListAdapter && mHomeMusicListAdapter.getData() != null && mHomeMusicListAdapter.getData().size() > 0) {
+
+            List<MusicInfo> musicInfos = mHomeMusicListAdapter.getData();
+            int position = -1;
+            for (int i = 0; i < musicInfos.size(); i++) {
+                if (musicInfo.getId().equals(musicInfos.get(i).getId())) {
+                    position = i;
+                    break;
+                }
+            }
+//            mRecyclerView.scrollToPosition(position);
+            mRecyclerView.smoothScrollToPosition(position);
+
+
+        }
     }
 
 }
