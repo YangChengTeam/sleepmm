@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:text="文章简介"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -28,13 +28,13 @@
             android:layout_marginTop="8dp"
             android:text="朋友之间的交往你要注意哪些事"
             android:textColor="@color/sleep_text_color"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E7E7E7"/>
+        android:background="#E7E7E7" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/user_head_default"/>
+                android:src="@mipmap/user_head_default" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,18 +65,19 @@
                 android:text="超级网红"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:layout_width="66dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="8dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/donation_selector"
                 android:text="打赏"
                 android:textColor="@color/donation_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <TextView
@@ -87,11 +88,11 @@
             android:layout_marginTop="8dp"
             android:text="中国传媒大学，超级网红，声音超级好听"
             android:textColor="@color/sleep_text_color"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E7E7E7"/>
+        android:background="#E7E7E7" />
 </LinearLayout>

@@ -5,8 +5,8 @@ package com.yc.sleepmm.base.constant;
  */
 
 public interface BaseNetConstant {
-    boolean IS_DEBUG = true;
+    boolean IS_DEBUG = false;
     String DEBUG_HOST = "http://api.sleep.slpi1.com/v1/";
-    String BASE_HOST = "";
+    String BASE_HOST = "http://sleep.bshu.com/v1/";
 
 }

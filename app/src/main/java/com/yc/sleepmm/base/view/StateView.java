@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SizeUtils;
-import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding.view.RxView;
 import com.yc.sleepmm.R;
 
@@ -64,7 +63,10 @@ public class StateView extends BaseView {
         ivLoading.setLayoutParams(layoutParams);
         setVisibility(VISIBLE);
         tvMess.setText(mess);
-        Glide.with(this).load(R.drawable.progress_anim).into(ivLoading);
+//        Glide.with(this).load(R.drawable.progress_anim).into(ivLoading);
+
+        ivLoading.setBackgroundResource(R.drawable.progress_anim);
+        animationDrawable = (AnimationDrawable) ivLoading.getBackground();
         mContentView.setVisibility(GONE);
         if (animationDrawable != null)
             animationDrawable.start();
@@ -87,8 +89,10 @@ public class StateView extends BaseView {
         setVisibility(VISIBLE);
         tvMess.setText(message);
         mContentView.setVisibility(GONE);
-
-        Glide.with(this).load(R.drawable.ic_list_empty_icon).into(ivLoading);
+        if (animationDrawable != null)
+            animationDrawable.stop();
+        ivLoading.setBackgroundResource(R.drawable.ic_list_empty_icon);
+//        Glide.with(this).load(R.drawable.ic_list_empty_icon).into(ivLoading);
     }
 
     public void showNoData(View contentView) {
@@ -107,8 +111,10 @@ public class StateView extends BaseView {
         mContentView.setVisibility(View.GONE);
         tvMess.setText(message);
 
-
-        Glide.with(this).load(R.mipmap.base_no_wifi).into(ivLoading);
+        if (animationDrawable != null)
+            animationDrawable.stop();
+        ivLoading.setBackgroundResource(R.mipmap.base_no_wifi);
+//        Glide.with(this).load(R.mipmap.base_no_wifi).into(ivLoading);
 
         RxView.clicks(rlContainer).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override

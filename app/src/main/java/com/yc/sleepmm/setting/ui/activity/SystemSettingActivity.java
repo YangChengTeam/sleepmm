@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.SPUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.utils.ToastUtil;
+import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
@@ -78,7 +79,7 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
                 APP.getInstance().setUserData(null, true);
                 RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "logout");
                 btnLogout.setVisibility(View.GONE);
-                ToastUtil.toast(SystemSettingActivity.this, "成功退出");
+                ToastUtils.showCenterToast("成功退出");
             }
         });
 
@@ -87,7 +88,7 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
             public void call(Void aVoid) {
                 if (mPresenter.clearCache()) {
                     tvCache.setText("0KB");
-                    ToastUtil.toast(SystemSettingActivity.this, "缓存清除成功");
+                    ToastUtils.showCenterToast("缓存清除成功");
                 }
 
             }

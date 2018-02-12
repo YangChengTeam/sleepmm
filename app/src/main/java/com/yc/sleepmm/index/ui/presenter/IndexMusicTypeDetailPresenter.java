@@ -51,7 +51,7 @@ public class IndexMusicTypeDetailPresenter extends BasePresenter<IndexMusicTypeD
             @Override
             public void onNext(ResultInfo<List<MusicInfo>> listResultInfo) {
                 if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
-                    if (listResultInfo.data != null) {
+                    if (listResultInfo.data != null && listResultInfo.data.size() > 0) {
                         mView.hide();
                         mView.showMusicInfos(listResultInfo.data);
                     } else {
