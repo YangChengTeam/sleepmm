@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @BindView(R.id.main_bottom_navigation_bar)
     BottomNavigationBar mainBottomNavigationBar;
     private List<Fragment> mList; //ViewPager的数据源
-    private static MainActivity instance;
 
 
     @Override
@@ -49,13 +48,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         return R.layout.activity_main;
     }
 
-    public static MainActivity getInstance() {
-        return instance;
-    }
 
     @Override
     public void init() {
-        instance = this;
+
         //初始化MusicService
         MusicPlayerManager.getInstance().bindService(this);
         mList = new ArrayList<>();

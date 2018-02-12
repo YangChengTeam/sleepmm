@@ -60,7 +60,7 @@ public class AppFragmentPagerAdapter extends android.support.v4.app.FragmentPage
      */
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mTitleList != null && mTitleList.size() > 0) {
+        if (mTitleList != null && mTitleList.size() > 0 && position < mTitleList.size()) {
             return mTitleList.get(position).title;
         } else {
             return "";

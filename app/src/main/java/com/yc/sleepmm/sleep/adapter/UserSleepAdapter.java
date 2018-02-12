@@ -1,7 +1,7 @@
 package com.yc.sleepmm.sleep.adapter;
 
-import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,14 +26,9 @@ import java.util.Observer;
 
 public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder> implements Observer {
 
-    private List<MusicInfo> mData;
 
-    private Context mContext;
-
-    public UserSleepAdapter(Context context, List<MusicInfo> datas) {
+    public UserSleepAdapter(@Nullable List<MusicInfo> datas) {
         super(R.layout.item_re_simple_music_list, datas);
-        this.mContext = context;
-        this.mData = datas;
     }
 
     @Override
@@ -43,33 +38,30 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
             if (TextUtils.isEmpty(seconds)) {
                 seconds = "1.0";
             }
-
-            TextView tv_item_name = helper.itemView.findViewById(R.id.tv_item_name);
-            TextView tv_item_author = helper.itemView.findViewById(R.id.tv_item_author);
-            TextView tv_item_drutaion = helper.itemView.findViewById(R.id.tv_item_drutaion);
             TextView tv_item_num = helper.itemView.findViewById(R.id.tv_item_num);
             ImageView ic_play_anim = helper.itemView.findViewById(R.id.ic_play_anim);
 
 
             float second = Float.parseFloat(seconds);
-            tv_item_name.setText(musicInfo.getTitle());
-            tv_item_author.setText("");
-            tv_item_drutaion.setText(DateUtil.getTimeLengthString((int) (second)));
-            tv_item_num.setText((helper.getAdapterPosition() + 1) + "");
+
+            helper.setText(R.id.tv_item_name, musicInfo.getTitle()).setText(R.id.tv_item_author, musicInfo.getAuthor())
+                    .setText(R.id.tv_item_drutaion, DateUtil.getTimeLengthString((int) (second)))
+                    .setText(R.id.tv_item_num, (helper.getAdapterPosition() + 1) + "");
+
 
             switch (musicInfo.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
                     tv_item_num.setVisibility(View.VISIBLE);
                     ic_play_anim.setVisibility(View.GONE);
-                    tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
+                    helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //播放中
                 case PlayerStatus.PLAYER_STATUS_PLAYING:
                     tv_item_num.setVisibility(View.GONE);
                     ic_play_anim.setVisibility(View.VISIBLE);
                     ic_play_anim.setImageResource(R.drawable.play_anim);
-                    tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
+
                     AnimationDrawable drawable = (AnimationDrawable) ic_play_anim.getDrawable();
                     if (null != drawable) {
                         if (drawable.isRunning()) {
@@ -77,13 +69,15 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                         }
                         drawable.start();
                     }
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_play_pause);
+                    helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     break;
                 //暂停中
                 case PlayerStatus.PLAYER_STATUS_PAUSE:
                     ic_play_anim.setVisibility(View.VISIBLE);
                     tv_item_num.setVisibility(View.GONE);
                     ic_play_anim.setImageResource(R.drawable.play_anim);
-                    tv_item_name.setTextColor(CommonUtils.getColor(R.color.app_style));
+                    helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
                     AnimationDrawable drawableAnimation = (AnimationDrawable) ic_play_anim.getDrawable();
                     if (null != drawableAnimation) {
                         drawableAnimation.stop();
@@ -98,7 +92,8 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                     ic_play_anim.setImageResource(0);
                     ic_play_anim.setVisibility(View.GONE);
                     tv_item_num.setVisibility(View.VISIBLE);
-                    tv_item_name.setTextColor(CommonUtils.getColor(R.color.coment_color));
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play);
+                    helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.coment_color));
                     break;
                 default:
                     break;
@@ -122,12 +117,15 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                     MusicInfo info = mData.get(i);
                     if (musicInfo.getId().equals(info.getId())) {
                         info.setPlauStatus(musicInfo.getPlauStatus());
+
+//                        break;
                     } else {
                         info.setPlauStatus(0);
                     }
                 }
                 Logger.d(TAG, "播放器示例界面列表收到观察者刷新,类型：" + musicInfo.getPlauStatus() + "，位置：" + position + ",musicID：" + musicInfo.getId());
-                this.notifyDataSetChanged();
+//                notifyItemChanged(position);
+                notifyDataSetChanged();
             }
         }
     }

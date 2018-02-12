@@ -5,8 +5,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
@@ -44,8 +48,13 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     @BindView(R.id.ll_container)
     LinearLayout llContainer;
 
+
     private UserSleepAdapter userSleepAdapter;
-    private String spaId = "4";
+    private String spaId = "";
+    private TextView tvWordDes;
+    private ImageView ivUserHead;
+    private TextView tvAutor;
+    private TextView tvAutorDes;
 
     @Override
     public int getLayoutId() {
@@ -122,9 +131,9 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         });
         //注册到被观察者中
         MusicPlayerManager.getInstance().addObservable(mMusicPlayerController);
-        //注册播放变化监听
-        MusicPlayerManager.getInstance().addPlayerStateListener(this);
-        MusicPlayerManager.getInstance().onResumeChecked();//先让播放器刷新起来
+//        //注册播放变化监听
+//        MusicPlayerManager.getInstance().addPlayerStateListener(this);
+//        MusicPlayerManager.getInstance().onResumeChecked();//先让播放器刷新起来
     }
 
     /**
@@ -134,7 +143,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         recyclerView.setLayoutManager(new LinearLayoutManager(SleepDetailActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         //如列表需要实时更新播放动态的话，Adapter需要实现Observer接口
-        userSleepAdapter = new UserSleepAdapter(SleepDetailActivity.this, null);
+        userSleepAdapter = new UserSleepAdapter(null);
         userSleepAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -146,6 +155,11 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         MusicPlayerManager.getInstance().addObservable(userSleepAdapter);
 
         View haedView = LayoutInflater.from(this).inflate(R.layout.sleep_detail_head, null);
+        tvWordDes = haedView.findViewById(R.id.tv_word_des);
+        ivUserHead = haedView.findViewById(R.id.iv_user_head);
+        tvAutor = haedView.findViewById(R.id.tv_autor);
+        tvAutorDes = haedView.findViewById(R.id.tv_autor_des);
+
         userSleepAdapter.addHeaderView(haedView);
     }
 
@@ -154,7 +168,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     protected void onDestroy() {
         super.onDestroy();
         //必须注销所有已注册的监听
-        MusicPlayerManager.getInstance().detelePlayerStateListener(this);
+//        MusicPlayerManager.getInstance().detelePlayerStateListener(this);
         if (null != mMusicPlayerController) {
             MusicPlayerManager.getInstance().deleteObserver(mMusicPlayerController);
             mMusicPlayerController.onDestroy();
@@ -211,7 +225,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
         if (Constants.UI_TYPE_DETAILS == viewTupe && null != userSleepAdapter) {
 
-            MusicPlayerManager.getInstance().playMusic(userSleepAdapter.getData(), position);//这个position默认是0，油控制器传出
+            MusicPlayerManager.getInstance().playMusic(userSleepAdapter.getData(), 0);//这个position默认是0，油控制器传出
         }
     }
 
@@ -264,13 +278,17 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
             showCollectSucess(data.getLists().get(0).getIs_favorite() == 1);
             userSleepAdapter.setNewData(data.getLists());
-            MusicPlayerManager.getInstance().onResumeChecked();
+            tvWordDes.setText(data.getTitle());
+            tvAutor.setText(data.getAuthor_title());
+            tvAutorDes.setText(data.getAuthor_desp());
+            Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).centerCrop()).into(ivUserHead);
             if (isRandom) {
                 int position = (int) (Math.random() * data.getLists().size());
                 MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
             }
 
         }
+        MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
     }
 
     @Override

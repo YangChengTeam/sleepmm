@@ -48,9 +48,7 @@ public class ExitDialog extends BaseDialog {
         layoutParams.width = ScreenUtil.getWidth(mContext) * 4 / 5;
 
         window.setAttributes(layoutParams);
-
         window.setGravity(Gravity.TOP);
-
 
 
         RxView.clicks(tvCancel).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
