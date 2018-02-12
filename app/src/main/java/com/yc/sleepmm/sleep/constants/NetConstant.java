@@ -8,6 +8,15 @@ import com.yc.sleepmm.base.constant.BaseNetConstant;
 
 public interface NetConstant {
 
+    /**
+     * spa分类
+     */
+    String SPA_DATA_LIST_URL = BaseNetConstant.DEBUG_HOST + "spa/type";
+
+    /**
+     * spa列表
+     */
+    String SPA_ITEM_LIST_URL = BaseNetConstant.DEBUG_HOST + "spa/index";
 
     /**
      * spa详情

@@ -1,25 +1,23 @@
 package com.yc.sleepmm.sleep.ui.fragment;
 
-import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseFragment;
 import com.yc.sleepmm.sleep.adapter.SpaListAdapter;
+import com.yc.sleepmm.sleep.adapter.SpaTypeListViewAdapter;
 import com.yc.sleepmm.sleep.bean.SpaItemInfoWrapper;
+import com.yc.sleepmm.sleep.contract.SpaDataContract;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
+import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
+import com.yc.sleepmm.sleep.presenter.SpaDataPresenter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -29,23 +27,30 @@ import butterknife.BindView;
  * Created by wanglin  on 2018/1/10 17:18.
  */
 
-public class SleepFragment extends BaseFragment {
-
-    /*@BindView(R.id.spa_list)
-    RecyclerView mSpaRecyclerView;*/
+public class SleepFragment extends BaseFragment<SpaDataPresenter> implements SpaDataContract.View, SpaTypeListViewAdapter.OnMoreListener {
 
     @BindView(R.id.expandablelistview)
     ExpandableListView expandablelistview;
 
-    private SpaItemInfoWrapper spaItemInfoWrapper;
+    private Map<Integer, SpaItemInfoWrapper> dataSet = new HashMap<>();
 
-    private ArrayList<SpaDataInfo> list;
+    private SpaTypeListViewAdapter spaTypeListViewAdapter;
 
-    private SpaListAdapter adapter;
+    private String currentTypeId;
 
-    private Map<Integer, SpaItemInfoWrapper> dataset = new HashMap<>();
+    private int itemPage = 1;
 
-    private String[] parentList = new String[]{"first", "second", "third"};
+    private int pageSize = 10;
+
+    private List<SpaDataInfo> dataTypes;
+
+    private int currentGroupPosition;
+
+    private Map<Integer, Integer> typePageMaps = new HashMap<Integer, Integer>();
+
+    private SpaListAdapter currentSpaListAdapter;
+
+    private View currentView;
 
     @Override
     public int getLayoutId() {
@@ -54,9 +59,8 @@ public class SleepFragment extends BaseFragment {
 
     @Override
     public void init() {
-        list = generateData();
-        spaItemInfoWrapper = new SpaItemInfoWrapper();
-        spaItemInfoWrapper.setList(list);
+        //spaItemInfoWrapper = new SpaItemInfoWrapper();
+        //spaItemInfoWrapper.setList(list);
         /*adapter = new SpaListAdapter(list);
         mSpaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSpaRecyclerView.setAdapter(adapter);
@@ -69,14 +73,36 @@ public class SleepFragment extends BaseFragment {
             }
         });*/
 
-        initialData();
+        mPresenter = new SpaDataPresenter(getActivity(), this);
 
-        expandablelistview.setAdapter(new MyExpandableListViewAdapter());
+        spaTypeListViewAdapter = new SpaTypeListViewAdapter(getActivity(), null, null);
+
+        expandablelistview.setAdapter(spaTypeListViewAdapter);
 
         expandablelistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "onItemClickListener--" + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        expandablelistview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                currentView = parent.getChildAt(groupPosition);
+
+                LogUtils.i("onGroupClick--->" + groupPosition);
+
+                //当前分类的页面
+                int tempPage = typePageMaps.get(groupPosition) != null ? typePageMaps.get(groupPosition) : 1;
+
+                if ((dataTypes != null && dataTypes.get(groupPosition) != null) && tempPage == itemPage) {
+
+                    currentGroupPosition = groupPosition;
+                    currentTypeId = dataTypes.get(groupPosition).getId();
+                    mPresenter.getSpaItemList(currentTypeId, tempPage, pageSize);
+                }
+                return false;
             }
         });
 
@@ -102,116 +128,76 @@ public class SleepFragment extends BaseFragment {
                 return true;
             }
         });
+
+        mPresenter.getSpaDataList();
+        spaTypeListViewAdapter.setOnMoreListener(SleepFragment.this);
     }
 
-    private void initialData() {
-        dataset.put(0, spaItemInfoWrapper);
-        dataset.put(1, spaItemInfoWrapper);
-        dataset.put(2, spaItemInfoWrapper);
+    @Override
+    public void showSpaData(List<SpaDataInfo> datas) {
+        if (datas != null) {
+            dataTypes = datas;
+            for (int i = 0; i < datas.size(); i++) {
+                dataSet.put(i, null);
+                typePageMaps.put(i, itemPage);
+            }
+            spaTypeListViewAdapter.setDataSet(dataSet);
+            spaTypeListViewAdapter.setSpaDataInfos(datas);
+            spaTypeListViewAdapter.refresh();
+        }
+
     }
 
-    private class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
+    @Override
+    public void showSpaItemList(List<SpaItemInfo> itemInfos) {
+        if (dataSet != null) {
+            if (itemInfos != null && itemInfos.size() > 0) {
+                if (currentSpaListAdapter != null) {
+                    LogUtils.i("spaListAdapter fragment --->" + currentSpaListAdapter.hashCode());
 
-        //  获得某个父项的某个子项
-        @Override
-        public Object getChild(int parentPos, int childPos) {
-            return dataset.get(parentPos).getList();
-        }
-
-        //  获得父项的数量
-        @Override
-        public int getGroupCount() {
-            return dataset.size();
-        }
-
-        //  获得某个父项的子项数目
-        @Override
-        public int getChildrenCount(int parentPos) {
-            return 1;
-        }
-
-        //  获得某个父项
-        @Override
-        public Object getGroup(int parentPos) {
-            return dataset.get(parentPos);
-        }
-
-        //  获得某个父项的id
-        @Override
-        public long getGroupId(int parentPos) {
-            return parentPos;
-        }
-
-        //  获得某个父项的某个子项的id
-        @Override
-        public long getChildId(int parentPos, int childPos) {
-            return childPos;
-        }
-
-        //  按函数的名字来理解应该是是否具有稳定的id，这个方法目前一直都是返回false，没有去改动过
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        //  获得父项显示的view
-        @Override
-        public View getGroupView(int parentPos, boolean b, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.spa_list_item_head, null);
-            }
-            view.setTag(R.layout.spa_list_item_head, parentPos);
-            view.setTag(R.layout.spa_list_item_content, -1);
-            TextView text = (TextView) view.findViewById(R.id.tv_spa_level_one);
-            text.setText(parentList[parentPos]);
-            return view;
-        }
-
-        //  获得子项显示的view
-        @Override
-        public View getChildView(int parentPos, int childPos, boolean b, View childView, ViewGroup viewGroup) {
-            if (childView == null) {
-                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                childView = inflater.inflate(R.layout.spa_list_item_child, null);
-            }
-
-            /*childView.setTag(R.layout.spa_list_item_head, parentPos);
-            childView.setTag(R.layout.spa_list_item_content, childPos);
-            TextView text = (TextView) childView.findViewById(R.id.tv_spa_level_two);
-            text.setText(((SpaItemInfo) dataset.get(parentPos).get(childPos)).getTitle());
-            text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getActivity(), "点到了内置的textview", Toast.LENGTH_SHORT).show();
+                    currentSpaListAdapter.addData(itemInfos);
+                    if (itemInfos.size() == pageSize) {
+                        currentSpaListAdapter.loadMoreComplete();
+                    } else {
+                        currentSpaListAdapter.loadMoreEnd();
+                    }
                 }
-            });*/
-            childView.setTag(R.layout.spa_list_item_head, parentPos);
-            childView.setTag(R.layout.spa_list_item_content, childPos);
 
-            RecyclerView recyclerView = (RecyclerView)childView.findViewById(R.id.spa_child_list);
-            adapter = new SpaListAdapter(dataset.get(parentPos).getList());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(adapter);
+                int tempPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
+                if (tempPage == 1) {
+                    SpaItemInfoWrapper spaItemInfoWrapper;
+                    if (dataSet.get(currentGroupPosition) != null) {
+                        spaItemInfoWrapper = dataSet.get(currentGroupPosition);
+                        spaItemInfoWrapper.setAddList(itemInfos);
+                    } else {
+                        spaItemInfoWrapper = new SpaItemInfoWrapper();
+                        spaItemInfoWrapper.setList(itemInfos);
+                    }
 
-            return childView;
-        }
+                    dataSet.put(currentGroupPosition, spaItemInfoWrapper);
 
-        //  子项是否可选中，如果需要设置子项的点击事件，需要返回true
-        @Override
-        public boolean isChildSelectable(int i, int i1) {
-            return true;
+                    spaTypeListViewAdapter.setDataSet(dataSet);
+                    spaTypeListViewAdapter.refresh();
+
+                }
+            }else{
+                currentSpaListAdapter.loadMoreEnd();
+            }
         }
     }
 
-    private ArrayList<SpaDataInfo> generateData() {
-        int lv0Count = 20;
+    @Override
+    public void loadMore(SpaListAdapter spaListAdapter) {
+        currentSpaListAdapter = spaListAdapter;
+        //当前分类的页面
+        int tempPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
+        int nextPage = tempPage + 1;
+        typePageMaps.put(currentGroupPosition, nextPage);
 
-        ArrayList<SpaDataInfo> res = new ArrayList<>();
-        for (int i = 0; i < lv0Count; i++) {
-            SpaDataInfo lv1 = new SpaDataInfo("item" + i + 1);
-            res.add(lv1);
-        }
-        return res;
+        //RecyclerView recyclerView = currentView.findViewById(R.id.spa_child_list);
+        //LogUtils.i("current item adapter --->" + recyclerView.getAdapter());
+
+
+        mPresenter.getSpaItemList(currentTypeId, nextPage, pageSize);
     }
 }
