@@ -1,13 +1,11 @@
 package com.yc.sleepmm.index.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,7 +20,6 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.StateView;
 import com.yc.sleepmm.index.adapter.HomeMusicListAdapter;
 import com.yc.sleepmm.index.rxnet.IndexMusicTypeDetailContract;
-import com.yc.sleepmm.index.ui.activity.MusicPlayerSample;
 import com.yc.sleepmm.index.ui.presenter.IndexMusicTypeDetailPresenter;
 
 import java.util.List;
@@ -111,19 +108,11 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
             }
         });
 
-        mHomeMusicListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Log.e("TAG", position + "");
-                MusicPlayerManager.getInstance().playPauseMusic(mHomeMusicListAdapter.getData(), position);
-                return true;
-            }
-        });
         mHomeMusicListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 //其他界面使用播放控制器示例
-                startActivity(new Intent(getActivity(), MusicPlayerSample.class));
+                MusicPlayerManager.getInstance().playPauseMusic(mHomeMusicListAdapter.getData(), position);
             }
         });
     }

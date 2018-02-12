@@ -17,7 +17,7 @@ public class GoodsInfo {
     public String m_price;// 优惠价
     public String vip_price;// 会员价
     public String unit;// 单位
-    public int use_time_limit;// 有效时长
+    public String use_time_limit;// 有效时长
     public int sort;// 排序
     public int status;// 状态
     public String pay_price;//支付价格

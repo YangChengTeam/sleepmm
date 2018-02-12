@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue_1b275d"
         android:orientation="vertical">
 
 
@@ -14,7 +13,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@mipmap/pay_bg">
 
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/nestedScrollView"
@@ -24,7 +24,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@mipmap/pay_bg"
+
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -147,36 +147,43 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_05"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:background="#767193" />
-
                     <LinearLayout
+                        android:id="@+id/ll_pay"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/dp_15">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_type"
-                            android:textColor="@color/blue_08a8ea"
-                            android:textSize="@dimen/text_16" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_05"
+                            android:layout_marginTop="@dimen/dp_15"
+                            android:background="#767193" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerView_good"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_20" />
+                            android:orientation="vertical"
+                            android:padding="@dimen/dp_15">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerView_pay"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_20" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/vip_type"
+                                android:textColor="@color/blue_08a8ea"
+                                android:textSize="@dimen/text_16" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerView_good"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_20" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerView_pay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_20" />
+                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>

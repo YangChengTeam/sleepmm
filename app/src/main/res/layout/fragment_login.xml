@@ -41,6 +41,7 @@
                 android:id="@+id/et_account"
                 style="@style/LoginEditTextInputStyle"
                 android:layout_weight="1"
+                android:maxLength="11"
                 android:inputType="number|textMultiLine"
                 android:hint="请输入手机号"/>
             <ImageView

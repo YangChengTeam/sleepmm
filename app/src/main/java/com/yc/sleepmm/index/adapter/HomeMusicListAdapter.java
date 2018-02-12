@@ -45,8 +45,7 @@ public class HomeMusicListAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHo
             helper.setText(R.id.tv_item_name, item.getTitle())
                     .setText(R.id.tv_item_play_count, item.getPlay_num())
                     .setText(R.id.tv_item_num, (helper.getAdapterPosition() + 1) + "")
-                    .setText(R.id.tv_item_durtion, (DateUtil.getTimeLengthString((int) (second))))
-                    .addOnClickListener(R.id.btn_play);
+                    .setText(R.id.tv_item_durtion, (DateUtil.getTimeLengthString((int) (second))));
             switch (item.getPlauStatus()) {
                 //缓冲中
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:

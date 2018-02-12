@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.pay.I1PayAbs;
 import com.kk.pay.IPayAbs;
@@ -21,6 +23,8 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
+import com.yc.sleepmm.setting.constants.BusAction;
+import com.yc.sleepmm.setting.constants.Config;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
@@ -30,6 +34,7 @@ import com.yc.sleepmm.vip.utils.GoodsInfoHelper;
 import com.yc.sleepmm.vip.utils.PaywayHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,6 +60,8 @@ public class VipActivity extends BaseActivity {
     NestedScrollView nestedScrollView;
     @BindView(R.id.btn_charge)
     Button btnCharge;
+    @BindView(R.id.ll_pay)
+    LinearLayout llPay;
     private VipGoodAdapter vipGoodAdapter;
     private VipPayAdapter vipPayAdapter;
     private GoodsInfo goodsInfo;
@@ -90,7 +97,7 @@ public class VipActivity extends BaseActivity {
         if (PaywayHelper.getmPaywayInfo() != null && PaywayHelper.getmPaywayInfo().size() > 0) {
             payInfo = PaywayHelper.getmPaywayInfo().get(0);
         }
-
+        setVip();
         initListener();
 
     }
@@ -128,7 +135,7 @@ public class VipActivity extends BaseActivity {
                 iPayAbs.pay(orderParams, new IPayCallback() {
                     @Override
                     public void onSuccess(OrderInfo orderInfo) {
-
+                        updateSuccessData();
                     }
 
                     @Override
@@ -157,5 +164,35 @@ public class VipActivity extends BaseActivity {
         });
     }
 
+    private void setVip() {
+        if (APP.getInstance().getUserData().getVip() == 1) {
+            llPay.setVisibility(View.GONE);
+            btnCharge.setVisibility(View.GONE);
+        } else {
+            llPay.setVisibility(View.VISIBLE);
+            btnCharge.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void updateSuccessData() {
+        UserInfo userInfo = APP.getInstance().getUserData();
+        userInfo.setVip(1);
+        Date date = new Date();
+        if (goodsInfo.use_time_limit != null) {
+            int use_time_Limit = 0;
+            try {
+                use_time_Limit = Integer.parseInt(goodsInfo.use_time_limit);
+            } catch (Exception e) {
+                use_time_Limit = 0;
+            }
+
+            long vip_end_time = date.getTime() + use_time_Limit * 30 * (Config.MS_IN_A_DAY);
+            userInfo.setVip_end_time(String.valueOf(vip_end_time / 1000));
+        }
+        APP.getInstance().setUserData(userInfo, true);
+
+        RxBus.get().post(BusAction.PAY_SUCCESS, "form pay");
+        finish();
+
+    }
 }
