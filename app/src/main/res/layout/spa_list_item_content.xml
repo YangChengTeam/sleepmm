@@ -17,9 +17,10 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tv_spa_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -37,7 +38,7 @@
                 android:layout_marginLeft="6dp"
                 android:gravity="left|center"
                 android:minHeight="28dp"
-                android:text="睡眠测试item"
+                android:text="睡眠咩咩"
                 android:textColor="@color/white"
                 android:textSize="14sp"/>
 
@@ -54,6 +55,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_spa_sing_user"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@mipmap/spa_user_icon"
@@ -71,12 +73,13 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_spa_sing_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@mipmap/spa_time_icon"
                         android:drawablePadding="6dp"
                         android:gravity="center"
-                        android:text="08:26"
+                        android:text="04:26"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -88,6 +91,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_spa_listen_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@mipmap/spa_listen_count"

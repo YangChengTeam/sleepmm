@@ -5,11 +5,13 @@ package com.yc.sleepmm.sleep.model.bean;
  * 分类信息
  */
 
-public class SpaDataInfo{
+public class SpaDataInfo {
 
     private String id;
     private String title;
     private String img;
+
+    private SpaItemInfo first;
 
     public String getId() {
         return id;
@@ -33,5 +35,13 @@ public class SpaDataInfo{
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public SpaItemInfo getFirst() {
+        return first;
+    }
+
+    public void setFirst(SpaItemInfo first) {
+        this.first = first;
     }
 }
