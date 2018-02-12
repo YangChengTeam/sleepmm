@@ -324,17 +324,16 @@ public class LoginRegisterFragment extends MusicBaseFragment<LoginPresenter> imp
     public void showAccountResult(UserInfo data, String tint) {
         if (null != data && !TextUtils.isEmpty(data.getId())) {
             ToastUtils.showCenterToast(tint + "成功");
-            if (TextUtils.equals(getString(R.string.login), tint)) {
+            if (TextUtils.equals(getString(R.string.login), tint) || TextUtils.equals(getString(R.string.register), tint)) {
                 APP.getInstance().setUserData(data, true);
             }
             if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing()) {
                 mLoginGroupActivity.registerResultFinlish();//登录完成
             }
-        }else {
+        } else {
             ToastUtils.showCenterToast(tint + "异常，请重试！");
         }
     }
-
 
 
     @Override

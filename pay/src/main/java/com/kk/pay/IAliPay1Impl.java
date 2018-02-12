@@ -113,7 +113,7 @@ public class IAliPay1Impl extends IPayImpl {
                         orderInfo.setMessage("支付成功");
                         iPayCallback.onSuccess(orderInfo);
                         ToastUtil.toast(mContext, "支付成功");
-                        checkOrder(orderInfo, iPayCallback, Config.CHECK_URL);
+//                        checkOrder(orderInfo, iPayCallback, Config.CHECK_URL);
                     }
                 });
 
@@ -134,7 +134,7 @@ public class IAliPay1Impl extends IPayImpl {
                         orderInfo.setMessage("支付失败");
                         iPayCallback.onFailure(orderInfo);
                         ToastUtil.toast(mContext, "支付失败");
-                        checkOrder(orderInfo, iPayCallback, Config.CHECK_URL);
+//                        checkOrder(orderInfo, iPayCallback, Config.CHECK_URL);
                     }
                 });
             }
