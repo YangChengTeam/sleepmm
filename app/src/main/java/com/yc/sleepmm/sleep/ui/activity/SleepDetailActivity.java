@@ -132,7 +132,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         //注册到被观察者中
         MusicPlayerManager.getInstance().addObservable(mMusicPlayerController);
 //        //注册播放变化监听
-//        MusicPlayerManager.getInstance().addPlayerStateListener(this);
+        MusicPlayerManager.getInstance().addPlayerStateListener(this);
 //        MusicPlayerManager.getInstance().onResumeChecked();//先让播放器刷新起来
     }
 
@@ -271,6 +271,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     }
 
 
+
     @Override
     public void showSpaDetailInfo(MusicInfo data, boolean isRandom) {
 
@@ -281,7 +282,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             tvWordDes.setText(data.getTitle());
             tvAutor.setText(data.getAuthor_title());
             tvAutorDes.setText(data.getAuthor_desp());
-            Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).centerCrop()).into(ivUserHead);
+            Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
             if (isRandom) {
                 int position = (int) (Math.random() * data.getLists().size());
                 MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
