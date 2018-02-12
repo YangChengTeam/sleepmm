@@ -11,15 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.util.DateUtils;
 import com.yc.sleepmm.sleep.bean.SpaItemInfoWrapper;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
 import com.yc.sleepmm.sleep.ui.activity.SleepDetailActivity;
@@ -117,7 +121,7 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
 
     //  获得父项显示的view
     @Override
-    public View getGroupView(int parentPos, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int parentPos, boolean b, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.spa_list_item_head, null);
@@ -125,9 +129,22 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
         view.setTag(R.layout.spa_list_item_head, parentPos);
         view.setTag(R.layout.spa_list_item_content, -1);
         final LinearLayout typeLayout = view.findViewById(R.id.type_layout);
-        TextView text = (TextView) view.findViewById(R.id.tv_spa_level_one);
+
+        TextView mTitleTv = (TextView) view.findViewById(R.id.tv_spa_level_one);
+        TextView mSingUserTv = (TextView) view.findViewById(R.id.tv_head_sing_user);
+        TextView mSingTimeTv = (TextView) view.findViewById(R.id.tv_head_sing_time);
+        TextView mListenCountTv = (TextView) view.findViewById(R.id.tv_head_listen_count);
+        ImageView mHeadPlayIv = (ImageView) view.findViewById(R.id.iv_head_play);
         if (spaDataInfos != null && spaDataInfos.get(parentPos) != null) {
-            text.setText(spaDataInfos.get(parentPos).getTitle());
+            if (spaDataInfos.get(parentPos).getFirst() != null) {
+                mTitleTv.setText(spaDataInfos.get(parentPos).getFirst().getTitle());
+                mSingUserTv.setText(spaDataInfos.get(parentPos).getFirst().getAuthor_title());
+                mListenCountTv.setText(spaDataInfos.get(parentPos).getFirst().getPlay_num()+"");
+                if (!StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getTime())) {
+                    mSingTimeTv.setText(DateUtils.getFormatDateInSecond(spaDataInfos.get(parentPos).getFirst().getTime()));
+                }
+            }
+
             Glide.with(mContext).asDrawable().load(spaDataInfos.get(parentPos).getImg()).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {
@@ -135,6 +152,20 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
                 }
             });
         }
+
+        //头部的播放按钮
+        mHeadPlayIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spaDataInfos.get(parentPos).getFirst() != null) {
+                    Intent intent = new Intent(mContext, SleepDetailActivity.class);
+                    intent.putExtra("spa_id", spaDataInfos.get(parentPos).getFirst().getId());
+                    mContext.startActivity(intent);
+                } else {
+                    ToastUtils.showLong("播放错误，请重试");
+                }
+            }
+        });
         return view;
     }
 

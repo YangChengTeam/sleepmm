@@ -1,9 +1,11 @@
 package com.yc.sleepmm.sleep.ui.fragment;
 
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -51,7 +53,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
     private SpaListAdapter currentSpaListAdapter;
 
-    private View currentView;
+    private int lastGroupPosition = -1;
 
     @Override
     public int getLayoutId() {
@@ -60,19 +62,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
     @Override
     public void init() {
-        //spaItemInfoWrapper = new SpaItemInfoWrapper();
-        //spaItemInfoWrapper.setList(list);
-        /*adapter = new SpaListAdapter(list);
-        mSpaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSpaRecyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(getActivity(), SleepDetailActivity.class);
-                startActivity(intent);
-            }
-        });*/
 
         mPresenter = new SpaDataPresenter(getActivity(), this);
 
@@ -83,17 +72,32 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         expandablelistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
             }
         });
 
         expandablelistview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                currentView = parent.getChildAt(groupPosition);
+            public boolean onGroupClick(ExpandableListView parent, View view, int groupPosition, long id) {
 
-                LogUtils.i("onGroupClick--->" + groupPosition);
+                if (lastGroupPosition > -1 && lastGroupPosition != groupPosition) {
+                    if (currentSpaListAdapter != null) {
+                        currentSpaListAdapter.setNewData(null);
+                    }
+                }
+                lastGroupPosition = groupPosition;
+
+                boolean isGroup = parent.isGroupExpanded(groupPosition);
+
+                TextView moreTextView = (TextView) view.findViewById(R.id.tv_spa_more);
+                Drawable downDrawable = getResources().getDrawable(R.mipmap.spa_more_down);
+                Drawable upDrawable = getResources().getDrawable(R.mipmap.spa_more_up);
+                if (isGroup) {
+                    downDrawable.setBounds(0, 0, downDrawable.getMinimumWidth(), downDrawable.getMinimumHeight());//非常重要，必须设置，否则图片不会显示
+                    moreTextView.setCompoundDrawables(downDrawable, null, null, null);
+                } else {
+                    upDrawable.setBounds(0, 0, upDrawable.getMinimumWidth(), upDrawable.getMinimumHeight());//非常重要，必须设置，否则图片不会显示
+                    moreTextView.setCompoundDrawables(upDrawable, null, null, null);
+                }
 
                 //当前分类的页面
                 int tempPage = typePageMaps.get(groupPosition) != null ? typePageMaps.get(groupPosition) : 1;
@@ -147,7 +151,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             spaTypeListViewAdapter.setSpaDataInfos(datas);
             spaTypeListViewAdapter.refresh();
         }
-
     }
 
     @Override
@@ -170,9 +173,13 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                     SpaItemInfoWrapper spaItemInfoWrapper;
                     if (dataSet.get(currentGroupPosition) != null) {
                         spaItemInfoWrapper = dataSet.get(currentGroupPosition);
+                        SpaItemInfo spaItemInfo = itemInfos.get(0);
+                        itemInfos.remove(spaItemInfo);
                         spaItemInfoWrapper.setAddList(itemInfos);
                     } else {
                         spaItemInfoWrapper = new SpaItemInfoWrapper();
+                        SpaItemInfo spaItemInfo = itemInfos.get(0);
+                        itemInfos.remove(spaItemInfo);
                         spaItemInfoWrapper.setList(itemInfos);
                     }
 
@@ -180,14 +187,12 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
                     spaTypeListViewAdapter.setDataSet(dataSet);
                     spaTypeListViewAdapter.refresh();
-
                 }
-            }else{
+            } else {
                 currentSpaListAdapter.loadMoreEnd();
             }
         }
     }
-
 
     @Override
     public void loadMore(SpaListAdapter spaListAdapter) {
@@ -196,10 +201,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         int tempPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
         int nextPage = tempPage + 1;
         typePageMaps.put(currentGroupPosition, nextPage);
-
-        //RecyclerView recyclerView = currentView.findViewById(R.id.spa_child_list);
-        //LogUtils.i("current item adapter --->" + recyclerView.getAdapter());
-
         mPresenter.getSpaItemList(currentTypeId, nextPage, pageSize);
     }
 }

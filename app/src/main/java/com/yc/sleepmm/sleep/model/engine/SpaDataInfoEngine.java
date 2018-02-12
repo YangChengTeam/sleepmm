@@ -35,7 +35,7 @@ public class SpaDataInfoEngine extends BaseEngine {
         params.put("type_id", typeId);
         params.put("page", page+"");
         params.put("limit", limit+"");
-        params.put("user_id", APP.getInstance().isLogin() ? APP.getInstance().getUserData().getId() : "");
+        params.put("user_id", APP.getInstance().isLogin() ? APP.getInstance().getUserData().getId() : "0");
         return HttpCoreEngin.get(mContext).rxpost(NetConstant.SPA_ITEM_LIST_URL, new TypeReference<ResultInfo<List<SpaItemInfo>>>() {
         }.getType(), params, true, true, true);
 

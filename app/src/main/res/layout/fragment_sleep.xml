@@ -4,17 +4,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/spa_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="24dp">
-    </android.support.v7.widget.RecyclerView>-->
     <ExpandableListView
         android:id="@+id/expandablelistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="36dp"
         android:animateLayoutChanges="false"
-        android:layout_marginTop="48dp">
+        android:groupIndicator="@null">
     </ExpandableListView>
 </RelativeLayout>

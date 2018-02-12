@@ -1,8 +1,10 @@
 package com.yc.sleepmm.sleep.adapter;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.util.DateUtils;
 import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
 
 import java.util.List;
@@ -19,9 +21,14 @@ public class SpaListAdapter extends BaseQuickAdapter<SpaItemInfo, BaseViewHolder
 
     @Override
     protected void convert(final BaseViewHolder helper, SpaItemInfo item) {
-        final SpaItemInfo spaItemInfo = (SpaItemInfo) item;
-        if (spaItemInfo != null) {
-            helper.setText(R.id.tv_spa_level_two, spaItemInfo.getTitle());
+        if (item != null) {
+            helper.setText(R.id.tv_spa_level_two, item.getTitle());
+            helper.setText(R.id.tv_spa_number, (helper.getAdapterPosition() + 2) + "");
+            helper.setText(R.id.tv_spa_sing_user, item.getAuthor_title());
+            helper.setText(R.id.tv_spa_listen_count, item.getPlay_num() + "");
+            if (!StringUtils.isEmpty(item.getTime())) {
+                helper.setText(R.id.tv_spa_sing_time, DateUtils.getFormatDateInSecond(item.getTime()));
+            }
         }
     }
 }
