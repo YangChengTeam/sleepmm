@@ -124,17 +124,16 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     }
 
     private List<MusicTypeInfo> musicTypeInfos;
-    private List<HomeMusicListFragment> fragments = new ArrayList<>();
+
 
     @Override
     public void showMusicTypeInfo(List<MusicTypeInfo> data) {
-
+        List<HomeMusicListFragment> fragments = new ArrayList<>();
         if (data.size() > 0) {
             musicTypeInfos = data;
             for (int i = 0; i < data.size(); i++) {
-                HomeMusicListFragment homeMusicListFragment = HomeMusicListFragment.newInstance(data.get(i).id + "", i);
-                if (!fragments.contains(homeMusicListFragment))
-                    fragments.add(homeMusicListFragment);
+
+                fragments.add(HomeMusicListFragment.newInstance(data.get(i).id + "", i));
             }
             AppFragmentPagerAdapter fragmentPagerAdapter = new AppFragmentPagerAdapter(getChildFragmentManager(), fragments, data);
             mView_pager.setOffscreenPageLimit(data.size());
@@ -145,13 +144,6 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         }
     }
 
-    private HomeMusicListFragment getFragment(int i) {
-        if (fragments.size() > 0) {
-            return fragments.get(i);
-        }
-
-        return null;
-    }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {
@@ -171,9 +163,9 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         }
         if (position >= 0) {
             mView_pager.setCurrentItem(position);
-            if (position < musicTypeInfos.size() && getFragment(position) != null) {
-                getFragment(position).scrollToposition(data);
-            }
+//            if (position < musicTypeInfos.size() && getFragment(position) != null) {
+//                getFragment(position).scrollToposition(data);
+//            }
         }
 
     }

@@ -42,13 +42,14 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
             TextView tv_item_num = helper.itemView.findViewById(R.id.tv_item_num);
             ImageView ic_play_anim = helper.itemView.findViewById(R.id.ic_play_anim);
 
-
             float second = Float.parseFloat(seconds);
+
 
             helper.setText(R.id.tv_item_name, musicInfo.getTitle()).setText(R.id.tv_head_sing_user, musicInfo.getAuthor_title())
                     .setText(R.id.tv_head_sing_time, DateUtil.getTimeLengthString((int) (second)))
                     .setText(R.id.tv_head_listen_count, !StringUtils.isEmpty(musicInfo.getPlay_num()) ? musicInfo.getPlay_num() + "" :"0")
                     .setText(R.id.tv_item_num, (helper.getAdapterPosition() + 1) + "");
+
 
             switch (musicInfo.getPlauStatus()) {
                 //缓冲中
@@ -79,6 +80,7 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                     tv_item_num.setVisibility(View.GONE);
                     ic_play_anim.setImageResource(R.drawable.play_anim);
                     helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.app_style));
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play_true);
                     AnimationDrawable drawableAnimation = (AnimationDrawable) ic_play_anim.getDrawable();
                     if (null != drawableAnimation) {
                         drawableAnimation.stop();
@@ -93,7 +95,7 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                     ic_play_anim.setImageResource(0);
                     ic_play_anim.setVisibility(View.GONE);
                     tv_item_num.setVisibility(View.VISIBLE);
-                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play);
+                    helper.setImageResource(R.id.ic_item_play, R.drawable.ic_item_play_true);
                     helper.setTextColor(R.id.tv_item_name, CommonUtils.getColor(R.color.coment_color));
                     break;
                 default:
@@ -119,7 +121,6 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
                     if (musicInfo.getId().equals(info.getId())) {
                         info.setPlauStatus(musicInfo.getPlauStatus());
 
-//                        break;
                     } else {
                         info.setPlauStatus(0);
                     }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.ToastUtil;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
@@ -121,7 +120,7 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
     private void sumTime() {
         int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int delayHours = 22 - hours;
-        ToastUtil.toast2(this, "将在" + delayHours + "小时后开启定时模式");
+//        ToastUtil.toast2(this, "将在" + delayHours + "小时后开启定时模式");
 
     }
 

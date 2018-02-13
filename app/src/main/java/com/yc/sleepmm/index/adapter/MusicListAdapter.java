@@ -131,7 +131,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (null != arg) {
             MusicInfo musicInfo = (MusicInfo) arg;
             if (null != musicInfo && null != mData && mData.size() > 0) {
-                int position = 0;
                 for (int i = 0; i < mData.size(); i++) {
                     MusicInfo info = mData.get(i);
                     if (musicInfo.getId().equals(info.getId())) {

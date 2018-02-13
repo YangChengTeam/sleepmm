@@ -84,12 +84,14 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             public boolean onGroupClick(ExpandableListView parent, View view, int groupPosition, long id) {
 
                 if (lastGroupPosition > -1 && lastGroupPosition != groupPosition) {
-                    if (currentSpaListAdapter != null) {
+                    /*if (currentSpaListAdapter != null) {
                         currentSpaListAdapter.setNewData(null);
-                    }
+                    }*/
+                    currentSpaListAdapter = null;
                 }
                 lastGroupPosition = groupPosition;
 
+                spaTypeListViewAdapter.setCurrentParentPosition(groupPosition);
                 boolean isGroup = parent.isGroupExpanded(groupPosition);
 
                 TextView moreTextView = (TextView) view.findViewById(R.id.tv_spa_more);
@@ -197,13 +199,16 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                         spaItemInfoWrapper.setList(itemInfos);
                     }
 
-                    dataSet.put(currentGroupPosition, spaItemInfoWrapper);
-
-                    spaTypeListViewAdapter.setDataSet(dataSet);
-                    spaTypeListViewAdapter.refresh();
+                    if(spaItemInfoWrapper.getList().size() > 0) {
+                        dataSet.put(currentGroupPosition, spaItemInfoWrapper);
+                        spaTypeListViewAdapter.setDataSet(dataSet);
+                        spaTypeListViewAdapter.refresh();
+                    }
                 }
             } else {
-                currentSpaListAdapter.loadMoreEnd();
+                if(currentSpaListAdapter != null) {
+                    currentSpaListAdapter.loadMoreEnd();
+                }
             }
         }
     }

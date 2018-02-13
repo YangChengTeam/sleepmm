@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
@@ -41,6 +40,8 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
 
     private Handler handler;
 
+    public int currentParentPosition;
+
     public interface OnMoreListener {
         void loadMore(SpaListAdapter spaListAdapter);
     }
@@ -59,6 +60,9 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
         this.spaDataInfos = spaDataInfos;
     }
 
+    public void setCurrentParentPosition(int currentParentPosition) {
+        this.currentParentPosition = currentParentPosition;
+    }
 
     public SpaTypeListViewAdapter(Context context, Map<Integer, SpaItemInfoWrapper> dataset, List<SpaDataInfo> spaDataInfos) {
         this.mContext = context;
@@ -172,6 +176,9 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
     //  获得子项显示的view
     @Override
     public View getChildView(int parentPos, int childPos, boolean b, View childView, final ViewGroup viewGroup) {
+        if(currentParentPosition != parentPos){
+            return childView;
+        }
 
         if (childView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -184,8 +191,6 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
         RecyclerView childRecyclerView = childView.findViewById(R.id.spa_child_list);
         if (dataSet.get(parentPos) != null && dataSet.get(parentPos).getList() != null) {
             final SpaListAdapter spaListAdapter = new SpaListAdapter(dataSet.get(parentPos).getList());
-
-            LogUtils.i("spaListAdapter adapter --->" + spaListAdapter.hashCode());
 
             childRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             childRecyclerView.setAdapter(spaListAdapter);
