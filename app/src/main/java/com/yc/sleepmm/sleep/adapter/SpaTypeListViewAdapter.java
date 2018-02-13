@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
@@ -41,6 +42,8 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
     private Handler handler;
 
     public int currentParentPosition;
+
+    public int lastParentPosition;
 
     public interface OnMoreListener {
         void loadMore(SpaListAdapter spaListAdapter);
@@ -176,9 +179,12 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
     //  获得子项显示的view
     @Override
     public View getChildView(int parentPos, int childPos, boolean b, View childView, final ViewGroup viewGroup) {
-        if(currentParentPosition != parentPos){
+
+        LogUtils.i("getChildView currentParentPosition ---> " + currentParentPosition + "---parentPos" + parentPos);
+
+        /*if(currentParentPosition != parentPos){
             return childView;
-        }
+        }*/
 
         if (childView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -157,7 +157,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
     @Override
     public void showSpaData(List<SpaDataInfo> datas) {
-       if (datas != null) {
+        if (datas != null) {
             dataTypes = datas;
             for (int i = 0; i < datas.size(); i++) {
                 dataSet.put(i, null);
@@ -182,6 +182,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                     } else {
                         currentSpaListAdapter.loadMoreEnd();
                     }
+                    return;
                 }
 
                 int tempCurrentPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
@@ -199,14 +200,15 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                         spaItemInfoWrapper.setList(itemInfos);
                     }
 
-                    if(spaItemInfoWrapper.getList().size() > 0) {
+                    if (spaItemInfoWrapper.getList().size() > 0) {
                         dataSet.put(currentGroupPosition, spaItemInfoWrapper);
                         spaTypeListViewAdapter.setDataSet(dataSet);
                         spaTypeListViewAdapter.refresh();
+                        LogUtils.i("refresh data --->");
                     }
                 }
             } else {
-                if(currentSpaListAdapter != null) {
+                if (currentSpaListAdapter != null) {
                     currentSpaListAdapter.loadMoreEnd();
                 }
             }
