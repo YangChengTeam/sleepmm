@@ -289,6 +289,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
                 int position = (int) (Math.random() * data.getLists().size());
                 MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
             } else {
+
                 MusicPlayerManager.getInstance().playMusic(musicInfo);
             }
 

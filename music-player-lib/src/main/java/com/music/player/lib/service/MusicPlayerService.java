@@ -804,7 +804,7 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
 
     private int getPlayPosition() {
         if (mediaPlayerNoEmpty()) {
-            return 0;
+            return mPlayPosition;
         }
         return -1;
     }

@@ -151,6 +151,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                 }
             }
         };
+        setVisivable(true);
         mBtnLast.setOnClickListener(onClickListener);
         mBtnNext.setOnClickListener(onClickListener);
         mIcPlayMode.setOnClickListener(onClickListener);
@@ -700,5 +701,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
     public void setOnClickEventListener(OnClickEventListener onClickEventListener) {
         mOnClickEventListener = onClickEventListener;
+    }
+
+    public void setVisivable(boolean isShow) {
+        mBtnNext.setVisibility(isShow ? VISIBLE : GONE);
+        mBtnLast.setVisibility(isShow ? VISIBLE : GONE);
     }
 }

@@ -47,8 +47,8 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
 
             helper.setText(R.id.tv_item_name, musicInfo.getTitle()).setText(R.id.tv_head_sing_user, musicInfo.getAuthor_title())
                     .setText(R.id.tv_head_sing_time, DateUtil.getTimeLengthString((int) (second)))
-                    .setText(R.id.tv_head_listen_count, !StringUtils.isEmpty(musicInfo.getPlay_num()) ? musicInfo.getPlay_num() + "" :"0")
-                    .setText(R.id.tv_item_num, (helper.getAdapterPosition() + 1) + "");
+                    .setText(R.id.tv_head_listen_count, !StringUtils.isEmpty(musicInfo.getPlay_num()) ? musicInfo.getPlay_num() + "" : "0")
+                    .setText(R.id.tv_item_num, (helper.getAdapterPosition()) + "");
 
 
             switch (musicInfo.getPlauStatus()) {
