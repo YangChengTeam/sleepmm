@@ -170,7 +170,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
     @Override
     public void showSpaData(List<SpaDataInfo> datas) {
-       if (datas != null) {
+        if (datas != null) {
             dataTypes = datas;
             for (int i = 0; i < datas.size(); i++) {
                 dataSet.put(i, null);

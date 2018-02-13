@@ -91,7 +91,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         //设置闹钟初始的定时时间
 //        mMusicPlayerController.setAlarmSeekBarProgress(60);
         //是否点赞,默认false
-
+        mMusicPlayerController.setVisivable(false);
 
         //注册事件回调
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {
@@ -225,7 +225,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
         if (Constants.UI_TYPE_DETAILS == viewTupe && null != userSleepAdapter) {
 
-            MusicPlayerManager.getInstance().playMusic(userSleepAdapter.getData(), 0);//这个position默认是0，油控制器传出
+            MusicPlayerManager.getInstance().playMusic(musicInfo);//这个position默认是0，油控制器传出
         }
     }
 
@@ -270,13 +270,14 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         stateView.showNoData(llContainer);
     }
 
+    private MusicInfo musicInfo;
 
 
     @Override
     public void showSpaDetailInfo(MusicInfo data, boolean isRandom) {
 
         if (null != userSleepAdapter && data != null && data.getLists() != null && data.getLists().size() > 0) {
-
+            musicInfo = data;
             showCollectSucess(data.getLists().get(0).getIs_favorite() == 1);
             userSleepAdapter.setNewData(data.getLists());
             tvWordDes.setText(data.getTitle());
@@ -284,6 +285,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             tvAutorDes.setText(data.getAuthor_desp());
             Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
             if (isRandom) {
+                mMusicPlayerController.setVisivable(true);
                 int position = (int) (Math.random() * data.getLists().size());
                 MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
             }
