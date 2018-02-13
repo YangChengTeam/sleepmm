@@ -84,12 +84,14 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             public boolean onGroupClick(ExpandableListView parent, View view, int groupPosition, long id) {
 
                 if (lastGroupPosition > -1 && lastGroupPosition != groupPosition) {
-                    if (currentSpaListAdapter != null) {
+                    /*if (currentSpaListAdapter != null) {
                         currentSpaListAdapter.setNewData(null);
-                    }
+                    }*/
+                    currentSpaListAdapter = null;
                 }
                 lastGroupPosition = groupPosition;
 
+                spaTypeListViewAdapter.setCurrentParentPosition(groupPosition);
                 boolean isGroup = parent.isGroupExpanded(groupPosition);
 
                 TextView moreTextView = (TextView) view.findViewById(R.id.tv_spa_more);
@@ -120,21 +122,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Toast.makeText(getActivity(), "onChildClick" + childPosition, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
-        expandablelistview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = "";
-                if ((int) view.getTag(R.layout.spa_list_item_head) == -1) {
-                    content = "父类第" + view.getTag(R.layout.spa_list_item_content) + "项" + "被长按了";
-                } else {
-                    content = "父类第" + view.getTag(R.layout.spa_list_item_head) + "项" + "中的"
-                            + "子类第" + view.getTag(R.layout.spa_list_item_content) + "项" + "被长按了";
-                }
-                Toast.makeText(getActivity(), content, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -195,10 +182,11 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                     } else {
                         currentSpaListAdapter.loadMoreEnd();
                     }
+                    return;
                 }
 
-                int tempPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
-                if (tempPage == 1) {
+                int tempCurrentPage = typePageMaps.get(currentGroupPosition) != null ? typePageMaps.get(currentGroupPosition) : 1;
+                if (tempCurrentPage == 1) {
                     SpaItemInfoWrapper spaItemInfoWrapper;
                     if (dataSet.get(currentGroupPosition) != null) {
                         spaItemInfoWrapper = dataSet.get(currentGroupPosition);
@@ -212,13 +200,17 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                         spaItemInfoWrapper.setList(itemInfos);
                     }
 
-                    dataSet.put(currentGroupPosition, spaItemInfoWrapper);
-
-                    spaTypeListViewAdapter.setDataSet(dataSet);
-                    spaTypeListViewAdapter.refresh();
+                    if (spaItemInfoWrapper.getList().size() > 0) {
+                        dataSet.put(currentGroupPosition, spaItemInfoWrapper);
+                        spaTypeListViewAdapter.setDataSet(dataSet);
+                        spaTypeListViewAdapter.refresh();
+                        LogUtils.i("refresh data --->");
+                    }
                 }
             } else {
-                currentSpaListAdapter.loadMoreEnd();
+                if (currentSpaListAdapter != null) {
+                    currentSpaListAdapter.loadMoreEnd();
+                }
             }
         }
     }

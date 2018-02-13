@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.music.player.lib.bean.MusicInfo;
@@ -28,7 +29,7 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
 
 
     public UserSleepAdapter(@Nullable List<MusicInfo> datas) {
-        super(R.layout.item_re_simple_music_list, datas);
+        super(R.layout.item_user_music_list, datas);
     }
 
     @Override
@@ -43,9 +44,11 @@ public class UserSleepAdapter extends BaseQuickAdapter<MusicInfo, BaseViewHolder
 
             float second = Float.parseFloat(seconds);
 
-            helper.setText(R.id.tv_item_name, musicInfo.getTitle()).setText(R.id.tv_item_author, musicInfo.getAuthor())
-                    .setText(R.id.tv_item_drutaion, DateUtil.getTimeLengthString((int) (second)))
-                    .setText(R.id.tv_item_num, (helper.getAdapterPosition()) + "");
+
+            helper.setText(R.id.tv_item_name, musicInfo.getTitle()).setText(R.id.tv_head_sing_user, musicInfo.getAuthor_title())
+                    .setText(R.id.tv_head_sing_time, DateUtil.getTimeLengthString((int) (second)))
+                    .setText(R.id.tv_head_listen_count, !StringUtils.isEmpty(musicInfo.getPlay_num()) ? musicInfo.getPlay_num() + "" :"0")
+                    .setText(R.id.tv_item_num, (helper.getAdapterPosition() + 1) + "");
 
 
             switch (musicInfo.getPlauStatus()) {
