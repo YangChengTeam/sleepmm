@@ -45,17 +45,19 @@ public interface NetConstant {
     /**
      * spa收藏
      */
-    String spa_myfavorite_url=(BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) +"spa/myfavorite";
+    String spa_myfavorite_url = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "spa/myfavorite";
 
     /**
      * 我的收藏
      */
-    String music_myfavorite_url=(BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST)+"music/myfavorite";
+    String music_myfavorite_url = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "music/myfavorite";
     /**
      * 用户资料
      */
-    String user_info_url=(BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST)+"user/info";
+    String user_info_url = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "user/info";
 
-
-
+    /**
+     * 绑定用户
+     */
+    String user_bind_url = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "user/bind";
 }

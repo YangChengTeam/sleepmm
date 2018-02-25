@@ -10,6 +10,7 @@ import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
+import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.engine.SettingEngine;
@@ -38,6 +39,7 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
         getGoodInfos("1", 1, 10);
+
     }
 
     @Override
@@ -140,6 +142,29 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
                 if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
                     APP.getInstance().setUserData(userInfoResultInfo.data, true);
                     RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "from update");
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+
+    }
+
+    public void getUserInfo() {
+        Subscription subscription = EngineUtils.getUserInfo(mContext, APP.getInstance().getUid()).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
+                    APP.getInstance().setUserData(userInfoResultInfo.data, true);
                 }
             }
         });

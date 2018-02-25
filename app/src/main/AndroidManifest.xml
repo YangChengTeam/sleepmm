@@ -86,6 +86,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <activity android:name=".setting.ui.activity.AccountActivity" />
+        <activity android:name=".setting.ui.activity.BindPhoneActivity" />
+        <activity android:name=".setting.ui.activity.ChangePwdActivity" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5a684f2ab27b0a360100010b" />

@@ -8,6 +8,8 @@ import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.music.player.lib.bean.MusicInfo;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.index.constants.NetContants;
+import com.yc.sleepmm.index.model.bean.UserInfo;
+import com.yc.sleepmm.setting.constants.NetConstant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,4 +70,33 @@ public class EngineUtils {
         }.getType(), params, true, true, true);
     }
 
+
+    /**
+     * 获取验证码
+     */
+    public static Observable<ResultInfo<String>> getCode(Context context, String phoneNumber) {
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile", phoneNumber);
+        params.put("user_id", APP.getInstance().getUserData() != null ? APP.getInstance().getUserData().getId() : "0");
+
+        return HttpCoreEngin.get(context).rxpost(NetContants.HOST_USER_GET_CODE, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true);
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param user_id
+     * @return
+     */
+
+    public static Observable<ResultInfo<UserInfo>> getUserInfo(Context context, String user_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", user_id);
+
+        return HttpCoreEngin.get(context).rxpost(NetConstant.user_info_url, new TypeReference<ResultInfo<UserInfo>>() {
+        }.getType(), params, true, true, true);
+
+
+    }
 }

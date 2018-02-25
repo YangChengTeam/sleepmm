@@ -1,5 +1,6 @@
 package com.yc.sleepmm.setting.ui.activity;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.jakewharton.rxbinding.view.RxView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
@@ -47,6 +51,10 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
     TextView tvCache;
     @BindView(R.id.rl_clear_cache)
     RelativeLayout rlClearCache;
+    @BindView(R.id.rl_account_safe)
+    RelativeLayout rlAccountSafe;
+    @BindView(R.id.iv_arrow)
+    ImageView ivArrow;
 
 
     @Override
@@ -77,7 +85,6 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
             public void call(Void aVoid) {
                 APP.getInstance().setUserData(null, true);
                 RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "logout");
-                btnLogout.setVisibility(View.GONE);
                 ToastUtils.showCenterToast("成功退出");
             }
         });
@@ -92,6 +99,14 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
 
             }
         });
+
+        RxView.clicks(rlAccountSafe).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                startActivity(new Intent(SystemSettingActivity.this, AccountActivity.class));
+            }
+        });
+
 
         switchTiming.setOnCheckedChangeListener(this);
         switchOpen2g.setOnCheckedChangeListener(this);
@@ -134,4 +149,12 @@ public class SystemSettingActivity extends BaseActivity<SystemSettingPresenter> 
         tvCache.setText(cacheSize);
     }
 
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {
+                    @Tag(Constant.RX_LOGIN_SUCCESS)
+            })
+    public void loginout(String logout) {
+        btnLogout.setVisibility(APP.getInstance().isLogin() ? View.VISIBLE : View.GONE);
+    }
 }

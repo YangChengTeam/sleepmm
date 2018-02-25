@@ -35,7 +35,8 @@
     <string name="retry">重试</string>
     <string name="register">注册</string>
     <string name="change_password">修改密码</string>
-    <string name="account_safe">账户安全</string>
+    <string name="account_safe">账户与安全</string>
+    <string name="bind_phone">绑定手机号</string>
 
     <string-array name="items">
         <item>10分钟后关闭</item>

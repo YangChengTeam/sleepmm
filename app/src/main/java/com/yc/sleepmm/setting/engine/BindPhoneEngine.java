@@ -15,21 +15,23 @@ import java.util.Map;
 import rx.Observable;
 
 /**
- * Created by wanglin  on 2018/2/12 10:53.
+ * Created by wanglin  on 2018/2/13 11:40.
  */
 
-public class VipEngine extends BaseEngine {
-    public VipEngine(Context context) {
+public class BindPhoneEngine extends BaseEngine {
+    public BindPhoneEngine(Context context) {
         super(context);
     }
 
-    public Observable<ResultInfo<UserInfo>> getUserInfo(String user_id) {
+
+    public Observable<ResultInfo<UserInfo>> bindPhone(String mobile, String user_id, String code) {
         Map<String, String> params = new HashMap<>();
+
+        params.put("mobile", mobile);
         params.put("user_id", user_id);
+        params.put("code", code);
 
-        return HttpCoreEngin.get(mContext).rxpost(NetConstant.user_info_url, new TypeReference<ResultInfo<UserInfo>>() {
+        return HttpCoreEngin.get(mContext).rxpost(NetConstant.user_bind_url, new TypeReference<ResultInfo<UserInfo>>() {
         }.getType(), params, true, true, true);
-
-
     }
 }

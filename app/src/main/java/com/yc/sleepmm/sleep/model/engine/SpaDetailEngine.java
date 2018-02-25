@@ -45,10 +45,10 @@ public class SpaDetailEngine extends BaseEngine {
 
     }
 
-    public Observable<ResultInfo<String>> spaPlay(String music_id) {
+    public Observable<ResultInfo<String>> spaPlay(String spa_id) {
         Map<String, String> params = new HashMap<>();
 
-        params.put("music_id", music_id);
+        params.put("spa_id", spa_id);
 
         return HttpCoreEngin.get(mContext).rxpost(NetConstant.SPA_PLAY_URL, new TypeReference<ResultInfo<MusicInfo>>() {
         }.getType(), params, true, true, true);

@@ -72,15 +72,6 @@ public class LoginGroupEngine extends BaseEngine {
     }
 
 
-    public Observable<ResultInfo<String>> getCode(String phoneNumber) {
-        Map<String, String> params = new HashMap<>();
-        params.put("mobile", phoneNumber);
-        params.put("user_id", "0");
-
-        return HttpCoreEngin.get(mContext).rxpost( NetContants.HOST_USER_GET_CODE, new TypeReference<ResultInfo<String>>() {
-        }.getType(), params, true, true, true);
-    }
-
     /**
      * token: 第三方登录凭证
      * sns: 1: QQ；2: 微信openID；3: 微信unionId；4: 微博

@@ -8,8 +8,10 @@ import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.presenter.BasePresenter;
+import com.yc.sleepmm.base.util.UIUtils;
 import com.yc.sleepmm.index.model.bean.UserDataInfo;
 import com.yc.sleepmm.index.model.bean.UserInfo;
+import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.index.model.engine.LoginGroupEngine;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 
@@ -226,7 +228,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
     public void getCode(String phoneNumber) {
 
         mView.showLoadingProgressDialog("获取验证码中...", true);
-        Subscription subscription = mEngine.getCode(phoneNumber).subscribe(new Subscriber<ResultInfo<String>>() {
+        Subscription subscription = EngineUtils.getCode(mContext, phoneNumber).subscribe(new Subscriber<ResultInfo<String>>() {
             @Override
             public void onCompleted() {
                 mView.dismissProgressDialog();
@@ -238,14 +240,20 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
             }
 
             @Override
-            public void onNext(ResultInfo<String> stringResultInfo) {
-                if (null != stringResultInfo) {
-                    if (HttpConfig.STATUS_OK == stringResultInfo.code && stringResultInfo.data != null) {
-                        ToastUtils.showCenterToast(stringResultInfo.data);
-                    } else {
-                        if (null != mView) mView.showRequstError(stringResultInfo.message);
+            public void onNext(final ResultInfo<String> stringResultInfo) {
+                UIUtils.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != stringResultInfo) {
+                            if (HttpConfig.STATUS_OK == stringResultInfo.code && stringResultInfo.data != null) {
+                                ToastUtils.showCenterToast(stringResultInfo.data);
+                            } else {
+                                ToastUtils.showCenterToast(stringResultInfo.message);
+                            }
+                        }
                     }
-                }
+                });
+
             }
         });
         mSubscriptions.add(subscription);

@@ -4,21 +4,25 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
 import com.music.player.lib.util.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.RxLogTool;
+import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.base.util.EmptyUtils;
 import com.yc.sleepmm.base.util.UIUtils;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.ui.dialog.LoadingProgressView;
+import com.yc.sleepmm.index.util.CommonUtils;
 
 import butterknife.ButterKnife;
 
@@ -32,6 +36,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected LoadingDialog loadingDialog;
 
     protected LoadingProgressView loadingProgressedView;
+    private Handler mHandler;
+    private MyRunnable taskRunnable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
+        mHandler = new Handler();
 
         init();
     }
@@ -129,6 +136,64 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         }
         RxBus.get().unregister(this);
 
+    }
+
+    /**
+     * 改变获取验证码按钮状态
+     */
+    public void showGetCodeDisplay(TextView textView) {
+        taskRunnable = new MyRunnable(textView);
+        if (null != mHandler) {
+            mHandler.removeCallbacks(taskRunnable);
+            mHandler.removeMessages(0);
+            totalTime = 60;
+            textView.setClickable(false);
+            textView.setTextColor(CommonUtils.getColor(R.color.coment_color));
+            textView.setBackgroundResource(R.drawable.bg_btn_get_code);
+            if (null != mHandler) mHandler.postDelayed(taskRunnable, 0);
+        }
+    }
+
+    /**
+     * 定时任务，模拟倒计时广告
+     */
+    private int totalTime = 60;
+
+
+    private class MyRunnable implements Runnable {
+        TextView mTv;
+
+        public MyRunnable(TextView textView) {
+            this.mTv = textView;
+        }
+
+        @Override
+        public void run() {
+            mTv.setText(totalTime + "秒后重试");
+            totalTime--;
+            if (totalTime < 0) {
+                //还原
+                initGetCodeBtn(mTv);
+                return;
+            }
+            if (null != mHandler) mHandler.postDelayed(this, 1000);
+        }
+    }
+
+
+    /**
+     * 还原获取验证码按钮状态
+     */
+    private void initGetCodeBtn(TextView textView) {
+        totalTime = 0;
+        if (null != taskRunnable && null != mHandler) {
+            mHandler.removeCallbacks(taskRunnable);
+            mHandler.removeMessages(0);
+        }
+        textView.setText("重新获取");
+        textView.setClickable(true);
+        textView.setTextColor(CommonUtils.getColor(R.color.white));
+        textView.setBackgroundResource(R.drawable.bg_btn_get_code_true);
     }
 
     @Override

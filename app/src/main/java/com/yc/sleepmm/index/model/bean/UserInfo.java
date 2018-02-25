@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 2018/2/5.
  */
 
-public class UserInfo implements Serializable{
+public class UserInfo implements Serializable {
 
     private String id;
     private String name;
@@ -58,7 +58,12 @@ public class UserInfo implements Serializable{
     }
 
     public int getVip() {
-        return vip;
+
+        if (System.currentTimeMillis() <= Long.parseLong(vip_end_time) * 1000) {
+
+            return vip;
+        }
+        return 0;
     }
 
     public void setVip(int vip) {
@@ -72,4 +77,6 @@ public class UserInfo implements Serializable{
     public void setVip_end_time(String vip_end_time) {
         this.vip_end_time = vip_end_time;
     }
+
+
 }

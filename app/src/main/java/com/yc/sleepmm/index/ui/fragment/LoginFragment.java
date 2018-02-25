@@ -91,6 +91,8 @@ public class LoginFragment extends MusicBaseFragment<LoginPresenter> implements 
                 }
             }
         };
+        etAccount.setText(APP.getInstance().getUserData() != null ? APP.getInstance().getUserData().getMobile() : "");
+        etAccount.setSelection(etAccount.getText().toString().length());
         tvRetrievePassword.setOnClickListener(onClickListener);
         ivAccountCancel.setOnClickListener(onClickListener);
         ivPasswordCancel.setOnClickListener(onClickListener);

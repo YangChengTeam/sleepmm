@@ -6,11 +6,12 @@ import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.APP;
+import com.yc.sleepmm.base.model.BaseEngine;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.model.bean.UserInfo;
+import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.setting.contract.VipContract;
-import com.yc.sleepmm.setting.engine.VipEngine;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -19,10 +20,10 @@ import rx.Subscription;
  * Created by wanglin  on 2018/2/12 10:55.
  */
 
-public class VipPresenter extends BasePresenter<VipEngine, VipContract.View> implements VipContract.Presenter {
+public class VipPresenter extends BasePresenter<BaseEngine, VipContract.View> implements VipContract.Presenter {
     public VipPresenter(Context mContext, VipContract.View view) {
         super(mContext, view);
-        mEngine = new VipEngine(mContext);
+        mEngine = new BaseEngine(mContext);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class VipPresenter extends BasePresenter<VipEngine, VipContract.View> imp
 
     @Override
     public void getUserInfo(final String user_id) {
-        Subscription subscription = mEngine.getUserInfo(user_id).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
+        Subscription subscription = EngineUtils.getUserInfo(mContext, user_id).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
 

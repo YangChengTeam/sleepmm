@@ -3,6 +3,7 @@ package com.yc.sleepmm.sleep.ui.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -289,8 +290,11 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
                 int position = (int) (Math.random() * data.getLists().size());
                 MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
             } else {
+                MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
 
-                MusicPlayerManager.getInstance().playMusic(musicInfo);
+                if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
+                    MusicPlayerManager.getInstance().playMusic(musicInfo);
+                }
             }
 
         }

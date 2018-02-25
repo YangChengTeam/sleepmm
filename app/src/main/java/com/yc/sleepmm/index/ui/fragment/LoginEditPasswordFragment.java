@@ -1,7 +1,6 @@
 package com.yc.sleepmm.index.ui.fragment;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -21,7 +20,6 @@ import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.ui.contract.LoginContract;
 import com.yc.sleepmm.index.ui.presenter.LoginPresenter;
-import com.yc.sleepmm.index.util.CommonUtils;
 import com.yc.sleepmm.setting.utils.Utils;
 
 import butterknife.BindView;
@@ -49,11 +47,12 @@ public class LoginEditPasswordFragment extends MusicBaseFragment<LoginPresenter>
     EditText etCode;
     @BindView(R.id.btn_submit)
     Button btnSubmit;
+    @BindView(R.id.common_view)
+    View topView;
 
     private Animation mInputAnimation;
 
     private LoginGroupActivity mLoginGroupActivity;
-    private Handler mHandler;
 
 
     @Override
@@ -65,9 +64,8 @@ public class LoginEditPasswordFragment extends MusicBaseFragment<LoginPresenter>
     @Override
     protected void initViews() {
         mPresenter = new LoginPresenter(getActivity(), this);
+        topView.setVisibility(View.GONE);
         mInputAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-        mHandler = new Handler();
-
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,60 +128,10 @@ public class LoginEditPasswordFragment extends MusicBaseFragment<LoginPresenter>
      */
     private void getCode(String country, String account) {
         if (null != mLoginGroupActivity && !mLoginGroupActivity.isFinishing() && null != mPresenter) {
-            showGetCodeDisplay();
-
+            mLoginGroupActivity.showGetCodeDisplay(tvGetCode);
             mPresenter.getCode(account);
         }
     }
-
-
-    /**
-     * 改变获取验证码按钮状态
-     */
-    private void showGetCodeDisplay() {
-        if (null != taskRunnable && null != mHandler) {
-            mHandler.removeCallbacks(taskRunnable);
-            totalTime = 60;
-            tvGetCode.setClickable(false);
-            tvGetCode.setTextColor(CommonUtils.getColor(R.color.coment_color));
-            tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code);
-            mHandler.postDelayed(taskRunnable, 0);
-        }
-    }
-
-
-    /**
-     * 还原获取验证码按钮状态
-     */
-    private void initGetCodeBtn() {
-        totalTime = 0;
-        if (null != taskRunnable && null != mHandler) {
-            mHandler.removeCallbacks(taskRunnable);
-        }
-        tvGetCode.setText("重新获取");
-        tvGetCode.setClickable(true);
-        tvGetCode.setTextColor(CommonUtils.getColor(R.color.white));
-        tvGetCode.setBackgroundResource(R.drawable.bg_btn_get_code_true);
-    }
-
-    /**
-     * 定时任务，模拟倒计时广告
-     */
-    private int totalTime = 60;
-
-    Runnable taskRunnable = new Runnable() {
-        @Override
-        public void run() {
-            tvGetCode.setText(totalTime + "S后重试");
-            totalTime--;
-            if (totalTime < 0) {
-                //还原
-                initGetCodeBtn();
-                return;
-            }
-            if (null != mHandler) mHandler.postDelayed(this, 1000);
-        }
-    };
 
 
     /**
@@ -317,27 +265,12 @@ public class LoginEditPasswordFragment extends MusicBaseFragment<LoginPresenter>
     }
 
 
-
     @Override
     public void showRequstError(String data) {
 
         ToastUtils.showCenterToast(data);
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        initGetCodeBtn();
-        if (null != mInputAnimation) {
-            mInputAnimation.cancel();
-            mInputAnimation = null;
-        }
-        if (null != mHandler) {
-            mHandler.removeCallbacks(taskRunnable);
-            mHandler = null;
-        }
-    }
 
     @Override
     public void showLoadingDialog(String mess) {

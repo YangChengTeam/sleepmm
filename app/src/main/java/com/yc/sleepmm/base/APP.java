@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
 import com.blankj.utilcode.util.Utils;
+import com.hwangjr.rxbus.RxBus;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.manager.MusicPlayerManager;
@@ -16,9 +17,9 @@ import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.vondear.rxtools.RxTool;
 import com.yc.sleepmm.R;
-import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
 import com.yc.sleepmm.index.manager.ApplicationManager;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.index.util.ACache;
 
@@ -81,6 +82,8 @@ public class APP extends MultiDexApplication {
         if (isPlant) {
             ApplicationManager.getInstance().getCacheExample().remove(Constant.SP_USER_USERINFO);
             ApplicationManager.getInstance().getCacheExample().put(Constant.SP_USER_USERINFO, (Serializable) userInfo);
+
+            RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "login");
         }
     }
 
@@ -90,7 +93,7 @@ public class APP extends MultiDexApplication {
 
     public boolean isGotoLogin(Context context) {
         if (mUserInfo == null) {
-            Intent intent =new Intent(context, LoginGroupActivity.class);
+            Intent intent = new Intent(context, LoginGroupActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             if (context instanceof Activity)
@@ -102,6 +105,9 @@ public class APP extends MultiDexApplication {
 
 
     public String getUid() {
+        if (mUserInfo != null) {
+            return mUserInfo.getId();
+        }
         return "";
     }
 
