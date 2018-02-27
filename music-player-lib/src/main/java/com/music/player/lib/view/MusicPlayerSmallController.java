@@ -21,7 +21,6 @@ import com.music.player.lib.bean.MusicPlayerConfig;
 import com.music.player.lib.constants.Constants;
 import com.music.player.lib.listener.OnUserPlayerEventListener;
 import com.music.player.lib.manager.MusicPlayerManager;
-import com.music.player.lib.mode.GlideCircleTransform;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.Logger;
 
@@ -64,7 +63,6 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
     private void initView(Context context, AttributeSet attrs) {
 
         View.inflate(context, R.layout.view_music_small_player_controller, this);
-
 
 
         ivCovorThumb = findViewById(R.id.iv_covor_thumb);
@@ -118,8 +116,7 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
                             mOptions = new RequestOptions();
                             mOptions.error(R.drawable.ic_launcher)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存源资源和转换后的资源
-                                    .skipMemoryCache(true)//跳过内存缓存
-                                    .transform(new GlideCircleTransform(getContext()));
+                                    .skipMemoryCache(true);//跳过内存缓存
                         }
                         Glide.with(getContext()).load(musicInfo.getImg()).apply(mOptions).thumbnail(0.1f).into(ivCovorThumb);//音标
                     }
@@ -164,7 +161,7 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
      */
     public void setPlaying(boolean flag) {
         if (null != ivPlayPause) {
-            ivPlayPause.setImageResource(flag?R.drawable.ic_player_pause:R.drawable.ic_player_play);
+            ivPlayPause.setImageResource(flag ? R.drawable.ic_player_pause : R.drawable.ic_player_play);
         }
     }
 
@@ -183,7 +180,7 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
                 mOptions.error(R.drawable.ic_launcher);
                 mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
                 mOptions.skipMemoryCache(true);//跳过内存缓存
-                mOptions.transform(new GlideCircleTransform(getContext()));
+
             }
             Glide.with(getContext()).load(musicInfo.getImg()).apply(mOptions).thumbnail(0.1f).into(ivCovorThumb);//音标
             setPlaying(2 == musicInfo.getPlauStatus());//是否正在播放
