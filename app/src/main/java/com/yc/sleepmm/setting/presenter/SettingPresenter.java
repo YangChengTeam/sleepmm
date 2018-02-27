@@ -8,9 +8,8 @@ import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
-import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
-import com.yc.sleepmm.index.model.engine.EngineUtils;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.setting.bean.UploadInfo;
 import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.engine.SettingEngine;
@@ -40,29 +39,6 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
         if (!forceUpdate) return;
         getGoodInfos("1", 1, 10);
 
-    }
-
-    @Override
-    public void getPayInfos() {
-        Subscription subscription = mEngine.getPayInfos().subscribe(new Subscriber<ResultInfo<List<PayInfo>>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(ResultInfo<List<PayInfo>> listResultInfo) {
-                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
-                    PaywayHelper.setmPaywayInfo(listResultInfo.data);
-                }
-            }
-        });
-        mSubscriptions.add(subscription);
     }
 
 
@@ -149,8 +125,9 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
 
     }
 
-    public void getUserInfo() {
-        Subscription subscription = EngineUtils.getUserInfo(mContext, APP.getInstance().getUid()).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
+    @Override
+    public void getPayInfos() {
+        Subscription subscription = mEngine.getPayInfos().subscribe(new Subscriber<ResultInfo<List<PayInfo>>>() {
             @Override
             public void onCompleted() {
 
@@ -162,13 +139,12 @@ public class SettingPresenter extends BasePresenter<SettingEngine, SettingContra
             }
 
             @Override
-            public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
-                if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
-                    APP.getInstance().setUserData(userInfoResultInfo.data, true);
+            public void onNext(ResultInfo<List<PayInfo>> listResultInfo) {
+                if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK && listResultInfo.data != null) {
+                    PaywayHelper.setmPaywayInfo(listResultInfo.data);
                 }
             }
         });
         mSubscriptions.add(subscription);
-
     }
 }

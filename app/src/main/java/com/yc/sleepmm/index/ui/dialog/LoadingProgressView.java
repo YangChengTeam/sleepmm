@@ -43,7 +43,11 @@ public class LoadingProgressView extends Dialog {
         }
 //        setCancelable(false);
 //        setCanceledOnTouchOutside(false);
+
     }
+
+
+
 
     @Override
     public void dismiss() {

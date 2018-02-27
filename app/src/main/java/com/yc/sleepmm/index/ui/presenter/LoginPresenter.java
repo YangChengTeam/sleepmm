@@ -72,7 +72,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
         Subscription subscription = mEngine.snsLogin(userDataInfo.getAccessToken(), userDataInfo.getLoginType(), userDataInfo.getNickname(), userDataInfo.getIconUrl()).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
-                mView.dismissProgressDialog();
+
             }
 
             @Override
@@ -82,6 +82,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
 
             @Override
             public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                mView.dismissProgressDialog();
                 if (null != userInfoResultInfo) {
                     if (HttpConfig.STATUS_OK == userInfoResultInfo.code && null != userInfoResultInfo.data) {
                         if (null != mView)
@@ -110,7 +111,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
         Subscription subscription = mEngine.loginAccount(account, password).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
-                mView.dismissProgressDialog();
+
             }
 
             @Override
@@ -120,6 +121,8 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
 
             @Override
             public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+
+                mView.dismissProgressDialog();
                 isLogin = false;
                 if (null != userInfoResultInfo) {
                     if (1 == userInfoResultInfo.code && null != userInfoResultInfo.data) {
@@ -151,7 +154,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
         Subscription subscription = mEngine.registerAccount(account, password, code).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
-                mView.dismissProgressDialog();
+
             }
 
             @Override
@@ -161,6 +164,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
 
             @Override
             public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                mView.dismissProgressDialog();
                 isRegister = false;
                 if (null != userInfoResultInfo) {
                     if (1 == userInfoResultInfo.code && null != userInfoResultInfo.data) {
@@ -191,7 +195,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
         Subscription subscription = mEngine.findPassword(phoneNumber, code, newPassword).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
             @Override
             public void onCompleted() {
-                mView.dismissProgressDialog();
+
             }
 
             @Override
@@ -201,6 +205,7 @@ public class LoginPresenter extends BasePresenter<LoginGroupEngine, LoginContrac
 
             @Override
             public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                mView.dismissProgressDialog();
                 isMakePassword = false;
                 if (null != userInfoResultInfo) {
                     if (HttpConfig.STATUS_OK == userInfoResultInfo.code && null != userInfoResultInfo.data) {

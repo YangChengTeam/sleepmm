@@ -809,6 +809,14 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
         return -1;
     }
 
+    private MusicInfo getCurrentMusicInfo() {
+        int position = getPlayPosition();
+        if (mMusicInfos != null && position != -1) {
+            return mMusicInfos.get(position);
+        }
+        return null;
+    }
+
 
     private Notification getNotification(MusicInfo musicInfo) {
 //        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.remote_music_player_layout);
@@ -1131,6 +1139,10 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
 
         public void cancelNotification() {
             MusicPlayerService.this.cancelNotification();
+        }
+
+        public MusicInfo getCurrentMusic() {
+            return MusicPlayerService.this.getCurrentMusicInfo();
         }
 
     }

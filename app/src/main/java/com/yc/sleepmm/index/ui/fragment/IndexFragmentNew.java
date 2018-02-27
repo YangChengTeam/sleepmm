@@ -1,18 +1,24 @@
 package com.yc.sleepmm.index.ui.fragment;
 
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.blankj.utilcode.util.SizeUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.kk.utils.LogUtil;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.util.PreferencesUtil;
 import com.music.player.lib.view.MusicPlayerController;
+import com.music.player.lib.view.MusicPlayerSmallController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseFragment;
@@ -31,7 +37,7 @@ import butterknife.BindView;
  * Created by wanglin  on 2018/1/10 17:17.
  */
 
-public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements IndexMusicContract.View {
+public class IndexFragmentNew extends BaseFragment<IndexMusicPresenter> implements IndexMusicContract.View {
 
 
     @BindView(R.id.music_player_controller)
@@ -40,11 +46,17 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     XTabLayout tab_layout;
     @BindView(R.id.view_pager)
     ViewPager mView_pager;
+    @BindView(R.id.music_player_small_controller)
+    MusicPlayerSmallController musicPlayerSmallController;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsingToolbarLayout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_index;
+        return R.layout.fragment_index_new;
     }
 
     @Override
@@ -100,6 +112,26 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         });
         //注册观察者
         MusicPlayerManager.getInstance().addObservable(mPlayerController);
+        MusicPlayerManager.getInstance().addObservable(musicPlayerSmallController);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+
+                LogUtil.msg("TAG  " + verticalOffset + "--" + appBarLayout.getHeight() + " --" + collapsingToolbarLayout.getHeight());
+
+//                if (-verticalOffset >= mPlayerController.getHeight() - musicPlayerSmallController.getHeight()) {
+                if (-verticalOffset >= appBarLayout.getHeight() - SizeUtils.dp2px(103)) {
+                    musicPlayerSmallController.setVisibility(View.VISIBLE);
+                    mPlayerController.setVisibility(View.INVISIBLE);
+                } else {
+                    mPlayerController.setVisibility(View.VISIBLE);
+                    musicPlayerSmallController.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
     }
 
 
@@ -108,7 +140,9 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         super.onDestroy();
         if (null != mPlayerController) {
             MusicPlayerManager.getInstance().deleteObserver(mPlayerController);//移除观察者
+            MusicPlayerManager.getInstance().deleteObserver(musicPlayerSmallController);
             mPlayerController.onDestroy();
+            musicPlayerSmallController.onDestroy();
         }
     }
 
@@ -175,7 +209,6 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     public void showCollectSucess(boolean isCollect) {
         mPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect);
     }
-
 
 }
 

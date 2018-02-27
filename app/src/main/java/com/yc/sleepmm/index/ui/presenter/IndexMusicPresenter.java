@@ -14,6 +14,7 @@ import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.base.util.CommonInfoHelper;
 import com.yc.sleepmm.index.constants.SpConstant;
 import com.yc.sleepmm.index.model.bean.MusicTypeInfo;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.index.model.engine.IndexMusicEngine;
 import com.yc.sleepmm.index.rxnet.IndexMusicContract;
@@ -37,7 +38,7 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
     @Override
     public void loadData(boolean forceUpdate, boolean showLoadingUI) {
         if (!forceUpdate) return;
-
+        getMusicTypes();
     }
 
     @Override
@@ -162,6 +163,30 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
             }
         });
 
+        mSubscriptions.add(subscription);
+
+    }
+
+
+    public void getUserInfo() {
+        Subscription subscription = EngineUtils.getUserInfo(mContext, APP.getInstance().getUid()).subscribe(new Subscriber<ResultInfo<UserInfo>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
+                    APP.getInstance().setUserData(userInfoResultInfo.data, true);
+                }
+            }
+        });
         mSubscriptions.add(subscription);
 
     }

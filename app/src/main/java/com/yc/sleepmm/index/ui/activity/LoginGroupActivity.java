@@ -270,7 +270,15 @@ public class LoginGroupActivity extends BaseActivity<LoginPresenter> implements 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
             dismissProgressDialog();
-            ToastUtils.showCenterToast("登录失败，请重试!");
+
+            String error = t.getMessage();
+            if (!TextUtils.isEmpty(error) && error.contains("2008")) {
+
+                ToastUtils.showCenterToast(platform.name() + "没有安装");
+            } else {
+                ToastUtils.showCenterToast("登录失败，请重试!");
+            }
+
         }
 
         @Override
@@ -298,7 +306,6 @@ public class LoginGroupActivity extends BaseActivity<LoginPresenter> implements 
             ToastUtils.showCenterToast(tint + "异常，请重试！");
         }
     }
-
 
 
     @Override

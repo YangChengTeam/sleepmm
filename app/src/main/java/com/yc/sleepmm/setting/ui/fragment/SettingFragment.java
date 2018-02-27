@@ -91,8 +91,8 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     @Override
     public void init() {
         mPresenter = new SettingPresenter(getActivity(), this);
-        mPresenter.getUserInfo();
         mPresenter.getPayInfos();
+
         setUserInfo("");
         initListener();
     }

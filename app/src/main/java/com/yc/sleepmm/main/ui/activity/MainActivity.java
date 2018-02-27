@@ -19,7 +19,7 @@ import com.yalantis.ucrop.UCropActivity;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.base.view.ExitDialog;
-import com.yc.sleepmm.index.ui.fragment.IndexFragment;
+import com.yc.sleepmm.index.ui.fragment.IndexFragmentNew;
 import com.yc.sleepmm.main.ui.adapter.MainAdapter;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         //初始化MusicService
         MusicPlayerManager.getInstance().bindService(this);
         mList = new ArrayList<>();
-        mList.add(new IndexFragment());
+        mList.add(new IndexFragmentNew());
         mList.add(new SleepFragment());
         mList.add(new SettingFragment());
         MainAdapter mainAdapter = new MainAdapter(getSupportFragmentManager(), mList);
@@ -142,11 +142,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+
         MusicPlayerManager.getInstance().clearNotifycation();
         MusicPlayerManager.getInstance().unBindService(this);
         MusicPlayerManager.getInstance().deleteObservers();
         MusicPlayerManager.getInstance().deteleAllPlayerStateListener();
+        super.onDestroy();
     }
 
     private void applyPermission() {

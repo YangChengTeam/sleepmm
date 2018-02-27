@@ -236,6 +236,15 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     }
 
 
+    public MusicInfo getCurrentMusicInfo() {
+        if (serviceIsNoEmpty()) {
+            return mMusicPlayerServiceBunder.getCurrentMusic();
+        }
+
+        return null;
+    }
+
+
     /**
      * 播放或者暂停
      *
