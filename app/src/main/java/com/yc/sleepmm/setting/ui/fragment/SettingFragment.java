@@ -26,8 +26,8 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.base.view.BaseFragment;
-import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.constants.Constant;
+import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.index.ui.activity.LoginGroupActivity;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.contract.SettingContract;
@@ -122,7 +122,13 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             String vip_end_time = null;
             if (vip != 0 && !TextUtils.isEmpty(userInfo.getVip_end_time())) {
                 try {
-                    String str = TimeUtils.date2String(new Date(Long.parseLong(userInfo.getVip_end_time()) * 1000), new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()));
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    String str = TimeUtils.date2String(new Date(Long.parseLong(userInfo.getVip_end_time()) * 1000), dateFormat);
+
+                    if (str.equals(TimeUtils.date2String(new Date(), dateFormat))) {
+                        str = getString(R.string.today);
+                    }
+
                     vip_end_time = String.format(getString(R.string.expired_time), str);
                 } catch (Exception e) {
                 }

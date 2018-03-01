@@ -10,8 +10,11 @@ import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.util.PreferencesUtil;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
+import com.yc.sleepmm.index.model.engine.EngineUtils;
 import com.yc.sleepmm.sleep.contract.SpaDetailContract;
 import com.yc.sleepmm.sleep.model.engine.SpaDetailEngine;
+
+import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -139,5 +142,59 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
             });
             mSubscriptions.add(subscription);
         }
+    }
+
+    public void getSpaDetailList(String typeId, final int page, final int limit, final String spaId) {
+        if (page == 1)
+            mView.showLoading();
+        Subscription subscription = EngineUtils.getSpaItemList(mContext, typeId, page, limit).subscribe(new Subscriber<ResultInfo<List<MusicInfo>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (page == 1)
+                    mView.showNoNet();
+            }
+
+            @Override
+            public void onNext(ResultInfo<List<MusicInfo>> spaDetailInfoResultInfo) {
+                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK && spaDetailInfoResultInfo.data != null) {
+                    mView.hide();
+                    if (page == 1) {
+                        mView.showSpaDetailList(filterData(spaDetailInfoResultInfo.data, spaId));
+                    } else {
+                        mView.showSpaDetailList(spaDetailInfoResultInfo.data);
+                    }
+
+                } else {
+                    if (page == 1)
+                        mView.showNoData();
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
+
+    private List<MusicInfo> filterData(List<MusicInfo> list, String spaId) {
+
+        MusicInfo currentInfo = null;
+        if (list.size() > 0) {
+            for (MusicInfo musicInfo : list) {
+                if (musicInfo.getId().equals(spaId)) {
+                    currentInfo = musicInfo;
+                    break;
+                }
+            }
+            if (currentInfo != null) {
+                list.remove(currentInfo);
+                list.add(0, currentInfo);
+            }
+        }
+        return list;
+
     }
 }

@@ -12,6 +12,7 @@ import com.yc.sleepmm.index.model.bean.UserInfo;
 import com.yc.sleepmm.setting.constants.NetConstant;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -97,6 +98,20 @@ public class EngineUtils {
         return HttpCoreEngin.get(context).rxpost(NetConstant.user_info_url, new TypeReference<ResultInfo<UserInfo>>() {
         }.getType(), params, true, true, true);
 
+
+    }
+
+
+    //列表
+    public static Observable<ResultInfo<List<MusicInfo>>> getSpaItemList(Context context, String typeId, int page, int limit) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("type_id", typeId);
+        params.put("page", page + "");
+        params.put("limit", limit + "");
+        params.put("user_id", APP.getInstance().isLogin() ? APP.getInstance().getUserData().getId() : "0");
+        return HttpCoreEngin.get(context).rxpost(com.yc.sleepmm.sleep.constants.NetConstant.SPA_ITEM_LIST_URL, new TypeReference<ResultInfo<List<MusicInfo>>>() {
+        }.getType(), params, true, true, true);
 
     }
 }

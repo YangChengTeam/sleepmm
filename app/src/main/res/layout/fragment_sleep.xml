@@ -16,6 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="36dp"
+        android:dividerHeight="@dimen/dp_10"
         android:animateLayoutChanges="false"
         android:groupIndicator="@null">
     </ExpandableListView>

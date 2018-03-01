@@ -27,6 +27,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="8dp"
+            android:maxLength="150"
             android:text="朋友之间的交往你要注意哪些事"
             android:textColor="@color/sleep_text_color"
             android:textSize="14sp" />
@@ -92,7 +93,8 @@
             android:layout_marginTop="8dp"
             android:text="中国传媒大学，超级网红，声音超级好听"
             android:textColor="@color/sleep_text_color"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View

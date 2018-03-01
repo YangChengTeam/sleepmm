@@ -19,7 +19,7 @@ public class SpaItemInfo {
     private String add_time;
     private String add_date;
 
-    private String is_favorite;
+    private int is_favorite;
     private String author_title;
 
     public String getId() {
@@ -110,11 +110,11 @@ public class SpaItemInfo {
         this.add_date = add_date;
     }
 
-    public String getIs_favorite() {
+    public int getIs_favorite() {
         return is_favorite;
     }
 
-    public void setIs_favorite(String is_favorite) {
+    public void setIs_favorite(int is_favorite) {
         this.is_favorite = is_favorite;
     }
 

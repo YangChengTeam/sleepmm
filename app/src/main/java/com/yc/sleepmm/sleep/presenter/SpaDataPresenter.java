@@ -79,4 +79,25 @@ public class SpaDataPresenter extends BasePresenter<SpaDataInfoEngine, SpaDataCo
         });
         mSubscriptions.add(subscription);
     }
+
+
+    public void getSpaItemList(String typeId, int page, int limit, final int position) {
+        Subscription subscription = mEngine.getSpaItemList(typeId, page, limit).subscribe(new Subscriber<ResultInfo<List<SpaItemInfo>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<List<SpaItemInfo>> spaDetailInfoResultInfo) {
+                mView.showSpaItemList(spaDetailInfoResultInfo.data, position);
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
 }

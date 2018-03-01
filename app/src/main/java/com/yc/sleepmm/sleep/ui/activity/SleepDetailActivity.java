@@ -32,6 +32,8 @@ import com.yc.sleepmm.sleep.adapter.UserSleepAdapter;
 import com.yc.sleepmm.sleep.contract.SpaDetailContract;
 import com.yc.sleepmm.sleep.presenter.SpaDetailPresenter;
 
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -56,6 +58,9 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     private ImageView ivUserHead;
     private TextView tvAutor;
     private TextView tvAutorDes;
+    private int page = 1;
+    private String typeId;
+    private int limit = 10;
 
     @Override
     public int getLayoutId() {
@@ -67,13 +72,27 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         mPresenter = new SpaDetailPresenter(this, this);
 
         Intent intent = getIntent();
-        if (intent != null && intent.getStringExtra("spa_id") != null)
+        if (intent != null) {
             spaId = intent.getStringExtra("spa_id");
+
+//            page = intent.getIntExtra("pos", 0);
+            typeId = intent.getStringExtra("type_id");
+        }
 
         getData();
         initViews();
         initAdapter();
+        initListener();
 
+    }
+
+    private void initListener() {
+        userSleepAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getData();
+            }
+        }, recyclerView);
     }
 
     /**
@@ -92,7 +111,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         //设置闹钟初始的定时时间
 //        mMusicPlayerController.setAlarmSeekBarProgress(60);
         //是否点赞,默认false
-        mMusicPlayerController.setVisivable(false);
+//        mMusicPlayerController.setVisivable(false);
 
         //注册事件回调
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {
@@ -242,7 +261,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
     public void getData() {
-        mPresenter.getSpaDetailInfo(spaId);
+        mPresenter.getSpaDetailList(typeId, page, limit, spaId);
     }
 
 
@@ -279,23 +298,27 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
         if (null != userSleepAdapter && data != null && data.getLists() != null && data.getLists().size() > 0) {
             musicInfo = data;
-            showCollectSucess(data.getLists().get(0).getIs_favorite() == 1);
-            userSleepAdapter.setNewData(data.getLists());
-            tvWordDes.setText(data.getTitle());
+            showCollectSucess(data.getIs_favorite() == 1);
+//            userSleepAdapter.setNewData(data.getLists());
+            tvWordDes.setText(data.getDesp());
             tvAutor.setText(data.getAuthor_title());
             tvAutorDes.setText(data.getAuthor_desp());
             Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
-            if (isRandom) {
-                mMusicPlayerController.setVisivable(true);
-                int position = (int) (Math.random() * data.getLists().size());
-                MusicPlayerManager.getInstance().playMusic(data.getLists(), position);
-            } else {
-                MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
 
-                if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
-                    MusicPlayerManager.getInstance().playMusic(musicInfo);
-                }
-            }
+            MusicPlayerManager.getInstance().playPauseMusic(data.getLists(), 0);
+
+
+//            if (isRandom) {
+//                mMusicPlayerController.setVisivable(true);
+//                int position = (int) (Math.random() * data.getLists().size());
+//
+//            } else {
+//                MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
+//
+//                if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
+//                    MusicPlayerManager.getInstance().playMusic(musicInfo);
+//                }
+//            }
 
         }
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
@@ -304,6 +327,43 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     @Override
     public void showCollectSucess(boolean isCollect) {
         mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect);
+    }
+
+    @Override
+    public void showSpaDetailList(List<MusicInfo> list) {
+
+
+        if (list != null && list.size() > 0) {
+            if (page == 1) {
+                musicInfo = list.get(0);
+                showCollectSucess(list.get(0).getIs_favorite() == 1);
+                tvWordDes.setText(musicInfo.getDesp());
+                tvAutor.setText(musicInfo.getAuthor_title());
+                tvAutorDes.setText(musicInfo.getAuthor_desp());
+                Glide.with(SleepDetailActivity.this).load(musicInfo.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
+                MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
+
+                if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
+                    MusicPlayerManager.getInstance().playPauseMusic(list, 0);
+                }
+                userSleepAdapter.setNewData(list);
+            } else {
+                userSleepAdapter.addData(list);
+            }
+
+
+            if (list.size() == limit) {
+                page++;
+                userSleepAdapter.loadMoreComplete();
+            } else {
+                userSleepAdapter.loadMoreEnd();
+            }
+
+
+        }
+
+
+        MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
     }
 
 

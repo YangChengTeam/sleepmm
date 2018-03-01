@@ -17,13 +17,17 @@ import java.util.List;
 
 public interface SpaDataContract {
 
-    interface View extends IView,ILoading, IHide, INoNet, INoData {
+    interface View extends IView, ILoading, IHide, INoNet, INoData {
         void showSpaData(List<SpaDataInfo> datas);
+
         void showSpaItemList(List<SpaItemInfo> itemInfos);
+
+        void showSpaItemList(List<SpaItemInfo> itemInfos, int postion);
     }
 
     interface Presenter extends IPresenter {
         void getSpaDataList();
-        void getSpaItemList(String typeId,int page,int limit);
+
+        void getSpaItemList(String typeId, int page, int limit);
     }
 }

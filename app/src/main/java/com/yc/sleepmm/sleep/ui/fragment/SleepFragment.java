@@ -216,6 +216,11 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     }
 
     @Override
+    public void showSpaItemList(List<SpaItemInfo> itemInfos, int postion) {
+
+    }
+
+    @Override
     public void loadMore(SpaListAdapter spaListAdapter) {
         currentSpaListAdapter = spaListAdapter;
         //当前分类的页面
