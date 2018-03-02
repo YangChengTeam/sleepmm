@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,7 +31,6 @@ import com.yc.sleepmm.setting.contract.VipContract;
 import com.yc.sleepmm.setting.presenter.VipPresenter;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
-import com.yc.sleepmm.vip.ui.adapter.VipGoodAdapter;
 import com.yc.sleepmm.vip.ui.adapter.VipPayAdapter;
 import com.yc.sleepmm.vip.utils.GoodsInfoHelper;
 import com.yc.sleepmm.vip.utils.PaywayHelper;
@@ -64,7 +64,11 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
     Button btnCharge;
     @BindView(R.id.ll_pay)
     LinearLayout llPay;
-    private VipGoodAdapter vipGoodAdapter;
+    @BindView(R.id.rl_good)
+    RelativeLayout rlGood;
+    @BindView(R.id.tv_vip_price)
+    TextView tvVipPrice;
+    //    private VipGoodAdapter vipGoodAdapter;
     private VipPayAdapter vipPayAdapter;
     private GoodsInfo goodsInfo;
     private PayInfo payInfo;
@@ -85,13 +89,14 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
 //        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) nestedScrollView.getLayoutParams();
 //        layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT - ScreenUtil.dip2px(this, 50);
 //        nestedScrollView.setLayoutParams(layoutParams);
-
-        recyclerViewGood.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        vipGoodAdapter = new VipGoodAdapter(GoodsInfoHelper.getGoodsInfoList());
-
-        recyclerViewGood.setAdapter(vipGoodAdapter);
+        rlGood.setSelected(true);
+//        recyclerViewGood.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//        vipGoodAdapter = new VipGoodAdapter(GoodsInfoHelper.getGoodsInfoList());
+//
+//        recyclerViewGood.setAdapter(vipGoodAdapter);
         if (GoodsInfoHelper.getGoodsInfoList() != null && GoodsInfoHelper.getGoodsInfoList().size() > 0) {
             goodsInfo = GoodsInfoHelper.getGoodsInfoList().get(0);
+            tvVipPrice.setText(goodsInfo.vip_price);
         }
         recyclerViewPay.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         vipPayAdapter = new VipPayAdapter(PaywayHelper.getmPaywayInfo());
@@ -149,13 +154,13 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
             }
         });
 
-        vipGoodAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                vipGoodAdapter.getView(position).setSelected(true);
-                goodsInfo = (GoodsInfo) adapter.getItem(position);
-            }
-        });
+//        vipGoodAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                vipGoodAdapter.getView(position).setSelected(true);
+//                goodsInfo = (GoodsInfo) adapter.getItem(position);
+//            }
+//        });
 
         vipPayAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

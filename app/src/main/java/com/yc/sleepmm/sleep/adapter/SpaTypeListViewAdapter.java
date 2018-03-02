@@ -3,10 +3,9 @@ package com.yc.sleepmm.sleep.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,32 +21,34 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.kk.utils.LogUtil;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.util.DateUtils;
-import com.yc.sleepmm.sleep.bean.SpaItemInfoWrapper;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
 import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
 import com.yc.sleepmm.sleep.ui.activity.SleepDetailActivity;
 
 import java.util.List;
-import java.util.Map;
 
 public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
 
+
     public Context mContext;
 
-    private Map<Integer, SpaItemInfoWrapper> dataSet;
+    private SparseArray<List<SpaItemInfo>> dataSet;
 
     private List<SpaDataInfo> spaDataInfos;
 
-    private Handler handler;
 
     public int currentParentPosition;
 
     public int lastParentPosition;
 
+    public SparseArray<RecyclerView> sparseArray;
+
     public interface OnMoreListener {
-        void loadMore(SpaListAdapter spaListAdapter);
+        void loadMore(SpaListAdapter spaListAdapter, int position);
+
     }
 
     public OnMoreListener onMoreListener;
@@ -56,45 +57,39 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
         this.onMoreListener = onMoreListener;
     }
 
-    public void setDataSet(Map<Integer, SpaItemInfoWrapper> dataSet) {
+    public void setDataSet(SparseArray<List<SpaItemInfo>> dataSet) {
         this.dataSet = dataSet;
+        notifyDataSetChanged();
     }
 
     public void setSpaDataInfos(List<SpaDataInfo> spaDataInfos) {
         this.spaDataInfos = spaDataInfos;
+        notifyDataSetChanged();
     }
 
     public void setCurrentParentPosition(int currentParentPosition) {
         this.currentParentPosition = currentParentPosition;
     }
 
-    public SpaTypeListViewAdapter(Context context, Map<Integer, SpaItemInfoWrapper> dataset, List<SpaDataInfo> spaDataInfos) {
+    public SpaTypeListViewAdapter(Context context, SparseArray<List<SpaItemInfo>> dataset, List<SpaDataInfo> spaDataInfos) {
         this.mContext = context;
         this.dataSet = dataset;
         this.spaDataInfos = spaDataInfos;
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                notifyDataSetChanged();
-                super.handleMessage(msg);
-            }
-        };
+        sparseArray = new SparseArray<>();
     }
 
-    public void refresh() {
-        handler.sendMessage(new Message());
-    }
 
     //  获得某个父项的某个子项
     @Override
     public Object getChild(int parentPos, int childPos) {
-        return dataSet != null ? dataSet.get(parentPos).getList() : null;
+        return dataSet != null ? dataSet.get(parentPos).get(childPos) : null;
     }
+
 
     //  获得父项的数量
     @Override
     public int getGroupCount() {
-        return dataSet != null ? dataSet.size() : 0;
+        return spaDataInfos != null ? spaDataInfos.size() : 0;
     }
 
     //  获得某个父项的子项数目
@@ -106,7 +101,7 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
     //  获得某个父项
     @Override
     public Object getGroup(int parentPos) {
-        return dataSet != null ? dataSet.get(parentPos) : 0;
+        return spaDataInfos != null ? spaDataInfos.get(parentPos) : null;
     }
 
     //  获得某个父项的id
@@ -129,40 +124,47 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
 
     //  获得父项显示的view
     @Override
-    public View getGroupView(final int parentPos, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int parentPos, boolean isExpanded, View converView, ViewGroup parent) {
+        LogUtil.msg("TAG getGroupView");
+        View view = converView;
+        GroupHolder groupHolder;
         if (view == null) {
+            groupHolder = new GroupHolder();
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.spa_list_item_head, null);
+            groupHolder.mTitleTv = view.findViewById(R.id.tv_spa_level_one);
+            groupHolder.mSingUserTv = view.findViewById(R.id.tv_head_sing_user);
+            groupHolder.mSingTimeTv = view.findViewById(R.id.tv_head_sing_time);
+            groupHolder.mListenCountTv = view.findViewById(R.id.tv_head_listen_count);
+            groupHolder.mHeadPlayIv = view.findViewById(R.id.iv_head_play);
+            groupHolder.typeLayout = view.findViewById(R.id.type_layout);
+            view.setTag(groupHolder);
+        } else {
+            groupHolder = (GroupHolder) view.getTag();
         }
-        view.setTag(R.layout.spa_list_item_head, parentPos);
-        view.setTag(R.layout.spa_list_item_content, -1);
-        final LinearLayout typeLayout = view.findViewById(R.id.type_layout);
 
-        TextView mTitleTv = (TextView) view.findViewById(R.id.tv_spa_level_one);
-        TextView mSingUserTv = (TextView) view.findViewById(R.id.tv_head_sing_user);
-        TextView mSingTimeTv = (TextView) view.findViewById(R.id.tv_head_sing_time);
-        TextView mListenCountTv = (TextView) view.findViewById(R.id.tv_head_listen_count);
-        ImageView mHeadPlayIv = (ImageView) view.findViewById(R.id.iv_head_play);
+
         if (spaDataInfos != null && spaDataInfos.get(parentPos) != null) {
             if (spaDataInfos.get(parentPos).getFirst() != null) {
-                mTitleTv.setText(spaDataInfos.get(parentPos).getFirst().getTitle());
-                mSingUserTv.setText(spaDataInfos.get(parentPos).getFirst().getAuthor_title());
-                mListenCountTv.setText(StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getPlay_num()) ? "0" : spaDataInfos.get(parentPos).getFirst().getPlay_num() + "");
+                groupHolder.mTitleTv.setText(spaDataInfos.get(parentPos).getFirst().getTitle());
+                groupHolder.mSingUserTv.setText(spaDataInfos.get(parentPos).getFirst().getAuthor_title());
+                groupHolder.mListenCountTv.setText(StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getPlay_num()) ? "0" : spaDataInfos.get(parentPos).getFirst().getPlay_num() + "");
                 if (!StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getTime())) {
-                    mSingTimeTv.setText(DateUtils.getFormatDateInSecond(spaDataInfos.get(parentPos).getFirst().getTime()));
+                    groupHolder.mSingTimeTv.setText(DateUtils.getFormatDateInSecond(spaDataInfos.get(parentPos).getFirst().getTime()));
                 }
             }
 
+            final GroupHolder finalGroupHolder = groupHolder;
             Glide.with(mContext).asDrawable().load(spaDataInfos.get(parentPos).getImg()).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {
-                    typeLayout.setBackground(drawable);
+                    finalGroupHolder.typeLayout.setBackground(drawable);
                 }
             });
         }
 
         //头部的播放按钮
-        mHeadPlayIv.setOnClickListener(new View.OnClickListener() {
+        groupHolder.mHeadPlayIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (spaDataInfos.get(parentPos).getFirst() != null && !StringUtils.isEmpty(spaDataInfos.get(parentPos).getFirst().getId())) {
@@ -182,32 +184,29 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
 
     //  获得子项显示的view
     @Override
-    public View getChildView(int parentPos, int childPos, boolean b, View childView, final ViewGroup viewGroup) {
+    public View getChildView(final int parentPos, int childPos, boolean b, View convertView, final ViewGroup viewGroup) {
 
+        LogUtil.msg("TAG getChildView");
         LogUtils.i("getChildView currentParentPosition ---> " + currentParentPosition + "---parentPos" + parentPos);
 
-        /*if(currentParentPosition != parentPos){
-            return childView;
-        }*/
+        View childView = convertView;
 
         if (childView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             childView = inflater.inflate(R.layout.spa_list_item_child, null);
         }
-
-        childView.setTag(R.layout.spa_list_item_head, parentPos);
-        childView.setTag(R.layout.spa_list_item_child, childPos);
-
         RecyclerView childRecyclerView = childView.findViewById(R.id.spa_child_list);
-        if (dataSet.get(parentPos) != null && dataSet.get(parentPos).getList() != null) {
-            final SpaListAdapter spaListAdapter = new SpaListAdapter(dataSet.get(parentPos).getList());
+
+
+        if (dataSet != null && dataSet.get(parentPos) != null) {
+            final SpaListAdapter spaListAdapter = new SpaListAdapter(dataSet.get(parentPos));
 
             childRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             childRecyclerView.setAdapter(spaListAdapter);
             spaListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
                 @Override
                 public void onLoadMoreRequested() {
-                    onMoreListener.loadMore(spaListAdapter);
+                    onMoreListener.loadMore(spaListAdapter, parentPos);
                 }
             }, childRecyclerView);
 
@@ -232,5 +231,37 @@ public class SpaTypeListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
+    }
+
+    /**
+     * 父类复用
+     */
+    public class GroupHolder {
+        public TextView mTitleTv;
+        public TextView mSingUserTv;
+        public TextView mSingTimeTv;
+        public TextView mListenCountTv;
+        public ImageView mHeadPlayIv;
+        public LinearLayout typeLayout;
+
+    }
+
+
+    public RecyclerView getView(int position) {
+        return sparseArray.get(position);
+    }
+
+    public SpaListAdapter getAdapter(int position) {
+
+        return ((SpaListAdapter) sparseArray.get(position).getAdapter());
+    }
+
+    public void setChildData(List<SpaItemInfo> infoList, int position) {
+        getAdapter(position).setNewData(infoList);
+    }
+
+
+    public void addChildData(List<SpaItemInfo> infoList, int position) {
+        getAdapter(position).addData(infoList);
     }
 }

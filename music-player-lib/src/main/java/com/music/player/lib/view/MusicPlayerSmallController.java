@@ -106,7 +106,7 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
                     Logger.d(TAG, "异步缓冲中");
                     if (null != tvMusicTitle) {
                         tvMusicTitle.setText(musicInfo.getTitle());
-                        String author = musicInfo.getAuthor();
+                        String author = musicInfo.getAuthor_title();
                         tvAuthor.setText(!TextUtils.isEmpty(author) ? author : "咩咩睡眠");
 
                     }

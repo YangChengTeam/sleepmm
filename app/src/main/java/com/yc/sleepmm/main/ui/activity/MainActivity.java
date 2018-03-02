@@ -23,7 +23,7 @@ import com.yc.sleepmm.index.ui.fragment.IndexFragment;
 import com.yc.sleepmm.main.ui.adapter.MainAdapter;
 import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.ui.fragment.SettingFragment;
-import com.yc.sleepmm.sleep.ui.fragment.SleepFragmentNew1;
+import com.yc.sleepmm.sleep.ui.fragment.SleepFragment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         MusicPlayerManager.getInstance().bindService(this);
         mList = new ArrayList<>();
         mList.add(new IndexFragment());
-        mList.add(new SleepFragmentNew1());
+        mList.add(new SleepFragment());
         mList.add(new SettingFragment());
         MainAdapter mainAdapter = new MainAdapter(getSupportFragmentManager(), mList);
         mMainViewPager.setAdapter(mainAdapter); //视图加载适配器

@@ -11,6 +11,7 @@
     <string name="individuality_skin">个性皮肤</string>
     <string name="opinion_feedback">意见反馈</string>
     <string name="system_setting">系统设置</string>
+    <string name="preside_setting">主播介绍</string>
     <string name="vip_protocol">会员协议</string>
     <string name="vip_right">会员权益</string>
     <string name="vip_type">会员种类</string>
@@ -44,6 +45,7 @@
         <item>20分钟后关闭</item>
         <item>30分钟后关闭</item>
         <item>深度睡眠后关闭</item>
+        <item>关闭闹钟</item>
 
     </string-array>
 

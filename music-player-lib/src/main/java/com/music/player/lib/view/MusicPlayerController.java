@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,10 +31,14 @@ import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.mode.PlayerStatus;
+import com.music.player.lib.util.DateUtil;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.MusicPlayerUtils;
 import com.music.player.lib.util.ToastUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -61,7 +67,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     private static int UI_COMPONENT_TYPE = Constants.UI_TYPE_HOME;
     private RequestOptions mOptions;
     private MusicInfo musicInfo;
-
+    private SeekBar mseekBar;
+    private TextView tvPlayDuration;
+    private TextView tvPlayProgress;
+    private MyRunable myRunable;
 
     public MusicPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -89,8 +98,13 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         RelativeLayout btnPlayMode = (RelativeLayout) findViewById(R.id.btn_play_mode);
         RelativeLayout btn_alarm = (RelativeLayout) findViewById(R.id.btn_alarm);
         RelativeLayout btn_player_collect = (RelativeLayout) findViewById(R.id.btn_player_collect);
+
         //进度条控制器
         mMusicPlayerSeekbar = (MusicPlayerSeekBar) findViewById(R.id.music_player_seekbar);
+
+        mseekBar = findViewById(R.id.mSeekBar);
+        tvPlayDuration = findViewById(R.id.tv_play_duration);
+        tvPlayProgress = findViewById(R.id.tv_play_progress);
         //处理进度条Bar点击事件
         mMusicPlayerSeekbar.setOnClickListener(new MusicPlayerSeekBar.OnClickListener() {
             @Override
@@ -162,6 +176,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         mBtnBack.setOnClickListener(onClickListener);
         MusicPlayerManager.getInstance().addPlayerStateListener(this);
         MusicPlayerManager.getInstance().checkedPlayerConfig();//检查播放器配置需要在注册监听之后进行,播放器的配置初始化是服务绑定成功后才会初始化的
+        mseekBar.setOnSeekBarChangeListener(seekBarlistener);
     }
 
 
@@ -241,6 +256,15 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
                     Logger.d(TAG, "异步缓冲中");
                     if (null != mTvMusicTitle) mTvMusicTitle.setText(musicInfo.getTitle());
+
+                    if (null != tvPlayDuration) {
+                        String seconds = musicInfo.getTime();
+                        if (TextUtils.isEmpty(seconds)) {
+                            seconds = "1.0";
+                        }
+                        float second = Float.parseFloat(seconds);
+                        tvPlayDuration.setText(DateUtil.getTimeLengthString((int) (second)));
+                    }
                     //封面
                     if (null != mIcPlayerCover) {
                         if (null == mOptions) {
@@ -259,7 +283,10 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                     Logger.d(TAG, "开始播放中");
                     if (null != mMusicPlayerSeekbar) {
                         mMusicPlayerSeekbar.setPlaying(true);
+
                     }
+                    myRunable = new MyRunable();
+                    mHandler.postDelayed(myRunable, 10);
                     break;
                 //暂停了播放
                 case PlayerStatus.PLAYER_STATUS_PAUSE:
@@ -276,6 +303,9 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
                     //封面
                     if (null != mIcPlayerCover)
                         mIcPlayerCover.setImageResource(R.drawable.ic_player_cover_default);
+                    if (myRunable != null) {
+                        mHandler.removeCallbacks(myRunable);
+                    }
                     //播放失败
                 case PlayerStatus.PLAYER_STATUS_ERROR:
                     Logger.d(TAG, "播放失败");
@@ -571,7 +601,7 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             }
             Glide.with(getContext()).load(musicInfo.getImg()).apply(mOptions).thumbnail(0.1f).into(mIcPlayerCover);//音标
             if (null != mMusicPlayerSeekbar)
-                mMusicPlayerSeekbar.setPlaying(2 == musicInfo.getPlauStatus() ? true : false);//是否正在播放
+                mMusicPlayerSeekbar.setPlaying(2 == musicInfo.getPlauStatus());//是否正在播放
         }
     }
 
@@ -624,6 +654,8 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
     }
 
+    private IMediaPlayer mMediaPlayer;
+
     /**
      * 播放器准备完成了
      *
@@ -634,6 +666,8 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
         if (null != mMusicPlayerSeekbar) {
             mMusicPlayerSeekbar.setPlaying(true);
+            mseekBar.setMax((int) mediaPlayer.getDuration());
+            mMediaPlayer = mediaPlayer;
         }
     }
 
@@ -706,5 +740,41 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     public void setVisivable(boolean isShow) {
         mBtnNext.setVisibility(isShow ? VISIBLE : GONE);
         mBtnLast.setVisibility(isShow ? VISIBLE : GONE);
+    }
+
+    private SeekBar.OnSeekBarChangeListener seekBarlistener = new SeekBar.OnSeekBarChangeListener()
+
+    {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            int progress = seekBar.getProgress();
+            MusicPlayerManager.getInstance().seekTo(progress);
+        }
+    };
+
+    private class MyRunable implements Runnable {
+        @Override
+        public void run() {
+            try {
+                if (mMediaPlayer != null) {
+                    mseekBar.setProgress((int) mMediaPlayer.getCurrentPosition());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
+                    tvPlayProgress.setText(simpleDateFormat.format(new Date((int) mMediaPlayer.getCurrentPosition())));
+                    mHandler.postDelayed(this, 500);
+                }
+            } catch (Exception e) {
+                Logger.e("TAG", e.getMessage());
+            }
+        }
     }
 }

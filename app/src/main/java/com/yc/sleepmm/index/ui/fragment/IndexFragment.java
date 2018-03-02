@@ -120,8 +120,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
 
 //                LogUtil.msg("TAG  " + verticalOffset + "--" + appBarLayout.getHeight() + " --" + collapsingToolbarLayout.getHeight());
 
-//                if (-verticalOffset >= mPlayerController.getHeight() - musicPlayerSmallController.getHeight()) {
-                if (-verticalOffset >= appBarLayout.getHeight() - SizeUtils.dp2px(103)) {
+                if (-verticalOffset >= appBarLayout.getHeight() - SizeUtils.dp2px(120)) {
                     musicPlayerSmallController.setVisibility(View.VISIBLE);
                     mPlayerController.setVisibility(View.INVISIBLE);
                 } else {

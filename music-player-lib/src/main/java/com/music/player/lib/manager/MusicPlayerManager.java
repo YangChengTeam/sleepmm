@@ -657,4 +657,10 @@ public class MusicPlayerManager implements OnPlayerEventListener {
             }
         }
     }
+
+    public void seekTo(int progrss) {
+        if (serviceIsNoEmpty()) {
+            mMusicPlayerServiceBunder.seekTo(progrss);
+        }
+    }
 }

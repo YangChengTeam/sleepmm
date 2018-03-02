@@ -147,6 +147,8 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
                 }
                 boolean isCollect = PreferencesUtil.getInstance().getBoolean(id);
                 mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect, id);
+                musicInfo = info;
+                setSleepDetailInfo();
             }
         });
         //注册到被观察者中
@@ -299,11 +301,8 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         if (null != userSleepAdapter && data != null && data.getLists() != null && data.getLists().size() > 0) {
             musicInfo = data;
             showCollectSucess(data.getIs_favorite() == 1);
-//            userSleepAdapter.setNewData(data.getLists());
-            tvWordDes.setText(data.getDesp());
-            tvAutor.setText(data.getAuthor_title());
-            tvAutorDes.setText(data.getAuthor_desp());
-            Glide.with(SleepDetailActivity.this).load(data.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
+
+            setSleepDetailInfo();
 
             MusicPlayerManager.getInstance().playPauseMusic(data.getLists(), 0);
 
@@ -337,10 +336,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             if (page == 1) {
                 musicInfo = list.get(0);
                 showCollectSucess(list.get(0).getIs_favorite() == 1);
-                tvWordDes.setText(musicInfo.getDesp());
-                tvAutor.setText(musicInfo.getAuthor_title());
-                tvAutorDes.setText(musicInfo.getAuthor_desp());
-                Glide.with(SleepDetailActivity.this).load(musicInfo.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
+                setSleepDetailInfo();
                 MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
 
                 if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
@@ -364,6 +360,13 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
+    }
+
+    private void setSleepDetailInfo() {
+        tvWordDes.setText(musicInfo.getDesp());
+        tvAutor.setText(musicInfo.getAuthor_title());
+        tvAutorDes.setText(musicInfo.getAuthor_desp());
+        Glide.with(SleepDetailActivity.this).load(musicInfo.getAuthor_img()).apply(new RequestOptions().error(R.mipmap.default_avatar).circleCrop()).into(ivUserHead);
     }
 
 

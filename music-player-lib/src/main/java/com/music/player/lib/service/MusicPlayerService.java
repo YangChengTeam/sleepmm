@@ -1145,6 +1145,10 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
             return MusicPlayerService.this.getCurrentMusicInfo();
         }
 
+        public void seekTo(int progress) {
+            MusicPlayerService.this.seekTo(progress);
+        }
+
     }
 
     private void cancelNotification() {

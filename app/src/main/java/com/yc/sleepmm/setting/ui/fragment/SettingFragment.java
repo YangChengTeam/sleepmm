@@ -34,6 +34,7 @@ import com.yc.sleepmm.setting.contract.SettingContract;
 import com.yc.sleepmm.setting.presenter.SettingPresenter;
 import com.yc.sleepmm.setting.ui.activity.FindCenterActivity;
 import com.yc.sleepmm.setting.ui.activity.OptionFeedbackActivity;
+import com.yc.sleepmm.setting.ui.activity.PresideIntroduceActivity;
 import com.yc.sleepmm.setting.ui.activity.SkinActivity;
 import com.yc.sleepmm.setting.ui.activity.SystemSettingActivity;
 import com.yc.sleepmm.setting.ui.activity.UserKeepActivity;
@@ -80,6 +81,9 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     Button btnVip;
     @BindView(R.id.tv_expired_time)
     TextView tvExpiredTime;
+    @BindView(R.id.baseSettingView_preside)
+    BaseSettingView baseSettingViewPreside;
+
     private UserInfo userInfo;
 
 
@@ -252,6 +256,13 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                     }
                 });
                 rxDialogEditSureCancel.show();
+            }
+        });
+
+        RxView.clicks(baseSettingViewPreside).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                startActivity(new Intent(getActivity(), PresideIntroduceActivity.class));
             }
         });
 
