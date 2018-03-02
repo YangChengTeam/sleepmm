@@ -10,8 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.music.player.lib.R;
-import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.MusicPlayerUtils;
 
 /**
@@ -41,7 +41,7 @@ public class MusicPlayerSeekBar extends View {
     private int mSeekBarCenterY = 0;
     private float mThumbLeft = 0;
     private float mThumbTop = 0;
-    private float mSeekBarDegree =0;
+    private float mSeekBarDegree = 0;
     private long mCurrentProgress = 0;
     private float mDownX;
     private float mDownY;
@@ -69,7 +69,7 @@ public class MusicPlayerSeekBar extends View {
     }
 
 
-    private void initViewAttrs(AttributeSet attrs){
+    private void initViewAttrs(AttributeSet attrs) {
 
         TypedArray localTypedArray = mContext.obtainStyledAttributes(attrs, R.styleable.MusicPlayerSeekBar);
         //thumb的属性是使用android:thumb属性进行设置的
@@ -82,7 +82,7 @@ public class MusicPlayerSeekBar extends View {
         //未选中的播放按钮
         mThumbNormal = new int[]{-android.R.attr.state_selected, -android.R.attr.state_checked};
         //选中效果的暂停按钮
-        mThumbPressed = new int[]{ android.R.attr.state_selected, android.R.attr.state_checked};
+        mThumbPressed = new int[]{android.R.attr.state_selected, android.R.attr.state_checked};
 
         float progressWidth = localTypedArray.getDimension(R.styleable.MusicPlayerSeekBar_progress_width, 5);
         int progressBackgroundColor = localTypedArray.getColor(R.styleable.MusicPlayerSeekBar_progress_background, Color.GRAY);
@@ -118,7 +118,7 @@ public class MusicPlayerSeekBar extends View {
     }
 
 
-    private void initViewDefault(){
+    private void initViewDefault() {
         mThumbDrawable = null;
         mThumbWidth = 0;
         mThumbHeight = 0;
@@ -161,13 +161,11 @@ public class MusicPlayerSeekBar extends View {
     }
 
 
-
-
     @Override
-    protected  void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //7.1系统遇到的坑，必须精确测量View的宽高
-        int speHeightSize=MeasureSpec.getSize(widthMeasureSpec);
+        int speHeightSize = MeasureSpec.getSize(widthMeasureSpec);
         int speWidthSize = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), speWidthSize);
         mViewWidth = speWidthSize;
@@ -184,9 +182,9 @@ public class MusicPlayerSeekBar extends View {
         // 起始位置，3点钟方向,mSeekBarDegree
         setThumbPosition(Math.toRadians(mSeekBarDegree));
     }
-    
+
     @Override
-    protected  void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //圆形背景颜色
         canvas.drawCircle(mSeekBarCenterX, mSeekBarCenterY, mSeekBarRadius, mSeekBarBackgroundPaint);
@@ -195,24 +193,23 @@ public class MusicPlayerSeekBar extends View {
         drawThumbBitmap(canvas);
         drawProgressText(canvas);
     }
-    
+
     private void drawThumbBitmap(Canvas canvas) {
         this.mThumbDrawable.setBounds((int) mThumbLeft, (int) mThumbTop,
                 (int) (mThumbLeft + mThumbWidth), (int) (mThumbTop + mThumbHeight));
         this.mThumbDrawable.draw(canvas);
     }
-    
+
     private void drawProgressText(Canvas canvas) {
-        if (true == mIsShowProgressText){
+        if (mIsShowProgressText) {
             float textWidth = mProgressTextPaint.measureText("" + mCurrentProgress);
             //回执进度条
             String forTime = MusicPlayerUtils.stringForTime(mCurrentProgress);
-            canvas.drawText(forTime,mSeekBarCenterX - textWidth/2,mSeekBarCenterY+mProgressTextSize / 2, mProgressTextPaint);
+            canvas.drawText(forTime, mSeekBarCenterX - textWidth / 2, mSeekBarCenterY + mProgressTextSize / 2, mProgressTextPaint);
         }
     }
 
 
-    
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float eventX = event.getX();
@@ -222,46 +219,51 @@ public class MusicPlayerSeekBar extends View {
             case MotionEvent.ACTION_DOWN:
                 mDownX = event.getX();
                 mDownY = event.getY();
-                break ;
+                break;
             case MotionEvent.ACTION_MOVE:
+                if (isPointOnThumb(eventX, eventY)) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
                 seekTo(eventX, eventY, false);
-                break ;
+                break;
             case MotionEvent.ACTION_UP:
                 float newDownX = event.getX();
                 float newDownY = event.getY();
                 //如果松手时X轴坐标小于按下时X坐标上下10个像素&&如果松手时Y轴坐标小于按下时Y坐标上下10个像素即在点击范围内
-                if(newDownX<(mDownX+10)&&newDownX>(mDownX-10)&&newDownY<(mDownY+10)&&newDownY>(mDownY-10)){
-                    mDownY=0;mDownY=0;
-                    if(null!=mOnClickListener){
+                if (newDownX < (mDownX + 10) && newDownX > (mDownX - 10) && newDownY < (mDownY + 10) && newDownY > (mDownY - 10)) {
+                    mDownY = 0;
+                    mDownY = 0;
+                    if (null != mOnClickListener) {
                         mOnClickListener.onClickView();
                     }
                     return true;
                 }
-                mDownY=0;mDownY=0;
+                mDownY = 0;
+                mDownY = 0;
                 seekTo(eventX, eventY, true);
-                break ;
+                break;
         }
         return true;
     }
 
     private void seekTo(float eventX, float eventY, boolean isUp) {
 
-        if (true == isPointOnThumb(eventX, eventY) && false == isUp) {
+        if (isPointOnThumb(eventX, eventY) && !isUp) {
             double radian = Math.atan2(eventY - mSeekBarCenterY, eventX - mSeekBarCenterX);
             /*
              * 由于atan2返回的值为[-pi,pi]
              * 因此需要将弧度值转换一下，使得区间为[0,2*pi]
              */
-            if (radian < 0){
-                radian = radian + 2*Math.PI;
+            if (radian < 0) {
+                radian = radian + 2 * Math.PI;
             }
             setThumbPosition(radian);
             mSeekBarDegree = (float) Math.round(Math.toDegrees(radian));
             mCurrentProgress = (int) (mSeekBarMax * mSeekBarDegree / 360);
             invalidate();
-        }else{
+        } else {
             invalidate();
-            if(null!=mOnSeekbarChangeListene){
+            if (null != mOnSeekbarChangeListene) {
                 mOnSeekbarChangeListene.onSeekBarChange(mCurrentProgress);
             }
         }
@@ -269,27 +271,28 @@ public class MusicPlayerSeekBar extends View {
 
     /**
      * 设置暂停、播放按钮
+     *
      * @param flag
      */
-    public void setPlaying(boolean flag){
-        if(null!=mThumbDrawable){
-            mThumbDrawable.setState(flag?mThumbPressed:mThumbNormal);
+    public void setPlaying(boolean flag) {
+        if (null != mThumbDrawable) {
+            mThumbDrawable.setState(flag ? mThumbPressed : mThumbNormal);
         }
         invalidate();
     }
 
 
-
-    public interface  OnClickListener{
+    public interface OnClickListener {
         void onClickView();
     }
+
     private OnClickListener mOnClickListener;
 
     public void setOnClickListener(OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 
-    public interface OnSeekbarChangeListene{
+    public interface OnSeekbarChangeListene {
         void onSeekBarChange(long progress);
     }
 
@@ -303,12 +306,12 @@ public class MusicPlayerSeekBar extends View {
         boolean result = false;
         double distance = Math.sqrt(Math.pow(eventX - mSeekBarCenterX, 2)
                 + Math.pow(eventY - mSeekBarCenterY, 2));
-        if (distance < mSeekBarSize && distance > (mSeekBarSize / 2 - mThumbWidth)){
+        if (distance < mSeekBarSize && distance > (mSeekBarSize / 2 - mThumbWidth)) {
             result = true;
         }
         return result;
     }
-    
+
     private void setThumbPosition(double radian) {
 
         double x = mSeekBarCenterX + mSeekBarRadius * Math.cos(radian);
@@ -319,13 +322,14 @@ public class MusicPlayerSeekBar extends View {
 
     /**
      * 设置进度条
+     *
      * @param progress
      */
-    public  void setProgress(long progress) {
-        if (progress > mSeekBarMax){
+    public void setProgress(long progress) {
+        if (progress > mSeekBarMax) {
             progress = mSeekBarMax;
         }
-        if (progress < 0){
+        if (progress < 0) {
             progress = 0;
         }
         mCurrentProgress = progress;
@@ -335,54 +339,54 @@ public class MusicPlayerSeekBar extends View {
 
         invalidate();
     }
-    
-    public long getProgress(){
+
+    public long getProgress() {
         return mCurrentProgress;
     }
-    
-    public void setProgressMax(int max){
+
+    public void setProgressMax(int max) {
 
         mSeekBarMax = max;
     }
-    
-    public int getProgressMax(){
+
+    public int getProgressMax() {
         return mSeekBarMax;
     }
-    
-    public void setProgressThumb(int thumbId){
+
+    public void setProgressThumb(int thumbId) {
         mThumbDrawable = mContext.getResources().getDrawable(thumbId);
     }
-    
-    public void setProgressWidth(int width){
+
+    public void setProgressWidth(int width) {
 
         mSeekbarProgressPaint.setStrokeWidth(width);
         mSeekBarBackgroundPaint.setStrokeWidth(width);
     }
-    
-    public void setProgressBackgroundColor(int color){
+
+    public void setProgressBackgroundColor(int color) {
         mSeekBarBackgroundPaint.setColor(color);
         invalidate();
     }
-    
-    public void setProgressFrontColor(int color){
+
+    public void setProgressFrontColor(int color) {
         mSeekbarProgressPaint.setColor(color);
     }
-    
-    public void setProgressTextColor(int color){
+
+    public void setProgressTextColor(int color) {
         mProgressTextPaint.setColor(color);
     }
-    
-    public void setProgressTextSize(int size){
+
+    public void setProgressTextSize(int size) {
 
         mProgressTextPaint.setTextSize(size);
     }
-    
-    public void setProgressTextStrokeWidth(int width){
+
+    public void setProgressTextStrokeWidth(int width) {
 
         mProgressTextPaint.setStrokeWidth(width);
     }
-    
-    public void setIsShowProgressText(boolean isShow){
+
+    public void setIsShowProgressText(boolean isShow) {
         mIsShowProgressText = isShow;
     }
 }

@@ -239,7 +239,6 @@ public class UserKeepFragment extends BaseFragment<CollectPresenter> implements 
 
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
-
     }
 
     @Override

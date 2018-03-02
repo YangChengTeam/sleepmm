@@ -105,6 +105,7 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
                 case PlayerStatus.PLAYER_STATUS_ASYNCPREPARE:
                     Logger.d(TAG, "异步缓冲中");
                     if (null != tvMusicTitle) {
+
                         tvMusicTitle.setText(musicInfo.getTitle());
                         String author = musicInfo.getAuthor_title();
                         tvAuthor.setText(!TextUtils.isEmpty(author) ? author : "咩咩睡眠");
@@ -175,14 +176,17 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
         if (null != tvMusicTitle) tvMusicTitle.setText(musicInfo.getTitle());
         //封面
         if (null != ivCovorThumb) {
-            if (null == mOptions) {
-                mOptions = new RequestOptions();
-                mOptions.error(R.drawable.ic_launcher);
-                mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
-                mOptions.skipMemoryCache(true);//跳过内存缓存
+            if (MusicPlayerManager.getInstance().getCurrentMusicInfo() != null &&
+                    !MusicPlayerManager.getInstance().getCurrentMusicInfo().getId().equals(musicInfo.getId())) {
+                if (null == mOptions) {
+                    mOptions = new RequestOptions();
+                    mOptions.error(R.drawable.ic_launcher);
+                    mOptions.diskCacheStrategy(DiskCacheStrategy.ALL);//缓存源资源和转换后的资源
+                    mOptions.skipMemoryCache(true);//跳过内存缓存
 
-            }
-            Glide.with(getContext()).load(musicInfo.getImg()).apply(mOptions).thumbnail(0.1f).into(ivCovorThumb);//音标
+                }
+                Glide.with(getContext()).load(musicInfo.getImg()).apply(mOptions).thumbnail(0.1f).into(ivCovorThumb);
+            }//音标
             setPlaying(2 == musicInfo.getPlauStatus());//是否正在播放
         }
     }

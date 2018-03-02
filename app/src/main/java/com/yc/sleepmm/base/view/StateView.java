@@ -1,11 +1,14 @@
 package com.yc.sleepmm.base.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,12 +38,21 @@ public class StateView extends BaseView {
     private View mContentView;
     private AnimationDrawable animationDrawable;
 
+
     public StateView(@NonNull Context context) {
         super(context);
     }
 
     public StateView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StateView);
+        try {
+            int gravity = ta.getInt(R.styleable.StateView_gravity, 5);
+            setGravity(gravity);
+
+        } finally {
+            ta.recycle();
+        }
     }
 
     @Override
@@ -63,6 +75,7 @@ public class StateView extends BaseView {
         ivLoading.setLayoutParams(layoutParams);
         setVisibility(VISIBLE);
         tvMess.setText(mess);
+        ivLoading.setVisibility(VISIBLE);
 //        Glide.with(this).load(R.drawable.progress_anim).into(ivLoading);
 
         ivLoading.setBackgroundResource(R.drawable.progress_anim);
@@ -135,4 +148,27 @@ public class StateView extends BaseView {
         showNoNet(contentView, "加载失败，点击重试", onClickListener);
     }
 
+    public void setGravity(int gravity) {
+        FrameLayout.LayoutParams layoutParams = (LayoutParams) rlContainer.getLayoutParams();
+//            layoutParams.topMargin = SizeUtils.dp2px(30);
+//            rlContainer.setLayoutParams(layoutParams);
+        switch (gravity) {
+            case 1://top
+                layoutParams.gravity = Gravity.TOP;
+                break;
+            case 2://left
+                layoutParams.gravity = Gravity.LEFT;
+                break;
+            case 3://right
+                layoutParams.gravity = Gravity.RIGHT;
+                break;
+            case 4://Bottom
+                layoutParams.gravity = Gravity.BOTTOM;
+                break;
+            case 5://Center
+                layoutParams.gravity = Gravity.CENTER;
+                break;
+        }
+        rlContainer.setLayoutParams(layoutParams);
+    }
 }

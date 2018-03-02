@@ -126,7 +126,8 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         if (null == mUserCallBackListenerList) {
             mUserCallBackListenerList = new ArrayList<>();
         }
-        mUserCallBackListenerList.add(listener);
+        if (!mUserCallBackListenerList.contains(listener))
+            mUserCallBackListenerList.add(listener);
     }
 
     /**
@@ -584,6 +585,7 @@ public class MusicPlayerManager implements OnPlayerEventListener {
     public void onPrepared(IMediaPlayer mediaPlayer) {
         if (null != mUserCallBackListenerList && mUserCallBackListenerList.size() > 0) {
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
+
                 onPlayerEventListener.onPrepared(mediaPlayer);
             }
         }

@@ -342,6 +342,9 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
      */
     private void setPlayerDurtion(long durtion) {
         TIMER_DURTION = durtion;
+        if (durtion <= 0) {
+            TIMER_DURTION = -1;
+        }
         currentDurtion = 0;
         //若用户滑动进度条改变了时长，默认重新设置为30分钟
         PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM, PlayerAlarmModel.PLAYER_ALARM_30);

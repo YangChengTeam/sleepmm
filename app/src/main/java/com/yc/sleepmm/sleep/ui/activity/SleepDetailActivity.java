@@ -1,6 +1,7 @@
 package com.yc.sleepmm.sleep.ui.activity;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -112,6 +113,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 //        mMusicPlayerController.setAlarmSeekBarProgress(60);
         //是否点赞,默认false
 //        mMusicPlayerController.setVisivable(false);
+        mMusicPlayerController.changeSeekbarTextColor(ContextCompat.getColor(this, R.color.user_name_color));
 
         //注册事件回调
         mMusicPlayerController.setOnClickEventListener(new MusicPlayerController.OnClickEventListener() {

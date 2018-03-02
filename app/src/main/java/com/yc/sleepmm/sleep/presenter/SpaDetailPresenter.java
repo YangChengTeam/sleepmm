@@ -161,17 +161,21 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
 
             @Override
             public void onNext(ResultInfo<List<MusicInfo>> spaDetailInfoResultInfo) {
-                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK && spaDetailInfoResultInfo.data != null) {
-                    mView.hide();
-                    if (page == 1) {
-                        mView.showSpaDetailList(filterData(spaDetailInfoResultInfo.data, spaId));
+                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK) {
+                    if (spaDetailInfoResultInfo.data != null && spaDetailInfoResultInfo.data.size() > 0) {
+                        mView.hide();
+                        if (page == 1) {
+                            mView.showSpaDetailList(filterData(spaDetailInfoResultInfo.data, spaId));
+                        } else {
+                            mView.showSpaDetailList(spaDetailInfoResultInfo.data);
+                        }
                     } else {
-                        mView.showSpaDetailList(spaDetailInfoResultInfo.data);
+                        if (page == 1)
+                            mView.showNoData();
                     }
-
                 } else {
                     if (page == 1)
-                        mView.showNoData();
+                        mView.showNoNet();
                 }
             }
         });

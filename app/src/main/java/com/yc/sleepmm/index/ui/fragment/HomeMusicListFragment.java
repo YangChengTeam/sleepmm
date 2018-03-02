@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -51,6 +52,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
 
     @Override
     protected void initViews() {
+        stateView.setGravity(Gravity.TOP);
         mPresenter = new IndexMusicTypeDetailPresenter(getActivity(), this);
 
         getData(false);
@@ -78,6 +80,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         mMusic_id = arguments.getString("music_id");
+
     }
 
 
@@ -203,7 +206,6 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
 
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
-
     }
 
 

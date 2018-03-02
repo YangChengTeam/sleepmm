@@ -47,12 +47,13 @@ public class SpaDataPresenter extends BasePresenter<SpaDataInfoEngine, SpaDataCo
                 if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK) {
                     if (spaDetailInfoResultInfo.data != null && spaDetailInfoResultInfo.data.size() > 0) {
                         mView.hide();
+                        mView.showSpaData(spaDetailInfoResultInfo.data);
                     } else {
                         mView.showNoData();
                     }
-                    mView.showSpaData(spaDetailInfoResultInfo.data);
+
                 } else {
-                    mView.showNoData();
+                    mView.showNoNet();
                 }
             }
         });

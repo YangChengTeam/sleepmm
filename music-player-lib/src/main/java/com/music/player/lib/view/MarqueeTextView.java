@@ -11,12 +11,15 @@ import android.util.AttributeSet;
 
 public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView {
 
+
     public MarqueeTextView(Context context) {
         super(context);
+
     }
 
     public MarqueeTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
     }
 
     public MarqueeTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -27,4 +30,6 @@ public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView
     public boolean isFocused() {
         return true;
     }
+
+
 }
