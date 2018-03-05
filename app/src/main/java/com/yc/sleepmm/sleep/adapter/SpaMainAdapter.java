@@ -9,15 +9,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.TypeReference;
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.kk.utils.LogUtil;
 import com.yc.sleepmm.R;
+import com.yc.sleepmm.base.util.CommonInfoHelper;
 import com.yc.sleepmm.base.util.DateUtils;
 import com.yc.sleepmm.sleep.model.bean.SpaDataInfo;
+import com.yc.sleepmm.sleep.model.bean.SpaItemInfo;
 
 import java.util.List;
 
@@ -78,7 +82,14 @@ public class SpaMainAdapter extends BaseQuickAdapter<SpaDataInfo, BaseViewHolder
     }
 
     public SpaListAdapter getAdapter(int position) {
-        return (SpaListAdapter) sparseArray.get(position).getAdapter();
+        SpaListAdapter spaListAdapter = (SpaListAdapter) sparseArray.get(position).getAdapter();
+
+        List<SpaItemInfo> spaItemInfos = spaListAdapter.getData();
+        if (spaItemInfos != null && spaItemInfos.size() > 0) {
+            CommonInfoHelper.setO(mContext, spaItemInfos, position + "");
+        }
+
+        return spaListAdapter;
     }
 
     public RecyclerView getView(int position) {
@@ -87,8 +98,22 @@ public class SpaMainAdapter extends BaseQuickAdapter<SpaDataInfo, BaseViewHolder
     }
 
 
-    public void setVisable(boolean flag, int position) {
+    public void setVisable(boolean flag, final int position) {
         sparseArray.get(position).setVisibility(flag ? View.VISIBLE : View.GONE);
+
+        if (flag) {
+
+            CommonInfoHelper.getO(mContext, position + "", new TypeReference<List<SpaItemInfo>>() {
+            }.getType(), new CommonInfoHelper.onParseListener<List<SpaItemInfo>>() {
+                @Override
+                public void onParse(List<SpaItemInfo> data) {
+                    getAdapter(position).setNewData(data);
+                    getAdapter(position).loadMoreEnd();
+                }
+            });
+
+            LogUtil.msg("TAG " + getAdapter(position).getData().size());
+        }
     }
 
 //    public void setParent(ViewGroup parent, int position) {

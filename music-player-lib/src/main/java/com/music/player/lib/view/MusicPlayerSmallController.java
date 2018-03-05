@@ -234,4 +234,5 @@ public class MusicPlayerSmallController extends FrameLayout implements Observer,
     public void onDestroy() {
         MusicPlayerManager.getInstance().detelePlayerStateListener(this);
     }
+
 }

@@ -15,6 +15,8 @@ public class BusAction {
 
     public static final String MUSIC_INFO_DETAIL = "music_info_detail";
 
-    public static final String BIND_PHONE= "bind_phone";
+    public static final String BIND_PHONE = "bind_phone";
+
+    public static final String VIEW_FINISH = "finish";
 
 }

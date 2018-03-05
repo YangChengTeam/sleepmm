@@ -23,11 +23,12 @@
                 android:id="@+id/music_player_controller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="pin" />
 
             <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">
 
                 <com.music.player.lib.view.MusicPlayerSmallController

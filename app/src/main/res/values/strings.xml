@@ -39,6 +39,8 @@
     <string name="account_safe">账户与安全</string>
     <string name="bind_phone">绑定手机号</string>
     <string name="today">今天</string>
+    <string name="pay_success">支付成功</string>
+    <string name="pay_success_confirm">确 认</string>
 
     <string-array name="items">
         <item>10分钟后关闭</item>

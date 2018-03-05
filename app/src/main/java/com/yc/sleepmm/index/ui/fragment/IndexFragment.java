@@ -4,6 +4,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.androidkun.xtablayout.XTabLayout;
@@ -51,6 +52,8 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
 
     @Override
@@ -113,6 +116,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
         MusicPlayerManager.getInstance().addObservable(mPlayerController);
         MusicPlayerManager.getInstance().addObservable(musicPlayerSmallController);
 
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -121,15 +125,17 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
 //                LogUtil.msg("TAG  " + verticalOffset + "--" + appBarLayout.getHeight() + " --" + collapsingToolbarLayout.getHeight());
 
                 if (-verticalOffset >= appBarLayout.getHeight() - SizeUtils.dp2px(120)) {
-                    musicPlayerSmallController.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                     mPlayerController.setVisibility(View.INVISIBLE);
                 } else {
                     mPlayerController.setVisibility(View.VISIBLE);
-                    musicPlayerSmallController.setVisibility(View.INVISIBLE);
+                    toolbar.setVisibility(View.INVISIBLE);
                 }
 
             }
         });
+
+
     }
 
 
@@ -207,6 +213,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     public void showCollectSucess(boolean isCollect) {
         mPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect);
     }
+
 
 }
 

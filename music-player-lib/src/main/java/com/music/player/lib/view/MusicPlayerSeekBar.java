@@ -207,6 +207,8 @@ public class MusicPlayerSeekBar extends View {
             String forTime = MusicPlayerUtils.stringForTime(mCurrentProgress);
             canvas.drawText(forTime, mSeekBarCenterX - textWidth / 2, mSeekBarCenterY + mProgressTextSize / 2, mProgressTextPaint);
         }
+
+
     }
 
 

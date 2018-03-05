@@ -126,8 +126,7 @@ public class MusicPlayerManager implements OnPlayerEventListener {
         if (null == mUserCallBackListenerList) {
             mUserCallBackListenerList = new ArrayList<>();
         }
-        if (!mUserCallBackListenerList.contains(listener))
-            mUserCallBackListenerList.add(listener);
+        mUserCallBackListenerList.add(listener);
     }
 
     /**

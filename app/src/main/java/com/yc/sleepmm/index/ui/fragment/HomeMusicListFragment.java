@@ -219,7 +219,7 @@ public class HomeMusicListFragment extends MusicBaseFragment<IndexMusicTypeDetai
     public void autoStartNewPlayTasks(int viewTupe, int position) {
         //如果是自己，且正在显示，处理自动播放事件
         if (viewTupe == HomeMusicListFragment.THIS_TOKIN && getUserVisibleHint() && null != mHomeMusicListAdapter) {
-            MusicPlayerManager.getInstance().playMusic(mHomeMusicListAdapter.getData(), 0);//默认播放第0个
+            MusicPlayerManager.getInstance().playPauseMusic(mHomeMusicListAdapter.getData(), 0);//默认播放第0个
         }
     }
 

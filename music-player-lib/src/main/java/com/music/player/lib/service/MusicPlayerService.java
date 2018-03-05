@@ -296,11 +296,15 @@ public class MusicPlayerService extends BaseService implements IMediaPlayer.OnPr
      * 当播放任务结束时 结束计时
      */
     private void stopTimer() {
-        if (null != mTimer) {
-            mTimer.cancel();
-        }
+
         if (null != mPlayTimerTask) {
             mPlayTimerTask.cancel();
+            mPlayTimerTask = null;
+        }
+        if (null != mTimer) {
+            mTimer.cancel();
+            mTimer = null;
+
         }
     }
 

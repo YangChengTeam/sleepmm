@@ -121,7 +121,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                             intent.putExtra("spa_id", spaItemInfo.getId());
                             intent.putExtra("type_id", spaItemInfo.getType_id());
                             intent.putExtra("pos", pages.get(position));
-
                             startActivity(intent);
                         }
                     });
@@ -191,7 +190,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     public void showSpaItemList(List<SpaItemInfo> itemInfos, int position) {
 
 
-        if (itemInfos != null && itemInfos.size() > 0) {
+        if (itemInfos != null) {
 
 
             loadMore(itemInfos, position);
@@ -215,8 +214,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
 //            LogUtils.i("spaListAdapter fragment --->" + currentSpaListAdapter.hashCode());
         int currentPage = pages.get(position);
-
-        if (itemInfos.size() == pageSize) {
+        if (itemInfos.size() > 0) {
             //当前分类的页面
             int nextPage = currentPage + 1;
             pages.put(position, nextPage);
@@ -224,6 +222,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         } else {
             spaMainAdapter.getAdapter(position).loadMoreEnd();
         }
+
 
         if (currentPage == 1) {
             itemInfos.remove(0);

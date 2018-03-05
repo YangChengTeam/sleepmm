@@ -56,4 +56,10 @@
 
     </style>
 
+    <style name="pay_style">
+        <item name="android:windowEnterAnimation">@anim/pay_in_ainm</item>
+        <item name="android:windowExitAnimation">@anim/pay_out_ainm</item>
+
+    </style>
+
 </resources>

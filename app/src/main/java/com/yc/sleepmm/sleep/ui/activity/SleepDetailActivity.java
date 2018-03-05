@@ -306,7 +306,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
             setSleepDetailInfo();
 
-            MusicPlayerManager.getInstance().playPauseMusic(data.getLists(), 0);
+            MusicPlayerManager.getInstance().playMusic(data);
 
 
 //            if (isRandom) {
@@ -359,7 +359,6 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
         }
-
 
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
     }

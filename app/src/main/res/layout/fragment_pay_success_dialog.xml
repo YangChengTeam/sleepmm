@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pay_success_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_15">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/pay_success" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="@string/pay_success"
+            android:textColor="@color/green_39c45d"
+            android:textSize="@dimen/text_16" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_05"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@color/gray_ededed" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_15"
+        android:lineSpacingExtra="@dimen/dp_2"
+        android:text="感谢您选择咩咩睡眠，失眠心理疏导一对一辅导，
+留下手机号码，稍等5分钟过后有客服专员一对一
+进行联系："
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_14" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/pay_success_edit_bg"
+        android:hint="请输入您的手机号"
+        android:inputType="number"
+        android:maxLength="11"
+        android:paddingBottom="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_12" />
+
+    <Button
+        android:id="@+id/btn_success_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/pay_sucess_btn_bg"
+        android:text="@string/pay_success_confirm"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16" />
+
+    <TextView
+        android:id="@+id/tv_link_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_15"
+        android:autoLink="phone"
+        android:lineSpacingExtra="@dimen/dp_2"
+        android:text="如有较长时间未与您联系，请拨打我们的电话与我们取得联系 +86-15926287915"
+        android:textColor="#929292"
+        android:textColorLink="#F0222D"
+        android:textSize="@dimen/text_14" />
+</LinearLayout>

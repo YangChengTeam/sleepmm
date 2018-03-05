@@ -1,6 +1,7 @@
 package com.yc.sleepmm.vip.ui.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.pay.I1PayAbs;
 import com.kk.pay.IPayAbs;
@@ -24,11 +24,10 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
-import com.yc.sleepmm.setting.constants.BusAction;
-import com.yc.sleepmm.setting.constants.Config;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.setting.contract.VipContract;
 import com.yc.sleepmm.setting.presenter.VipPresenter;
+import com.yc.sleepmm.setting.ui.fragment.PaySuccessFragment;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
 import com.yc.sleepmm.vip.ui.adapter.VipPayAdapter;
@@ -36,7 +35,6 @@ import com.yc.sleepmm.vip.utils.GoodsInfoHelper;
 import com.yc.sleepmm.vip.utils.PaywayHelper;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -104,7 +102,7 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
         if (PaywayHelper.getmPaywayInfo() != null && PaywayHelper.getmPaywayInfo().size() > 0) {
             payInfo = PaywayHelper.getmPaywayInfo().get(0);
         }
-        setVip();
+        setVip(APP.getInstance().getUserData());
         initListener();
 
     }
@@ -134,7 +132,9 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
                 orderParams.setUser_id(userInfo.getId());
                 orderParams.setTitle(goodsInfo.name);
                 orderParams.setMoney(goodsInfo.pay_price);
-                orderParams.setPay_way_name(payInfo.getPayway());
+                if (payInfo != null) {
+                    orderParams.setPay_way_name(payInfo.getPayway());
+                }
                 List<OrderGood> list = new ArrayList<>();
                 OrderGood orderGood = new OrderGood(String.valueOf(goodsInfo.id), 1);
                 list.add(orderGood);
@@ -143,6 +143,21 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
                     @Override
                     public void onSuccess(OrderInfo orderInfo) {
                         mPresenter.getUserInfo(APP.getInstance().getUserData().getId());
+                        PaySuccessFragment paySuccessFragment = new PaySuccessFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("orderSn", orderInfo.getOrder_sn());
+                        paySuccessFragment.setArguments(bundle);
+                        paySuccessFragment.show(getSupportFragmentManager(), "pay");
+
+                        paySuccessFragment.setOnViewFinishListener(new PaySuccessFragment.onViewFinishListener() {
+                            @Override
+                            public void onViewFinish(PaySuccessFragment fragment) {
+                                if (fragment != null && fragment.isVisible())
+                                    fragment.dismiss();
+                                VipActivity.this.finish();
+                            }
+                        });
+
                     }
 
                     @Override
@@ -171,8 +186,8 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
         });
     }
 
-    private void setVip() {
-        if (APP.getInstance().getUserData().getVip() == 1) {
+    private void setVip(UserInfo userInfo) {
+        if (userInfo.getVip() == 1) {
             llPay.setVisibility(View.GONE);
             btnCharge.setVisibility(View.GONE);
         } else {
@@ -181,25 +196,9 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
         }
     }
 
-    private void updateSuccessData() {
-        UserInfo userInfo = APP.getInstance().getUserData();
-        userInfo.setVip(1);
-        Date date = new Date();
-        if (goodsInfo.use_time_limit != null) {
-            int use_time_Limit = 0;
-            try {
-                use_time_Limit = Integer.parseInt(goodsInfo.use_time_limit);
-            } catch (Exception e) {
-                use_time_Limit = 0;
-            }
-
-            long vip_end_time = date.getTime() + use_time_Limit * 30 * (Config.MS_IN_A_DAY);
-            userInfo.setVip_end_time(String.valueOf(vip_end_time / 1000));
-        }
-        APP.getInstance().setUserData(userInfo, true);
-
-        RxBus.get().post(BusAction.PAY_SUCCESS, "form pay");
-        finish();
-
+    @Override
+    public void showUserInfo(UserInfo data) {
+        setVip(data);
     }
+
 }

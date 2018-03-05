@@ -49,7 +49,9 @@ public class VipPresenter extends BasePresenter<BaseEngine, VipContract.View> im
                 if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
                     APP.getInstance().setUserData(userInfoResultInfo.data, true);
                     RxBus.get().post(Constant.RX_LOGIN_SUCCESS, "form pay");
-                    mView.finish();
+                    mView.showUserInfo(userInfoResultInfo.data);
+
+//                    mView.finish();
                 }
             }
         });

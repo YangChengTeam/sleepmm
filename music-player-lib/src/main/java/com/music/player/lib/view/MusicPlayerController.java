@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,7 +71,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
     private TextView tvPlayDuration;
     private TextView tvPlayProgress;
     private MyRunable myRunable;
-    private WindowManager wm;
 
     public MusicPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -81,7 +79,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
 
 
     private void initView(Context context) {
-        wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         inflate(context, R.layout.view_music_player_controller, this);
         mHandler = new Handler();
         mBtnLast = (ImageView) findViewById(R.id.btn_last);
@@ -171,7 +168,6 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
         setVisivable(true);
         mBtnLast.setOnClickListener(onClickListener);
         mBtnNext.setOnClickListener(onClickListener);
-        mIcPlayMode.setOnClickListener(onClickListener);
         btnPlayMode.setOnClickListener(onClickListener);
         btn_alarm.setOnClickListener(onClickListener);
         btn_player_collect.setOnClickListener(onClickListener);
@@ -798,4 +794,5 @@ public class MusicPlayerController extends FrameLayout implements Observer, OnUs
             }
         }
     }
+
 }

@@ -6,9 +6,9 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.TypeReference;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.ToastUtil;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.util.PreferencesUtil;
+import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.base.util.CommonInfoHelper;
@@ -114,7 +114,7 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
         if (!APP.getInstance().isGotoLogin(mContext)) {
 
             if (TextUtils.isEmpty(music_id)) {
-                ToastUtil.toast(mContext, "请先选择一首歌曲收藏");
+                ToastUtils.showCenterToast("请先选择一首歌曲收藏");
                 return;
             }
 

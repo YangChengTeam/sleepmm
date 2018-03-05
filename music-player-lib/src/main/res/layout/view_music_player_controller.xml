@@ -26,7 +26,6 @@
             android:layout_centerHorizontal="true"
             android:ellipsize="marquee"
             android:focusable="true"
-            android:focusableInTouchMode="true"
             android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
@@ -40,6 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -66,9 +67,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
         <!--上一首-->
         <LinearLayout
             android:layout_width="0dp"
@@ -93,9 +92,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/linearLayout"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
             <!--封面-->
             <RelativeLayout
                 android:layout_width="110dp"
@@ -113,7 +110,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/music_player_masking"></RelativeLayout>
+                    android:background="@drawable/music_player_masking" />
             </RelativeLayout>
             <!--时间、缓冲进度、播放、暂停按钮-->
             <com.music.player.lib.view.MusicPlayerSeekBar
@@ -144,7 +141,6 @@
                 android:id="@+id/btn_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:background="?attr/selectableItemBackground"
                 android:padding="15dp"
                 android:src="@drawable/btn_next_selector" />
@@ -158,8 +154,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="-10dp"
+        android:layout_marginTop="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 

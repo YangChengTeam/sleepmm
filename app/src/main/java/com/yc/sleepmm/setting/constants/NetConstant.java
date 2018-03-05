@@ -60,4 +60,9 @@ public interface NetConstant {
      * 绑定用户
      */
     String user_bind_url = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "user/bind";
+
+    /**
+     * 上传用户手机号
+     */
+    String upload_user_phone = (BaseNetConstant.IS_DEBUG ? BaseNetConstant.DEBUG_HOST : BaseNetConstant.BASE_HOST) + "orders/call";
 }
