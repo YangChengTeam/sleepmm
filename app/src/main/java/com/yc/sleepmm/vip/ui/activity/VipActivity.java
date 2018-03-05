@@ -2,6 +2,7 @@ package com.yc.sleepmm.vip.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.pay.I1PayAbs;
 import com.kk.pay.IPayAbs;
@@ -24,6 +28,7 @@ import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.index.model.bean.UserInfo;
+import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.setting.contract.VipContract;
 import com.yc.sleepmm.setting.presenter.VipPresenter;
@@ -147,16 +152,18 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
                         Bundle bundle = new Bundle();
                         bundle.putString("orderSn", orderInfo.getOrder_sn());
                         paySuccessFragment.setArguments(bundle);
-                        paySuccessFragment.show(getSupportFragmentManager(), "pay");
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.add(paySuccessFragment, null);
+                        ft.commitAllowingStateLoss();
 
-                        paySuccessFragment.setOnViewFinishListener(new PaySuccessFragment.onViewFinishListener() {
-                            @Override
-                            public void onViewFinish(PaySuccessFragment fragment) {
-                                if (fragment != null && fragment.isVisible())
-                                    fragment.dismiss();
-                                VipActivity.this.finish();
-                            }
-                        });
+//                        paySuccessFragment.setOnViewFinishListener(new PaySuccessFragment.onViewFinishListener() {
+//                            @Override
+//                            public void onViewFinish(PaySuccessFragment fragment) {
+//                                if (fragment != null && fragment.isVisible())
+//                                    fragment.dismiss();
+//                                VipActivity.this.finish();
+//                            }
+//                        });
 
                     }
 
@@ -201,4 +208,12 @@ public class VipActivity extends BaseActivity<VipPresenter> implements VipContra
         setVip(data);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {
+                    @Tag(BusAction.VIEW_FINISH)
+            }
+    )
+    public void finishView(String tint) {
+        finish();
+    }
 }

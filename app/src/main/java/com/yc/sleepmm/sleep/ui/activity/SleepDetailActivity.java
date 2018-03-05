@@ -128,7 +128,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             public void onEventRandomPlay() {
                 //其他界面使用播放控制器示例
                 if (!APP.getInstance().isGotoLogin(SleepDetailActivity.this)) {
-                    mPresenter.randomSpaInfo();
+                    mPresenter.randomSpaInfo(typeId);
                 }
             }
 
@@ -298,15 +298,15 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
     @Override
-    public void showSpaDetailInfo(MusicInfo data, boolean isRandom) {
+    public void showSpaDetailInfo(List<MusicInfo> data, boolean isRandom) {
 
-        if (null != userSleepAdapter && data != null && data.getLists() != null && data.getLists().size() > 0) {
-            musicInfo = data;
-            showCollectSucess(data.getIs_favorite() == 1);
+        if (null != userSleepAdapter && data != null && data.size() > 0) {
+            musicInfo = data.get(0);
+            showCollectSucess(musicInfo.getIs_favorite() == 1);
 
             setSleepDetailInfo();
 
-            MusicPlayerManager.getInstance().playMusic(data);
+            MusicPlayerManager.getInstance().playPauseMusic(data, 0);
 
 
 //            if (isRandom) {
@@ -356,8 +356,6 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             } else {
                 userSleepAdapter.loadMoreEnd();
             }
-
-
         }
 
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步

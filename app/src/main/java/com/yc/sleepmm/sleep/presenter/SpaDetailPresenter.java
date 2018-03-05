@@ -35,10 +35,36 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
     }
 
 
+//    @Override
+//    public void getSpaDetailInfo(String spa_id) {
+//        mView.showLoading();
+//        Subscription subscription = mEngine.getSpaDetailInfo(spa_id).subscribe(new Subscriber<ResultInfo<MusicInfo>>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                mView.showNoNet();
+//            }
+//
+//            @Override
+//            public void onNext(ResultInfo<MusicInfo> spaDetailInfoResultInfo) {
+//                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK && spaDetailInfoResultInfo.data != null) {
+//                    mView.showSpaDetailInfo(spaDetailInfoResultInfo.data, false);
+//                    mView.hide();
+//                } else {
+//                    mView.showNoData();
+//                }
+//            }
+//        });
+//        mSubscriptions.add(subscription);
+//    }
+
     @Override
-    public void getSpaDetailInfo(String spa_id) {
-        mView.showLoading();
-        Subscription subscription = mEngine.getSpaDetailInfo(spa_id).subscribe(new Subscriber<ResultInfo<MusicInfo>>() {
+    public void randomSpaInfo(String type_id) {
+        Subscription subscription = mEngine.randomSpaInfo(type_id).subscribe(new Subscriber<ResultInfo<List<MusicInfo>>>() {
             @Override
             public void onCompleted() {
 
@@ -46,37 +72,11 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
 
             @Override
             public void onError(Throwable e) {
-                mView.showNoNet();
-            }
-
-            @Override
-            public void onNext(ResultInfo<MusicInfo> spaDetailInfoResultInfo) {
-                if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK && spaDetailInfoResultInfo.data != null) {
-                    mView.showSpaDetailInfo(spaDetailInfoResultInfo.data, false);
-                    mView.hide();
-                } else {
-                    mView.showNoData();
-                }
-            }
-        });
-        mSubscriptions.add(subscription);
-    }
-
-    @Override
-    public void randomSpaInfo() {
-        Subscription subscription = mEngine.randomSpaInfo().subscribe(new Subscriber<ResultInfo<MusicInfo>>() {
-            @Override
-            public void onCompleted() {
 
             }
 
             @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(ResultInfo<MusicInfo> musicInfoResultInfo) {
+            public void onNext(ResultInfo<List<MusicInfo>> musicInfoResultInfo) {
                 if (musicInfoResultInfo != null && musicInfoResultInfo.code == HttpConfig.STATUS_OK && musicInfoResultInfo.data != null) {
                     mView.showSpaDetailInfo(musicInfoResultInfo.data, true);
                 }

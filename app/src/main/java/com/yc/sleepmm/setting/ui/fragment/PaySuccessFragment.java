@@ -7,11 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
 import com.jakewharton.rxbinding.view.RxView;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.view.BaseActivity;
 import com.yc.sleepmm.base.view.BaseDialogFragment;
+import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.contract.PaySuccessContract;
 import com.yc.sleepmm.setting.presenter.PaySuccessPresenter;
 import com.yc.sleepmm.setting.widget.NoUnderlineSpan;
@@ -95,11 +97,11 @@ public class PaySuccessFragment extends BaseDialogFragment<PaySuccessPresenter> 
     @Override
     public void showUploadResult(String data) {
         ToastUtils.showCenterToast(data);
-        if (listener!=null){
-            listener.onViewFinish(this);
-        }
-//        dismiss();
-//        RxBus.get().post(BusAction.VIEW_FINISH, "finish");
+//        if (listener!=null){
+//            listener.onViewFinish(this);
+//        }
+        dismiss();
+        RxBus.get().post(BusAction.VIEW_FINISH, "finish");
     }
 
     public interface onViewFinishListener {

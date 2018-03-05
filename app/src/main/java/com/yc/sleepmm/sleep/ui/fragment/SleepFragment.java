@@ -192,19 +192,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
         if (itemInfos != null) {
 
-
             loadMore(itemInfos, position);
-
-//            int tempCurrentPage = pages.get(position);
-//            if (tempCurrentPage == 1) {
-//                dataSet.clear();
-//                itemInfos.remove(itemInfos.get(0));
-//                dataSet.put(position, itemInfos);
-//                spaTypeListViewAdapter.setDataSet(dataSet);
-//
-//                LogUtils.i("refresh data --->");
-//
-//            }
         }
 
     }
@@ -212,7 +200,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
     private void loadMore(List<SpaItemInfo> itemInfos, int position) {
 
-//            LogUtils.i("spaListAdapter fragment --->" + currentSpaListAdapter.hashCode());
         int currentPage = pages.get(position);
         if (itemInfos.size() > 0) {
             //当前分类的页面
@@ -222,7 +209,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
         } else {
             spaMainAdapter.getAdapter(position).loadMoreEnd();
         }
-
 
         if (currentPage == 1) {
             itemInfos.remove(0);

@@ -17,7 +17,7 @@ import java.util.List;
 public interface SpaDetailContract {
 
     interface View extends IView, ILoading, INoData, INoNet, IHide {
-        void showSpaDetailInfo(MusicInfo data, boolean b);
+        void showSpaDetailInfo(List<MusicInfo> musicInfoList, boolean b);
 
         void showCollectSucess(boolean isCollect);
 
@@ -25,9 +25,9 @@ public interface SpaDetailContract {
     }
 
     interface Presenter extends IPresenter {
-        void getSpaDetailInfo(String spa_id);
+//        void getSpaDetailInfo(String spa_id);
 
-        void randomSpaInfo();
+        void randomSpaInfo(String type_id);
 
         void spaPlay(String music_id);
 

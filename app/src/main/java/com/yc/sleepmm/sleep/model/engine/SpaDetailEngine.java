@@ -11,6 +11,7 @@ import com.yc.sleepmm.base.model.BaseEngine;
 import com.yc.sleepmm.sleep.constants.NetConstant;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -35,12 +36,13 @@ public class SpaDetailEngine extends BaseEngine {
 
     }
 
-    public Observable<ResultInfo<MusicInfo>> randomSpaInfo() {
+    public Observable<ResultInfo<List<MusicInfo>>> randomSpaInfo(String type_id) {
         Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", APP.getInstance().isLogin() ? APP.getInstance().getUserData().getId() : "");
+        params.put("user_id", APP.getInstance().getUid());
+        params.put("type_id", type_id);
 
-        return HttpCoreEngin.get(mContext).rxpost(NetConstant.SPA_RANDOM_URL, new TypeReference<ResultInfo<MusicInfo>>() {
+        return HttpCoreEngin.get(mContext).rxpost(NetConstant.SPA_RANDOM_URL, new TypeReference<ResultInfo<List<MusicInfo>>>() {
         }.getType(), params, true, true, true);
 
     }
