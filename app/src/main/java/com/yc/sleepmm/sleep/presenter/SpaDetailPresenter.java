@@ -1,13 +1,11 @@
 package com.yc.sleepmm.sleep.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.kk.utils.ToastUtil;
 import com.music.player.lib.bean.MusicInfo;
-import com.music.player.lib.util.PreferencesUtil;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
 import com.yc.sleepmm.index.model.engine.EngineUtils;
@@ -109,15 +107,15 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
     }
 
     @Override
-    public void collectSpa(final String spa_id) {
+    public void collectSpa(final MusicInfo musicInfo) {
         if (!APP.getInstance().isGotoLogin(mContext)) {
 
-            if (TextUtils.isEmpty(spa_id)) {
+            if (musicInfo == null) {
                 ToastUtil.toast(mContext, "请先选择一首歌曲收藏");
                 return;
             }
 
-            Subscription subscription = mEngine.collectSpa(APP.getInstance().getUserData().getId(), spa_id).subscribe(new Subscriber<ResultInfo<String>>() {
+            Subscription subscription = mEngine.collectSpa(APP.getInstance().getUserData().getId(), musicInfo.getId()).subscribe(new Subscriber<ResultInfo<String>>() {
                 @Override
                 public void onCompleted() {
 
@@ -130,12 +128,12 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
 
                 @Override
                 public void onNext(ResultInfo<String> stringResultInfo) {
-                    boolean isCollect = PreferencesUtil.getInstance().getBoolean(spa_id);
+                    boolean isCollect = musicInfo.getIs_favorite() == 1;
                     if (stringResultInfo != null && stringResultInfo.code == HttpConfig.STATUS_OK) {
 
                         isCollect = !isCollect;
-                        PreferencesUtil.getInstance().putBoolean(spa_id, isCollect);
-
+//                        PreferencesUtil.getInstance().putBoolean(spa_id, isCollect);
+                        musicInfo.setIs_favorite(isCollect ? 1 : 0);
                         mView.showCollectSucess(isCollect);
                     }
                 }
@@ -144,8 +142,8 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
         }
     }
 
-    public void getSpaDetailList(String typeId, final int page, final int limit, final String spaId) {
-        if (page == 1)
+    public void getSpaDetailList(String typeId, final int page, final int homePage, final int limit, final String spaId) {
+        if (page == homePage)
             mView.showLoading();
         Subscription subscription = EngineUtils.getSpaItemList(mContext, typeId, page, limit).subscribe(new Subscriber<ResultInfo<List<MusicInfo>>>() {
             @Override
@@ -164,17 +162,17 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
                 if (spaDetailInfoResultInfo != null && spaDetailInfoResultInfo.code == HttpConfig.STATUS_OK) {
                     if (spaDetailInfoResultInfo.data != null && spaDetailInfoResultInfo.data.size() > 0) {
                         mView.hide();
-                        if (page == 1) {
-                            mView.showSpaDetailList(filterData(spaDetailInfoResultInfo.data, spaId));
-                        } else {
-                            mView.showSpaDetailList(spaDetailInfoResultInfo.data);
-                        }
+//                        if (page == 1) {
+                        mView.showSpaDetailList(filterData(spaDetailInfoResultInfo.data, spaId));
+//                        } else {
+//                            mView.showSpaDetailList(spaDetailInfoResultInfo.data);
+//                        }
                     } else {
-                        if (page == 1)
+                        if (page == homePage)
                             mView.showNoData();
                     }
                 } else {
-                    if (page == 1)
+                    if (page == homePage)
                         mView.showNoNet();
                 }
             }
@@ -188,11 +186,13 @@ public class SpaDetailPresenter extends BasePresenter<SpaDetailEngine, SpaDetail
         MusicInfo currentInfo = null;
         if (list.size() > 0) {
             for (MusicInfo musicInfo : list) {
+                musicInfo.setType(2);
                 if (musicInfo.getId().equals(spaId)) {
                     currentInfo = musicInfo;
                     break;
                 }
             }
+
             if (currentInfo != null) {
                 list.remove(currentInfo);
                 list.add(0, currentInfo);

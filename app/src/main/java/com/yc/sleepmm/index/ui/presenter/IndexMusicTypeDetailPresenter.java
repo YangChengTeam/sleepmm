@@ -53,7 +53,7 @@ public class IndexMusicTypeDetailPresenter extends BasePresenter<IndexMusicTypeD
                 if (listResultInfo != null && listResultInfo.code == HttpConfig.STATUS_OK) {
                     if (listResultInfo.data != null && listResultInfo.data.size() > 0) {
                         mView.hide();
-                        mView.showMusicInfos(listResultInfo.data);
+                        setTypeInfo(listResultInfo.data);
                     } else {
                         if (page == 1) {
                             mView.showNoData();
@@ -67,6 +67,16 @@ public class IndexMusicTypeDetailPresenter extends BasePresenter<IndexMusicTypeD
             }
         });
         mSubscriptions.add(subscription);
+    }
+
+    private void setTypeInfo(List<MusicInfo> infos) {
+        if (infos != null && infos.size() > 0) {
+            for (MusicInfo info : infos) {
+                info.setType(1);
+            }
+        }
+        mView.showMusicInfos(infos);
+
     }
 
 

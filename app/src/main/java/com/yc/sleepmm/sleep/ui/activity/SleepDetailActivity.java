@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.kk.utils.LogUtil;
 import com.ksyun.media.player.IMediaPlayer;
 import com.ksyun.media.player.KSYMediaPlayer;
 import com.music.player.lib.bean.MusicInfo;
@@ -23,7 +24,6 @@ import com.music.player.lib.listener.OnUserPlayerEventListener;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.mode.PlayerStatus;
-import com.music.player.lib.util.PreferencesUtil;
 import com.music.player.lib.view.MusicPlayerController;
 import com.yc.sleepmm.R;
 import com.yc.sleepmm.base.APP;
@@ -62,6 +62,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
     private int page = 1;
     private String typeId;
     private int limit = 10;
+    private int homePage = 1;//起始页
 
     @Override
     public int getLayoutId() {
@@ -76,7 +77,10 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
         if (intent != null) {
             spaId = intent.getStringExtra("spa_id");
 
-//            page = intent.getIntExtra("pos", 0);
+            page = intent.getIntExtra("pos", 0);
+
+            homePage = page;
+            LogUtil.msg("TAG: " + page + " spaId: " + spaId);
             typeId = intent.getStringExtra("type_id");
         }
 
@@ -120,7 +124,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             //收藏事件触发了
             @Override
             public void onEventCollect(MusicInfo musicInfo) {
-                mPresenter.collectSpa(musicInfo != null ? musicInfo.getId() : "");
+                mPresenter.collectSpa(musicInfo);
             }
 
             //随机播放触发了
@@ -146,9 +150,9 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
                     if (PlayerStatus.PLAYER_STATUS_PLAYING == info.getPlauStatus()) {
                         mPresenter.spaPlay(id);
                     }
+                    boolean isCollect = info.getIs_favorite() == 1;
+                    mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect, id);
                 }
-                boolean isCollect = PreferencesUtil.getInstance().getBoolean(id);
-                mMusicPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect, id);
                 musicInfo = info;
                 setSleepDetailInfo();
             }
@@ -265,7 +269,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
     public void getData() {
-        mPresenter.getSpaDetailList(typeId, page, limit, spaId);
+        mPresenter.getSpaDetailList(typeId, page, homePage, limit, spaId);
     }
 
 
@@ -308,19 +312,6 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
             MusicPlayerManager.getInstance().playPauseMusic(data, 0);
 
-
-//            if (isRandom) {
-//                mMusicPlayerController.setVisivable(true);
-//                int position = (int) (Math.random() * data.getLists().size());
-//
-//            } else {
-//                MusicInfo mMusicInfo = MusicPlayerManager.getInstance().getCurrentMusicInfo();
-//
-//                if (mMusicInfo == null || !TextUtils.equals(mMusicInfo.getId(), musicInfo.getId())) {
-//                    MusicPlayerManager.getInstance().playMusic(musicInfo);
-//                }
-//            }
-
         }
         MusicPlayerManager.getInstance().onResumeChecked();//在刷新之后检查，防止列表为空，无法全局同步
     }
@@ -335,7 +326,7 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
 
 
         if (list != null && list.size() > 0) {
-            if (page == 1) {
+            if (page == homePage) {
                 musicInfo = list.get(0);
                 showCollectSucess(list.get(0).getIs_favorite() == 1);
                 setSleepDetailInfo();
@@ -348,7 +339,6 @@ public class SleepDetailActivity extends BaseActivity<SpaDetailPresenter> implem
             } else {
                 userSleepAdapter.addData(list);
             }
-
 
             if (list.size() == limit) {
                 page++;

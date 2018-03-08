@@ -39,7 +39,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     @BindView(R.id.recyclerView_sleep)
     RecyclerView recyclerViewSleep;
 
-
     private int itemPage = 1;
 
     private int pageSize = 10;
@@ -51,6 +50,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     private SparseBooleanArray booleanSparseArray;
     private SpaMainAdapter spaMainAdapter;
     private SparseBooleanArray booleanArray;//是否是首次点击
+
 
     @Override
     public int getLayoutId() {
@@ -68,6 +68,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
 
         booleanSparseArray = new SparseBooleanArray();
         booleanArray = new SparseBooleanArray();
+
         mPresenter.getSpaDataList();
 
         recyclerViewSleep.addItemDecoration(new MyDecoration());
@@ -116,11 +117,12 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
                     spaMainAdapter.getAdapter(position).setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int pos) {
+
                             SpaItemInfo spaItemInfo = spaMainAdapter.getAdapter(position).getItem(pos);
                             Intent intent = new Intent(getActivity(), SleepDetailActivity.class);
                             intent.putExtra("spa_id", spaItemInfo.getId());
                             intent.putExtra("type_id", spaItemInfo.getType_id());
-                            intent.putExtra("pos", pages.get(position));
+                            intent.putExtra("pos", spaItemInfo.getGroupPos());
                             startActivity(intent);
                         }
                     });
@@ -201,6 +203,7 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
     private void loadMore(List<SpaItemInfo> itemInfos, int position) {
 
         int currentPage = pages.get(position);
+
         if (itemInfos.size() > 0) {
             //当前分类的页面
             int nextPage = currentPage + 1;
@@ -228,5 +231,6 @@ public class SleepFragment extends BaseFragment<SpaDataPresenter> implements Spa
             outRect.set(0, 0, 0, SizeUtils.dp2px(10));
         }
     }
+
 
 }

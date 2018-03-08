@@ -31,6 +31,6 @@ public interface SpaDetailContract {
 
         void spaPlay(String music_id);
 
-        void collectSpa(String spa_id);
+        void collectSpa(MusicInfo musicInfo);
     }
 }

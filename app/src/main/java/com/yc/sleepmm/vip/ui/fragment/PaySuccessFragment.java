@@ -1,4 +1,4 @@
-package com.yc.sleepmm.setting.ui.fragment;
+package com.yc.sleepmm.vip.ui.fragment;
 
 import android.text.Spannable;
 import android.text.Spanned;
@@ -104,13 +104,5 @@ public class PaySuccessFragment extends BaseDialogFragment<PaySuccessPresenter> 
         RxBus.get().post(BusAction.VIEW_FINISH, "finish");
     }
 
-    public interface onViewFinishListener {
-        void onViewFinish(PaySuccessFragment fragment);
-    }
 
-    public onViewFinishListener listener;
-
-    public void setOnViewFinishListener(onViewFinishListener listener) {
-        this.listener = listener;
-    }
 }

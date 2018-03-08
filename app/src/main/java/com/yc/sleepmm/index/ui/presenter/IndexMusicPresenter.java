@@ -1,13 +1,11 @@
 package com.yc.sleepmm.index.ui.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.alibaba.fastjson.TypeReference;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.bean.MusicInfo;
-import com.music.player.lib.util.PreferencesUtil;
 import com.music.player.lib.util.ToastUtils;
 import com.yc.sleepmm.base.APP;
 import com.yc.sleepmm.base.presenter.BasePresenter;
@@ -107,18 +105,25 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
      * 音乐收藏
      *
      * @param
-     * @param music_id
+     * @param musicInfo
      */
-    public void collectMusic(final String music_id) {
+    public void collectMusic(final MusicInfo musicInfo) {
+
 
         if (!APP.getInstance().isGotoLogin(mContext)) {
 
-            if (TextUtils.isEmpty(music_id)) {
+            if (musicInfo == null) {
                 ToastUtils.showCenterToast("请先选择一首歌曲收藏");
                 return;
             }
 
-            Subscription subscription = EngineUtils.collectMusic(mContext, APP.getInstance().getUserData().getId(), music_id).subscribe(new Subscriber<ResultInfo<String>>() {
+
+            if (musicInfo.getType() == 2) {
+                ToastUtils.showCenterToast("当前播放的是spa音乐，不能" + (musicInfo.getIs_favorite() == 1 ? "取消收藏" : "收藏"));
+                return;
+            }
+
+            Subscription subscription = EngineUtils.collectMusic(mContext, APP.getInstance().getUserData().getId(), musicInfo.getId()).subscribe(new Subscriber<ResultInfo<String>>() {
                 @Override
                 public void onCompleted() {
 
@@ -131,12 +136,11 @@ public class IndexMusicPresenter extends BasePresenter<IndexMusicEngine, IndexMu
 
                 @Override
                 public void onNext(ResultInfo<String> stringResultInfo) {
-                    boolean isCollect = PreferencesUtil.getInstance().getBoolean(music_id);
+                    boolean isCollect = musicInfo.getIs_favorite() == 1;
                     if (stringResultInfo != null && stringResultInfo.code == HttpConfig.STATUS_OK) {
 
                         isCollect = !isCollect;
-                        PreferencesUtil.getInstance().putBoolean(music_id, isCollect);
-
+                        musicInfo.setIs_favorite(isCollect ? 1 : 0);
                         mView.showCollectSucess(isCollect);
                     }
                 }

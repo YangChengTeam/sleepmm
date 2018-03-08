@@ -82,7 +82,7 @@ public class SpaMainAdapter extends BaseQuickAdapter<SpaDataInfo, BaseViewHolder
     }
 
     public SpaListAdapter getAdapter(int position) {
-        SpaListAdapter spaListAdapter = (SpaListAdapter) sparseArray.get(position).getAdapter();
+        SpaListAdapter spaListAdapter = (SpaListAdapter) getView(position).getAdapter();
 
         List<SpaItemInfo> spaItemInfos = spaListAdapter.getData();
         if (spaItemInfos != null && spaItemInfos.size() > 0) {
@@ -99,7 +99,7 @@ public class SpaMainAdapter extends BaseQuickAdapter<SpaDataInfo, BaseViewHolder
 
 
     public void setVisable(boolean flag, final int position) {
-        sparseArray.get(position).setVisibility(flag ? View.VISIBLE : View.GONE);
+        getView(position).setVisibility(flag ? View.VISIBLE : View.GONE);
 
         if (flag) {
 

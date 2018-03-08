@@ -16,7 +16,6 @@ import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.music.player.lib.mode.PlayerSetyle;
 import com.music.player.lib.mode.PlayerStatus;
-import com.music.player.lib.util.PreferencesUtil;
 import com.music.player.lib.view.MusicPlayerController;
 import com.music.player.lib.view.MusicPlayerSmallController;
 import com.yc.sleepmm.R;
@@ -64,7 +63,6 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
     @Override
     public void init() {
         mPresenter = new IndexMusicPresenter(getActivity(), this);
-
         initViews();
     }
 
@@ -81,7 +79,7 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
             @Override
             public void onEventCollect(MusicInfo musicInfo) {
 
-                mPresenter.collectMusic(musicInfo != null ? musicInfo.getId() : "");
+                mPresenter.collectMusic(musicInfo);
             }
 
             //随便听听
@@ -106,9 +104,10 @@ public class IndexFragment extends BaseFragment<IndexMusicPresenter> implements 
                     if (PlayerStatus.PLAYER_STATUS_PLAYING == info.getPlauStatus()) {
                         mPresenter.playStatistics(id);
                     }
+                    boolean isCollect = info.getIs_favorite() == 1;
+                    mPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect, id);
                 }
-                boolean isCollect = PreferencesUtil.getInstance().getBoolean(id);
-                mPlayerController.setCollectIcon(isCollect ? R.drawable.ic_player_collect_true : R.drawable.ic_player_collect, isCollect, id);
+
 
             }
         });

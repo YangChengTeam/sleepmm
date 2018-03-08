@@ -59,7 +59,7 @@
                 app:xTabSelectedTextColor="@color/app_style"
                 app:xTabSelectedTextSize="15sp"
                 app:xTabTextColor="@color/white"
-                app:xTabTextSize="14sp"></com.androidkun.xtablayout.XTabLayout>
+                app:xTabTextSize="14sp" />
 
             <View
                 android:layout_width="match_parent"

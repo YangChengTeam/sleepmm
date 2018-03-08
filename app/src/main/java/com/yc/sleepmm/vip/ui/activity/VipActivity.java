@@ -32,7 +32,7 @@ import com.yc.sleepmm.setting.constants.BusAction;
 import com.yc.sleepmm.setting.constants.NetConstant;
 import com.yc.sleepmm.setting.contract.VipContract;
 import com.yc.sleepmm.setting.presenter.VipPresenter;
-import com.yc.sleepmm.setting.ui.fragment.PaySuccessFragment;
+import com.yc.sleepmm.vip.ui.fragment.PaySuccessFragment;
 import com.yc.sleepmm.vip.bean.GoodsInfo;
 import com.yc.sleepmm.vip.bean.PayInfo;
 import com.yc.sleepmm.vip.ui.adapter.VipPayAdapter;

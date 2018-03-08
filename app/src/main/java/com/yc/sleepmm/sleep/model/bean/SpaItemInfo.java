@@ -22,6 +22,8 @@ public class SpaItemInfo {
     private int is_favorite;
     private String author_title;
 
+    private int groupPos;//当前数据在page页的位置
+
     public String getId() {
         return id;
     }
@@ -124,5 +126,13 @@ public class SpaItemInfo {
 
     public void setAuthor_title(String author_title) {
         this.author_title = author_title;
+    }
+
+    public int getGroupPos() {
+        return groupPos;
+    }
+
+    public void setGroupPos(int groupPos) {
+        this.groupPos = groupPos;
     }
 }

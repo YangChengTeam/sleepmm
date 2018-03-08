@@ -83,4 +83,6 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
             mPresenter.unsubscribe();
         RxBus.get().unregister(this);
     }
+
+
 }
